@@ -18,6 +18,8 @@
 #include "aliases/aliases.h"
 #include "epgdb/epgdb.h"
 
+#include "dbmerge/dbmerge.h"
+
 static char db_root[256];
 static char homedir[256];
 
@@ -90,9 +92,9 @@ bool exec_defrag (bool withcallback)
 		db_opened = true;
 	}
 	if (withcallback)
-		ret = dbmerge_fromfile (header_filename_tmp, descriptor_filename_tmp, progress_callback, event_callback, stop);
+		ret = dbmerge_fromfile (header_filename_tmp, descriptor_filename_tmp, progress_callback, event_callback, &stop);
 	else
-		ret = dbmerge_fromfile (header_filename_tmp, descriptor_filename_tmp, NULL, NULL, stop);
+		ret = dbmerge_fromfile (header_filename_tmp, descriptor_filename_tmp, NULL, NULL, &stop);
 
 	if (ret)
 		log_add ("Data defragmented");
