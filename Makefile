@@ -100,7 +100,7 @@ $(XMLTV_OBJS):
 $(DEFRAGMENTER_OBJS):
 	$(CC) $(CFLAGS) -c -o $@ $(@:.o=.c)
 
-$(SWIGS_LIBS): $(SWIGS_OBJS)
+$(SWIGS_LIBS): $(OBJS) $(SWIGS_OBJS)
 	$(CC) $(LDFLAGS) -shared -o $@ $(OBJS) $(SWIGS_OBJS) -lxml2 -lz -lm -lpthread -lcurl
 	$(STRIP) $@
 
