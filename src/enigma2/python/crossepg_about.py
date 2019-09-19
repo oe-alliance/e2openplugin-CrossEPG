@@ -85,14 +85,14 @@ class CrossEPG_About(Screen):
 		try:
 			rytecpng = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/rytec.png")
 		except:
-			rytecpng = resolveFilename(SCOPE_CURRENT_SKIN, "crossepg/rytec.png")
+			rytecpng = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/rytec.png")
 		if rytecpng == None or not os.path.exists(rytecpng):
 			rytecpng = "%s/images/rytec.png" % (os.path.dirname(sys.modules[__name__].__file__))
 		self["rytec_pix"].instance.setPixmapFromFile(rytecpng)
 		try:
 			krkadonipng = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/krkadoni.png")
 		except:
-			krkadonipng = resolveFilename(SCOPE_CURRENT_SKIN, "crossepg/krkadoni.png")
+			krkadonipng = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/krkadoni.png")
 		if krkadonipng == None or not os.path.exists(krkadonipng):
 			krkadonipng = "%s/images/krkadoni.png" % (os.path.dirname(sys.modules[__name__].__file__))
 		self["krkadoni_pix"].instance.setPixmapFromFile(krkadonipng)

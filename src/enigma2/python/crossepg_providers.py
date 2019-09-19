@@ -129,7 +129,7 @@ class CrossEPG_Providers(Screen):
 			try:
 				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/enabled.png")
 			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "crossepg/enabled.png")
+				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/enabled.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/enabled.png" % os.path.dirname(sys.modules[__name__].__file__)
 			pixmap = LoadPixmap(cached=True, path=png)
