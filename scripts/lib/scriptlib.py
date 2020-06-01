@@ -15,6 +15,9 @@ import time
 import codecs
 import crossepg
 
+import six
+
+
 # escape some incorrect chars from filename
 def fn_escape(s):
 	if type(s).__name__ == 'str':
@@ -153,7 +156,7 @@ class lamedb_class:
 
 		for charset in charset_list:
 			try:
-				u = unicode(s, charset, "strict")
+				u = six.text_type(s, charset, "strict")
 			except:
 				pass
 			else:

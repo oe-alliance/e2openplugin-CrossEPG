@@ -13,13 +13,13 @@ import sys
 import time
 import codecs
 import socket
-import string
 import random
-import urllib2
 import ConfigParser
 
 # import CrossEPG functions
 import crossepg
+import six
+from six.moves import urllib
 
 # location of local python modules under "scripts/lib" dir.
 # add it to sys.path()
@@ -192,7 +192,7 @@ class main:
 
 		# create a dictionary (Python array) with index = channel ID
 		for i in temp:
-			self.CHANNELLIST[i[0]] = unicode(i[1], 'utf-8')
+			self.CHANNELLIST[i[0]] = six.text_type(i[1], 'utf-8')
 
 		if len(self.CHANNELLIST) == 0 :
 			self.log.log("ERROR: [channels] section empty ?")
@@ -232,7 +232,7 @@ class main:
 		#   i.e. ("101" , "1,SkyCinema1")
 		pbar_max = 0
 		for c in chlist.keys():
-			cacheopt = int(string.split(chlist[c], ",")[0])
+			cacheopt = int(chlist[c].split(",")[0])
 			if cacheopt == 1:
 				pbar_max += 1
 				
@@ -253,7 +253,7 @@ class main:
 			#  2 : always download overwriting existing files (optional 2,new_name )
 			#  3 : always download overwriting existing files only for TODAY (optional 3,new_name )
 
-			cacheopt = int(string.split(chlist[c], ",")[0])
+			cacheopt = int(chlist[c].split(",")[0])
 
 			# if cacheopt == 0, do nothing
 			if cacheopt == 0:
@@ -311,7 +311,7 @@ class main:
 					time.sleep(random.uniform(self.CONF_RANDOM_MIN, self.CONF_RANDOM_MAX))
 
 					try:
-						sock=urllib2.urlopen(self.CONF_URL + '?' + xmlfile)
+						sock=urllib.request.urlopen(self.CONF_URL + '?' + xmlfile)
 						data=sock.read()
 
 					except IOError as e:
@@ -359,7 +359,7 @@ class main:
 							#self.log(event_starttime + " , " + str(self.DELTA_UTC) + " , " + str(int(time.mktime(time.strptime(event_starttime,"%Y-%m-%d %H:%M")))) + " , " + event_startime_unix_gmt )
 
 							# convert remote data (RAI website use UTF-8) in Python Unicode (UCS2)
-							event_title = unicode(titolo, self.REMOTE_EPG_CHARSET)
+							event_title = six.text_type(titolo, self.REMOTE_EPG_CHARSET)
 
 							event_title = event_title.replace('\r', '')
 							event_title = event_title.replace('\n', u' ')

@@ -11,9 +11,11 @@ __license__ = "CreativeCommons by-nc-sa http://creativecommons.org/licenses/by-n
 
 import time
 import string
-import urllib2
-from urllib import quote_plus
 from xml.dom import minidom
+
+
+from six.moves import urllib
+from six.moves.urllib.parse import quote_plus
 
 
 class webif_class:
@@ -42,17 +44,17 @@ class webif_class:
     def WI(self, command):
 
         if self.USE_WEBIF_AUTH == 1 :
-            auth_handler = urllib2.HTTPBasicAuthHandler()
+            auth_handler = urllib.request.HTTPBasicAuthHandler()
             auth_handler.add_password(self.WEBIF_AUTH_REALM, 'http://' + self.WEBIF_IP, self.WEBIF_AUTH_USER, self.WEBIF_AUTH_PASSW)
-            opener = urllib2.build_opener(auth_handler)
-            urllib2.install_opener(opener)
+            opener = urllib.request.build_opener(auth_handler)
+            urllib.request.install_opener(opener)
 
         try:
-            sock=urllib2.urlopen('http://' + self.WEBIF_IP + '/web/' + command)
+            sock=urllib.request.urlopen('http://' + self.WEBIF_IP + '/web/' + command)
             data=sock.read()
-        except urllib2.URLError:
+        except urllib.error.URLError:
             pass
-        except urllib2.HTTPError:
+        except urllib.error.HTTPError:
             pass
         except urllib2.httplib.BadStatusLine:
             pass

@@ -14,6 +14,7 @@ import time
 
 # import CrossEPG functions
 import crossepg
+import six
 
 # location of local python modules under "scripts/lib" dir.
 # add it to sys.path()
@@ -62,7 +63,7 @@ class main:
 		self.CHANNELLIST = {}
 		# create a dictionary (Python array) with index = channel ID
 		for i in temp:
-			self.CHANNELLIST[i[0]] = unicode(i[1], 'utf-8')
+			self.CHANNELLIST[i[0]] = six.text_type(i[1], 'utf-8')
 
 		if len(self.CHANNELLIST) == 0 :
 			self.log.log("ERROR: [aliases] section empty ?")
