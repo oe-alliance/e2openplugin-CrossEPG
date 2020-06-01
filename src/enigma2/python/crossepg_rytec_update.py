@@ -1,3 +1,4 @@
+from __future__ import print_function
 from enigma import getDesktop, eTimer
 
 from Components.Label import Label
@@ -103,24 +104,24 @@ class CrossEPG_Rytec_Update(Screen):
 			distro = getImageDistro()
 			if distro == "openvix":
 				url = "http://www.openvix.co.uk/crossepgsources.gz"
-			print "[crossepg_rytec_update:loadSourceList] downloading source list from %s" % url
+			print("[crossepg_rytec_update:loadSourceList] downloading source list from %s" % url)
 			response = urllib2.urlopen(url)
 			content_raw = response.read()
 			if 'gzip' in response.info().getheader('Content-Type'):
 				self.mirrors = [x.strip() for x in gzip.GzipFile(fileobj=StringIO(content_raw)).read().strip().split("\n")]
 				random.shuffle(self.mirrors)
 			else:
-				print "[crossepg_rytec_update:loadSourceList] Fetched data is not Gzip format"
-				print "[crossepg_rytec_update:loadSourceList] content_raw:", content_raw
-		except Exception, e:
-			print "[crossepg_rytec_update:loadSourceList] error fetching:", e
+				print("[crossepg_rytec_update:loadSourceList] Fetched data is not Gzip format")
+				print("[crossepg_rytec_update:loadSourceList] content_raw:", content_raw)
+		except Exception as e:
+			print("[crossepg_rytec_update:loadSourceList] error fetching:", e)
 
 	def load(self):
 		ret = False
 		for mirror in self.mirrors:
-			mirror = mirror.replace('\t','')
+			mirror = mirror.replace('\t', '')
 			try:
-				print "downloading from %s" % (mirror)
+				print("downloading from %s" % (mirror))
 				smirror = mirror.lstrip("http://")
 				host = smirror.split("/")[0]
 				path = smirror.lstrip(host)
@@ -135,9 +136,9 @@ class CrossEPG_Rytec_Update(Screen):
 					os.unlink("/tmp/crossepg_rytec_tmp")
 					ret = True
 				else:
-					print "http error: %d (%s)" % (httpres.status, mirror)
-			except Exception, e:
-				print e
+					print("http error: %d (%s)" % (httpres.status, mirror))
+			except Exception as e:
+				print(e)
 		return ret
 
 	def getServer(self, description):

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from enigma import getDesktop, eTimer
 
 from Components.Label import Label
@@ -104,8 +105,8 @@ class CrossEPG_Xepgdb_Update(Screen):
 				self.loadFromFile("/tmp/crossepg_xepgdb_tmp")
 				os.unlink("/tmp/crossepg_xepgdb_tmp")
 				return True
-		except Exception, e:
-			print e
+		except Exception as e:
+			print(e)
 		return False
 
 	def loadFromFile(self, filename):

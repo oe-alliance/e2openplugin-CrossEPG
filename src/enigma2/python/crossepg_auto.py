@@ -1,3 +1,4 @@
+from __future__ import print_function
 from enigma import * #, quitMainloop
 from Components.ServiceEventTracker import ServiceEventTracker
 from Screens.MessageBox import MessageBox
@@ -23,13 +24,13 @@ def CrossEPGautostart(reason, session=None, **kwargs):
 	global _session
 	now = int(time())
 	if reason == 0:
-		print "[CrossEPG_Auto] AutoStart Enabled"
+		print("[CrossEPG_Auto] AutoStart Enabled")
 		if session is not None:
 			_session = session
 			if autoCrossEPGTimer is None:
 				autoCrossEPGTimer = CrossEPG_Auto(session)
 	else:
-		print "[CrossEPG_Auto] Stop"
+		print("[CrossEPG_Auto] Stop")
 		autoCrossEPGTimer.stop()
 
 class CrossEPG_Auto:
@@ -57,7 +58,7 @@ class CrossEPG_Auto:
 			# Modded by IAmATeaf 13/04/2012
 			# os.system("rm -f /tmp/crossepg.standby")
 			os.unlink("/tmp/crossepg.standby")
-			print "[CrossEPG_Auto] coming back in standby in 30 seconds"
+			print("[CrossEPG_Auto] coming back in standby in 30 seconds")
 			self.standbyTimer.start(30000, 1)
 
 		self.config.load()
@@ -68,16 +69,16 @@ class CrossEPG_Auto:
 		now = int(time())
 		global CrossEPGTime
 		if self.config.download_standby_enabled or self.config.download_daily_enabled:
-			print "[CrossEPG_Auto] Schedule Enabled at ", strftime("%c", localtime(now))
+			print("[CrossEPG_Auto] Schedule Enabled at ", strftime("%c", localtime(now)))
 			if now > 1262304000:
 				self.crossepgdate()
 			else:
-				print "[CrossEPG_Auto] Time not yet set."
+				print("[CrossEPG_Auto] Time not yet set.")
 				CrossEPGTime = 0
 				self.crossepgactivityTimer.start(36000)
 		else:
 			CrossEPGTime = 0
-			print "[CrossEPG_Auto] Schedule Disabled at", strftime("%c", localtime(now))
+			print("[CrossEPG_Auto] Schedule Disabled at", strftime("%c", localtime(now)))
 			self.crossepgactivityTimer.stop()
 
 		assert CrossEPG_Auto.instance is None, "class CrossEPG_Auto is a singleton class and just one instance of this class is allowed!"
@@ -118,7 +119,7 @@ class CrossEPG_Auto:
 			self.crossepgtimer.startLongTimer(next)
 		else:
 			CrossEPGTime = -1
-		print "[CrossEPG_Auto] Time set to", strftime("%c", localtime(CrossEPGTime)), strftime("(now=%c)", localtime(now))
+		print("[CrossEPG_Auto] Time set to", strftime("%c", localtime(CrossEPGTime)), strftime("(now=%c)", localtime(now)))
 		return CrossEPGTime
 
 	def backupstop(self):
@@ -132,12 +133,12 @@ class CrossEPG_Auto:
 		atLeast = 0
 		if wake - now < 60:
 			atLeast = 60
-			print "[CrossEPG_Auto] onTimer occured at", strftime("%c", localtime(now))
+			print("[CrossEPG_Auto] onTimer occured at", strftime("%c", localtime(now)))
 			from Screens.Standby import inStandby
 			self.config.load()
 			if (self.config.download_standby_enabled and inStandby) or self.config.download_daily_enabled:
 				if self.lock or self.session.nav.RecordTimer.isRecording() or abs(self.session.nav.RecordTimer.getNextRecordingTime() - time()) <= 900 or abs(self.session.nav.RecordTimer.getNextZapTime() - time()) <= 900:
-					print "[CrossEPG_Auto] poll delaying as recording."
+					print("[CrossEPG_Auto] poll delaying as recording.")
 					self.doCrossEPG(False)
 				elif not inStandby:
 					message = _("Your epg about to update,\nDo you want to allow this?")
@@ -152,24 +153,24 @@ class CrossEPG_Auto:
 		now = int(time())
 		if answer is False:
 			if retrycount < 2:
-				print '[CrossEPG_Auto] Number of retries',retrycount
-				print "[CrossEPG_Auto] delayed."
+				print('[CrossEPG_Auto] Number of retries', retrycount)
+				print("[CrossEPG_Auto] delayed.")
 				repeat = retrycount
 				repeat += 1
 				retrycount = repeat
 				CrossEPGTime = now + (30 * 60)
-				print "[CrossEPG_Auto] Time now set to", strftime("%c", localtime(CrossEPGTime)), strftime("(now=%c)", localtime(now))
+				print("[CrossEPG_Auto] Time now set to", strftime("%c", localtime(CrossEPGTime)), strftime("(now=%c)", localtime(now)))
 				self.crossepgtimer.startLongTimer(30 * 60)
 			else:
 				atLeast = 60
-				print "[CrossEPG_Auto] Enough Retries, delaying till next schedule.", strftime("%c", localtime(now))
+				print("[CrossEPG_Auto] Enough Retries, delaying till next schedule.", strftime("%c", localtime(now)))
 				self.session.open(MessageBox, _("Enough Retries, delaying till next schedule."), MessageBox.TYPE_INFO, timeout = 10)
 				retrycount = 0
 				self.crossepgdate(atLeast)
 		else:
 			self.timer = eTimer()
 			self.timer.callback.append(self.doautostartdownload)
-			print "[CrossEPG_Auto] Running CrossEPG", strftime("%c", localtime(now))
+			print("[CrossEPG_Auto] Running CrossEPG", strftime("%c", localtime(now)))
 			self.timer.start(100, 1)
 
 	def doautostartdownload(self):
@@ -183,9 +184,9 @@ class CrossEPG_Auto:
 		self.download(self.config.providers)
 
 	def download(self, providers):
-		print "[CrossEPG_Auto] providers selected for download:"
+		print("[CrossEPG_Auto] providers selected for download:")
 		for provider in providers:
-			print "[CrossEPG_Auto] %s" % provider
+			print("[CrossEPG_Auto] %s" % provider)
 		if self.osd:
 			self.session.openWithCallback(self.downloadCallback, CrossEPG_Downloader, providers)
 		else:
@@ -205,7 +206,7 @@ class CrossEPG_Auto:
 
 	def defrag(self):
 		if self.config.last_defrag_timestamp < time() - 7 * 24 * 60 * 60:	 # 1 week
-			print "[CrossEPG_Auto] start defragmentation"
+			print("[CrossEPG_Auto] start defragmentation")
 			if self.osd:
 				self.session.openWithCallback(self.defragCallback, CrossEPG_Defragmenter)
 			else:
@@ -217,7 +218,7 @@ class CrossEPG_Auto:
 		self.pdefrag = None
 		
 	def importer(self):
-		print "[CrossEPG_Auto] start csv import"
+		print("[CrossEPG_Auto] start csv import")
 		if self.osd:
 			self.session.openWithCallback(self.importerCallback, CrossEPG_Importer)
 		else:
@@ -233,7 +234,7 @@ class CrossEPG_Auto:
 				self.loader()
 
 	def converter(self):
-		print "[CrossEPG_Auto] start epg.dat conversion"
+		print("[CrossEPG_Auto] start epg.dat conversion")
 		if self.osd:
 			self.session.openWithCallback(self.converterCallback, CrossEPG_Converter)
 		else:
@@ -256,7 +257,7 @@ class CrossEPG_Auto:
 						# Modded by IAmATeaf 13/04/2012
 						# os.system("rm /tmp/crossepg.standby")
 						os.unlink("/tmp/crossepg.standby")
-					print "[CrossEPG_Auto] rebooting"
+					print("[CrossEPG_Auto] rebooting")
 					from Screens.Standby import TryQuitMainloop
 					self.session.open(TryQuitMainloop, 3)
 
@@ -290,7 +291,7 @@ class CrossEPG_Auto:
 	def backToStandby(self):
 		from Screens.Standby import inStandby
 		if inStandby == None:
-			print "[CrossEPG_Auto] coming back in standby"
+			print("[CrossEPG_Auto] coming back in standby")
 			from Screens.Standby import Standby
 			self.session.open(Standby)
 
@@ -298,13 +299,13 @@ class CrossEPG_Auto:
 		now = int(time())
 		if self.config.download_standby_enabled or self.config.download_daily_enabled:
 			if autoCrossEPGTimer is not None:
-				print "[CrossEPG_Auto] Schedule Enabled at", strftime("%c", localtime(now))
+				print("[CrossEPG_Auto] Schedule Enabled at", strftime("%c", localtime(now)))
 				autoCrossEPGTimer.crossepgdate()
 		else:
 			if autoCrossEPGTimer is not None:
 				global CrossEPGTime
 				CrossEPGTime = 0
-				print "[CrossEPG_Auto] Schedule Disabled at", strftime("%c", localtime(now))
+				print("[CrossEPG_Auto] Schedule Disabled at", strftime("%c", localtime(now)))
 				autoCrossEPGTimer.backupstop()
 		if CrossEPGTime > 0:
 			t = localtime(CrossEPGTime)

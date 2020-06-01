@@ -53,7 +53,7 @@ class CrossEPG_Menu(Screen):
 			from version import version
 			self.setup_title = _("CrossEPG") + " - " + version[:5]
 			Screen.setTitle(self, self.setup_title)
-		except Exception, e:
+		except Exception as e:
 			self.setup_title = _("CrossEPG") + " - " + _("unknown version")
 			Screen.setTitle(self, self.setup_title)
 

@@ -5,6 +5,7 @@
 # this test.py program simply do nothing
 
 
+from __future__ import print_function
 import os
 import sys
 
@@ -15,9 +16,9 @@ import crossepg
 # and add it to sys.path()
 crossepg_instroot = crossepg.epgdb_get_installroot()
 if crossepg_instroot == False:
-	print "ERROR: cannot find CrossEPG installation directory"
+	print("ERROR: cannot find CrossEPG installation directory")
 	sys.exit(1)
-libdir = os.path.join(crossepg_instroot , 'scripts/lib')
+libdir = os.path.join(crossepg_instroot, 'scripts/lib')
 sys.path.append(libdir)
 
 # import local modules under 'scripts/lib'

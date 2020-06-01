@@ -1,3 +1,4 @@
+from __future__ import print_function
 from enigma import getDesktop, iPlayableService, eTimer, eServiceReference
 
 from Components.Label import Label
@@ -152,7 +153,7 @@ class CrossEPG_Downloader(Screen):
 			self.wrapper.download(self.providers[self.provider_index])
 			
 	def error(self, message):
-		print "[CrossEPG_Downloader] Error: %s" % message
+		print("[CrossEPG_Downloader] Error: %s" % message)
 		self.session.open(MessageBox, _("CrossEPG error: %s") % (message), type = MessageBox.TYPE_INFO, timeout = 20)
 		self.retValue = False
 		self.quit()
@@ -179,20 +180,20 @@ class CrossEPG_Downloader(Screen):
 				nimList.append(nim.slot)
 		if len(nimList) == 0:
 			self.error(_("No DVB-S NIMs founds"))
-			print "[CrossEPG_Downloader] No DVB-S NIMs founds."
+			print("[CrossEPG_Downloader] No DVB-S NIMs founds.")
 			return
 
 		resmanager = eDVBResourceManager.getInstance()
 		if not resmanager:
 			self.error("Cannot retrieve Resource Manager instance")
-			print "[CrossEPG_Downloader] Cannot retrieve Resource Manager instance."
+			print("[CrossEPG_Downloader] Cannot retrieve Resource Manager instance.")
 			return
 
 		# stop pip if running
 		if self.session.pipshown:
 			self.session.pipshown = False
 			del self.session.pip
-			print "[CrossEPG_Downloader] Stopping PIP."
+			print("[CrossEPG_Downloader] Stopping PIP.")
 
 		
 		# stop currently playing service if it is using a tuner in ("loopthrough", "satposdepends")
@@ -214,11 +215,11 @@ class CrossEPG_Downloader(Screen):
 					self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 					self.session.nav.stopService()
 					currentlyPlayingNIM = None
-					print "[CrossEPG_Downloader] The active service was using a %s tuner, so had to be stopped (slot id %s)." % (nimConfigMode, currentlyPlayingNIM)
+					print("[CrossEPG_Downloader] The active service was using a %s tuner, so had to be stopped (slot id %s)." % (nimConfigMode, currentlyPlayingNIM))
 		del frontendInfo
 		del currentService
 
-		print "[CrossEPG_Downloader] Search NIM for orbital position %d" % transponder["orbital_position"]
+		print("[CrossEPG_Downloader] Search NIM for orbital position %d" % transponder["orbital_position"])
 		current_slotid = -1
 		if self.rawchannel:
 			del(self.rawchannel)
@@ -230,26 +231,26 @@ class CrossEPG_Downloader(Screen):
 		for slotid in nimList:
 			sats = nimmanager.getSatListForNim(slotid)
 			for sat in sats:
-				print '[CrossEPG_Downloader] SAT:',sat
+				print('[CrossEPG_Downloader] SAT:', sat)
 				if sat[0] == transponder["orbital_position"]:
-					print '[CrossEPG_Downloader] TEST1:',slotid
+					print('[CrossEPG_Downloader] TEST1:', slotid)
 					if current_slotid == -1:	# mark the first valid slotid in case of no other one is free
-						print '[CrossEPG_Downloader] TEST2:',slotid
+						print('[CrossEPG_Downloader] TEST2:', slotid)
 						current_slotid = slotid
 
 					self.rawchannel = resmanager.allocateRawChannel(slotid)
 					if self.rawchannel:
-						print '[CrossEPG_Downloader] TEST3:',slotid
-						print "[CrossEPG_Downloader] Nim found on slot id %d with sat %s" % (slotid, sat[1])
+						print('[CrossEPG_Downloader] TEST3:', slotid)
+						print("[CrossEPG_Downloader] Nim found on slot id %d with sat %s" % (slotid, sat[1]))
 						current_slotid = slotid
 						break
 
 			if self.rawchannel:
-				print '[CrossEPG_Downloader] TEST4:'
+				print('[CrossEPG_Downloader] TEST4:')
 				break
 
 		if current_slotid == -1:
-			print "[CrossEPG_Downloader] No valid NIM found"
+			print("[CrossEPG_Downloader] No valid NIM found")
 			self.error(_("No valid NIM found"))
 			return
 
@@ -260,21 +261,21 @@ class CrossEPG_Downloader(Screen):
 				sats = nimmanager.getSatListForNim(slotid)
 				for sat in sats:
 					if sat[0] == transponder["orbital_position"]:
-						print "[CrossEPG_Downloader] Nim found on slot id %d but it's busy. Stopping active service" % slotid
+						print("[CrossEPG_Downloader] Nim found on slot id %d but it's busy. Stopping active service" % slotid)
 						self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 						self.session.nav.stopService()
 						self.rawchannel = resmanager.allocateRawChannel(slotid)
 						if self.rawchannel:
-							print "[CrossEPG_Downloader] The active service was stopped, and has been freed to use."
+							print("[CrossEPG_Downloader] The active service was stopped, and has been freed to use.")
 							current_slotid = slotid
 							break
 
 			if not self.rawchannel:
 				if self.session.nav.RecordTimer.isRecording():
-					print "[CrossEPG_Downloader] Cannot free NIM because a recording is in progress"
+					print("[CrossEPG_Downloader] Cannot free NIM because a recording is in progress")
 					self.error(_("Cannot free NIM because a recording is in progress"))
 				else:
-					print "[CrossEPG_Downloader] Cannot get the NIM"
+					print("[CrossEPG_Downloader] Cannot get the NIM")
 					self.error(_("Cannot get the NIM"))
 				if self.oldService:
 					self.session.nav.playService(self.oldService)
@@ -283,20 +284,20 @@ class CrossEPG_Downloader(Screen):
 		# set extended timeout for rotors
 		if self.isRotorSat(current_slotid, transponder["orbital_position"]):
 			self.LOCK_TIMEOUT = self.LOCK_TIMEOUT_ROTOR
-			print"[CrossEPG_Downloader] Motorised dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10)
+			print("[CrossEPG_Downloader] Motorised dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10))
 		else:
 			self.LOCK_TIMEOUT = self.LOCK_TIMEOUT_FIXED
-			print"[CrossEPG_Downloader] Fixed dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10)
+			print("[CrossEPG_Downloader] Fixed dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10))
 
 		self.frontend = self.rawchannel.getFrontend()
 		if not self.frontend:
-			print "[CrossEPG_Downloader] Cannot get frontend"
+			print("[CrossEPG_Downloader] Cannot get frontend")
 			self.error(_("Cannot get frontend"))
 			return
 
 		demuxer_id = self.rawchannel.reserveDemux()
 		if demuxer_id < 0:
-			print "[CrossEPG_Downloader] Cannot allocate the demuxer"
+			print("[CrossEPG_Downloader] Cannot allocate the demuxer")
 			self.error(_("Cannot allocate the demuxer"))
 			return
 
@@ -315,7 +316,7 @@ class CrossEPG_Downloader(Screen):
 		params_fe.setDVBS(params, False)
 		self.frontend.tune(params_fe)
 		self.wrapper.demuxer("/dev/dvb/adapter%d/demux%d" % (0, demuxer_id)) # FIX: use the correct device
-		print '[CrossEPG_Downloader] current_slotid:',current_slotid
+		print('[CrossEPG_Downloader] current_slotid:', current_slotid)
 		self.wrapper.frontend(current_slotid)
 
 		self.lockcounter = 0
@@ -335,15 +336,15 @@ class CrossEPG_Downloader(Screen):
 		dict = {}
 		self.frontend.getFrontendStatus(dict)
 		if dict["tuner_state"] == "TUNING":
-			print "[CrossEPG] TUNING"
+			print("[CrossEPG] TUNING")
 		elif dict["tuner_state"] == "LOCKED":
-			print "[CrossEPG] ACQUIRING TSID/ONID"
+			print("[CrossEPG] ACQUIRING TSID/ONID")
 			self.timer = eTimer()
 			self.timer.callback.append(self.doDownload)
 			self.timer.start(500, 1)
 			return
 		elif dict["tuner_state"] == "LOSTLOCK" or dict["tuner_state"] == "FAILED":
-			print "[CrossEPG] FAILED"
+			print("[CrossEPG] FAILED")
 
 		self.lockcounter += 1
 		if self.lockcounter > self.LOCK_TIMEOUT:

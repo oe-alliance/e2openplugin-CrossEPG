@@ -1,3 +1,4 @@
+from __future__ import print_function
 from enigma import getDesktop
 
 from Screens.Screen import Screen
@@ -390,8 +391,8 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 				config.misc.epgcache_filename.callNotifiersOnSaveAndCancel = True
 				config.misc.epgcache_filename.save()
 				configfile.save()
-			except Exception, e:
-				print "custom epgcache filename not supported by current enigma2 version"
+			except Exception as e:
+				print("custom epgcache filename not supported by current enigma2 version")
 
 		if getEPGPatchType() == -1:
 			# exec crossepg_prepare_pre_start for unpatched images

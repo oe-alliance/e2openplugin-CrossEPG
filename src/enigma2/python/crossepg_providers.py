@@ -1,3 +1,4 @@
+from __future__ import print_function
 from enigma import getDesktop
 
 from Screens.Screen import Screen
@@ -104,8 +105,8 @@ class CrossEPG_Providers(Screen):
 		protocol = self.protocol
 		if protocol == "mhw2":
 			protocol = "script"
-		print protocol
-		print self.protocol
+		print(protocol)
+		print(self.protocol)
 		for provider in self.providers[0]:
 			if self.providers[2][i] == protocol:
 				if protocol == "script":

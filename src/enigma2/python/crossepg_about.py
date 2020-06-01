@@ -58,7 +58,7 @@ class CrossEPG_About(Screen):
 
 		try:
 			from version import version
-		except Exception, e:
+		except Exception as e:
 			version = "unknow version"
 
 		credit = "CrossEPG %s (c) 2009-2013 Sandro Cavazzoni\n" % version
