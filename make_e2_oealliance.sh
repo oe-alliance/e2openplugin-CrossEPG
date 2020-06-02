@@ -7,7 +7,7 @@ CROSS=${DEVKIT_ROOT}/sysroots/x86_64-linux/usr/bin/mips32el-oe-linux/mipsel-oe-l
 
 export CFLAGS+="-I${DEVKIT_ROOT}/sysroots/gbquad/usr/include \
  -I${DEVKIT_ROOT}/sysroots/gbquad/usr/include/libxml2 \
- -I${DEVKIT_ROOT}/sysroots/gbquad/usr/include/python2.7"
+ -I${DEVKIT_ROOT}/sysroots/gbquad/usr/include/python3.8"
 export CC=${CROSS}gcc
 export STRIP=${CROSS}strip
 export SWIG=${DEVKIT_ROOT}/sysroots/x86_64-linux/usr/bin/swig

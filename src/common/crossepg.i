@@ -46,7 +46,7 @@ def epgdb_get_dbroot():
 
 	try:
 		f = open("%s/crossepg.config" % (homedir), "r")
-	except Exception, e:
+	except Exception as e:
 		return False
 		
 	entryRe = re.compile(r"db_root=(.*)")

@@ -150,10 +150,10 @@ clean:
 	$(SWIGS_OBJS) $(SWIGS_LIBS) $(SHARED_LIBS)
 
 install-python:
-	install -d $(D)$(libdir)/python2.7/lib-dynload
-	install -m 644 src/common/crossepg.py $(D)$(libdir)/python2.7
-	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python2.7
-	install -m 644 bin/_crossepg.so $(D)$(libdir)/python2.7/lib-dynload
+	install -d $(D)$(libdir)/python3.8/lib-dynload
+	install -m 644 src/common/crossepg.py $(D)$(libdir)/python3.8
+	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python3.8
+	install -m 644 bin/_crossepg.so $(D)$(libdir)/python3.8/lib-dynload
 
 install-python-qboxhd:
 	install -d $(D)/usr/local/lib/python2.6/lib-dynload
@@ -172,6 +172,12 @@ install-python-2.6:
 	install -m 644 src/common/crossepg.py $(D)$(libdir)/python2.6
 	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python2.6
 	install -m 644 bin/_crossepg.so $(D)$(libdir)/python2.6/lib-dynload
+
+install-python-2.7:
+	install -d $(D)$(libdir)/python2.7/lib-dynload
+	install -m 644 src/common/crossepg.py $(D)$(libdir)/python2.7
+	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python2.7
+	install -m 644 bin/_crossepg.so $(D)$(libdir)/python2.7/lib-dynload
 
 install-standalone:
 	install -d $(D)/usr/crossepg/aliases
@@ -309,10 +315,11 @@ install-var-flash: install-standalone-var install-plugin
 install-var-qboxhd: install-python-qboxhd install-standalone-var install-plugin-qboxhd
 install-py25: install-python-2.5 install-standalone install-plugin
 install-py26: install-python-2.6 install-standalone install-plugin
+install-py27: install-python-2.7 install-standalone install-plugin
 
 remote-install:
-	ncftpput -m -u $(FTP_USER) -p $(FTP_PASSWORD) $(FTP_HOST) ${libdir}/python2.7 src/common/crossepg.py
-	ncftpput -m -u $(FTP_USER) -p $(FTP_PASSWORD) $(FTP_HOST) ${libdir}/python2.7/lib-dynload bin/_crossepg.so
+	ncftpput -m -u $(FTP_USER) -p $(FTP_PASSWORD) $(FTP_HOST) ${libdir}/python3.8 src/common/crossepg.py
+	ncftpput -m -u $(FTP_USER) -p $(FTP_PASSWORD) $(FTP_HOST) ${libdir}/python3.8/lib-dynload bin/_crossepg.so
 
 	ncftpput -m -u $(FTP_USER) -p $(FTP_PASSWORD) $(FTP_HOST) /usr/crossepg bin/crossepg_dbconverter
 	ncftpput -m -u $(FTP_USER) -p $(FTP_PASSWORD) $(FTP_HOST) /usr/crossepg bin/crossepg_dbinfo
