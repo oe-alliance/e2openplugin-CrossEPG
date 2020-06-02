@@ -152,31 +152,26 @@ clean:
 install-python:
 	install -d $(D)$(libdir)/python3.8/lib-dynload
 	install -m 644 src/common/crossepg.py $(D)$(libdir)/python3.8
-	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python3.8
 	install -m 644 bin/_crossepg.so $(D)$(libdir)/python3.8/lib-dynload
 
 install-python-qboxhd:
 	install -d $(D)/usr/local/lib/python2.6/lib-dynload
 	install -m 644 src/common/crossepg.py $(D)/usr/local/lib/python2.6
-	install -m 644 src/common/crossepg.pyo $(D)/usr/local/lib/python2.6
 	install -m 644 bin/_crossepg.so $(D)/usr/local/lib/python2.6/lib-dynload
 
 install-python-2.5:
 	install -d $(D)$(libdir)/python2.5/lib-dynload
 	install -m 644 src/common/crossepg.py $(D)$(libdir)/python2.5
-	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python2.5
 	install -m 644 bin/_crossepg.so $(D)$(libdir)/python2.5/lib-dynload
 
 install-python-2.6:
 	install -d $(D)$(libdir)/python2.6/lib-dynload
 	install -m 644 src/common/crossepg.py $(D)$(libdir)/python2.6
-	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python2.6
 	install -m 644 bin/_crossepg.so $(D)$(libdir)/python2.6/lib-dynload
 
 install-python-2.7:
 	install -d $(D)$(libdir)/python2.7/lib-dynload
 	install -m 644 src/common/crossepg.py $(D)$(libdir)/python2.7
-	install -m 644 src/common/crossepg.pyo $(D)$(libdir)/python2.7
 	install -m 644 bin/_crossepg.so $(D)$(libdir)/python2.7/lib-dynload
 
 install-standalone:
@@ -203,7 +198,6 @@ install-standalone:
 	install -m 755 contrib/crossepg_prepare_pre_start.sh $(D)/usr/crossepg/
 	install -m 644 providers/* $(D)/usr/crossepg/providers/
 	install -m 755 scripts/*.py $(D)/usr/crossepg/scripts/
-	install -m 755 scripts/*.pyo $(D)/usr/crossepg/scripts/
 	install -m 755 scripts/lib/* $(D)/usr/crossepg/scripts/lib/
 	install -m 755 scripts/rai/* $(D)/usr/crossepg/scripts/rai/
 	install -m 755 scripts/alias/* $(D)/usr/crossepg/scripts/alias/
@@ -238,7 +232,6 @@ install-standalone-var:
 	install -m 755 contrib/crossepg_prepare_pre_start.sh $(D)/var/crossepg/
 	install -m 644 providers/* $(D)/var/crossepg/providers/
 	install -m 755 scripts/*.py $(D)/var/crossepg/scripts/
-	install -m 755 scripts/*.pyo $(D)/var/crossepg/scripts/
 	install -m 755 scripts/lib/* $(D)/var/crossepg/scripts/lib/
 	install -m 755 scripts/rai/* $(D)/var/crossepg/scripts/rai/
 	install -m 755 scripts/alias/* $(D)/var/crossepg/scripts/alias/
@@ -275,7 +268,6 @@ install-plugin:
 	install -m 644 contrib/po/sv/LC_MESSAGES/CrossEPG.mo $(D)${libdir}/enigma2/python/Plugins/SystemPlugins/CrossEPG/po/sv/LC_MESSAGES/
 	install -m 644 contrib/po/uk/LC_MESSAGES/CrossEPG.mo $(D)${libdir}/enigma2/python/Plugins/SystemPlugins/CrossEPG/po/uk/LC_MESSAGES/
 	install -m 644 src/enigma2/python/*.py $(D)${libdir}/enigma2/python/Plugins/SystemPlugins/CrossEPG/
-	install -m 644 src/enigma2/python/*.pyo $(D)${libdir}/enigma2/python/Plugins/SystemPlugins/CrossEPG/
 	install -m 644 src/enigma2/python/skins/*.xml $(D)${libdir}/enigma2/python/Plugins/SystemPlugins/CrossEPG/skins/
 	install -m 644 src/enigma2/python/images/*.png $(D)${libdir}/enigma2/python/Plugins/SystemPlugins/CrossEPG/images/
 
@@ -305,7 +297,6 @@ install-plugin-qboxhd:
 	install -m 644 contrib/po/sv/LC_MESSAGES/CrossEPG.mo $(D)/usr/local/lib/enigma2/python/Plugins/SystemPlugins/CrossEPG/po/sv/LC_MESSAGES/
 	install -m 644 contrib/po/uk/LC_MESSAGES/CrossEPG.mo $(D)/usr/local/lib/enigma2/python/Plugins/SystemPlugins/CrossEPG/po/uk/LC_MESSAGES/
 	install -m 644 src/enigma2/python/*.py $(D)/usr/local/lib/enigma2/python/Plugins/SystemPlugins/CrossEPG/
-	install -m 644 src/enigma2/python/*.pyo $(D)/usr/local/lib/enigma2/python/Plugins/SystemPlugins/CrossEPG/
 	install -m 644 src/enigma2/python/skins/*.xml $(D)/usr/local/lib/enigma2/python/Plugins/SystemPlugins/CrossEPG/skins/
 	install -m 644 src/enigma2/python/images/*.png $(D)/usr/local/lib/enigma2/python/Plugins/SystemPlugins/CrossEPG/images/
 
