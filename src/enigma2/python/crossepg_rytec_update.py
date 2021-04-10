@@ -118,7 +118,7 @@ class CrossEPG_Rytec_Update(Screen):
 	def load(self):
 		ret = False
 		for mirror in self.mirrors:
-			mirror = mirror.replace('\t','')
+			mirror = mirror.replace('\t', '')
 			try:
 				print "downloading from %s" % (mirror)
 				smirror = mirror.lstrip("http://")

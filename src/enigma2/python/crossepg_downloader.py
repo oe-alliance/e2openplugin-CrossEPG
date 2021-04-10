@@ -230,16 +230,16 @@ class CrossEPG_Downloader(Screen):
 		for slotid in nimList:
 			sats = nimmanager.getSatListForNim(slotid)
 			for sat in sats:
-				print '[CrossEPG_Downloader] SAT:',sat
+				print '[CrossEPG_Downloader] SAT:', sat
 				if sat[0] == transponder["orbital_position"]:
-					print '[CrossEPG_Downloader] TEST1:',slotid
+					print '[CrossEPG_Downloader] TEST1:', slotid
 					if current_slotid == -1:	# mark the first valid slotid in case of no other one is free
-						print '[CrossEPG_Downloader] TEST2:',slotid
+						print '[CrossEPG_Downloader] TEST2:', slotid
 						current_slotid = slotid
 
 					self.rawchannel = resmanager.allocateRawChannel(slotid)
 					if self.rawchannel:
-						print '[CrossEPG_Downloader] TEST3:',slotid
+						print '[CrossEPG_Downloader] TEST3:', slotid
 						print "[CrossEPG_Downloader] Nim found on slot id %d with sat %s" % (slotid, sat[1])
 						current_slotid = slotid
 						break
@@ -315,7 +315,7 @@ class CrossEPG_Downloader(Screen):
 		params_fe.setDVBS(params, False)
 		self.frontend.tune(params_fe)
 		self.wrapper.demuxer("/dev/dvb/adapter%d/demux%d" % (0, demuxer_id)) # FIX: use the correct device
-		print '[CrossEPG_Downloader] current_slotid:',current_slotid
+		print '[CrossEPG_Downloader] current_slotid:', current_slotid
 		self.wrapper.frontend(current_slotid)
 
 		self.lockcounter = 0

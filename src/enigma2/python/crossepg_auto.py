@@ -152,7 +152,7 @@ class CrossEPG_Auto:
 		now = int(time())
 		if answer is False:
 			if retrycount < 2:
-				print '[CrossEPG_Auto] Number of retries',retrycount
+				print '[CrossEPG_Auto] Number of retries', retrycount
 				print "[CrossEPG_Auto] delayed."
 				repeat = retrycount
 				repeat += 1
