@@ -283,10 +283,10 @@ class CrossEPG_Downloader(Screen):
 		# set extended timeout for rotors
 		if self.isRotorSat(current_slotid, transponder["orbital_position"]):
 			self.LOCK_TIMEOUT = self.LOCK_TIMEOUT_ROTOR
-			print"[CrossEPG_Downloader] Motorised dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10)
+			print"[CrossEPG_Downloader] Motorised dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT / 10)
 		else:
 			self.LOCK_TIMEOUT = self.LOCK_TIMEOUT_FIXED
-			print"[CrossEPG_Downloader] Fixed dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10)
+			print"[CrossEPG_Downloader] Fixed dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT / 10)
 
 		self.frontend = self.rawchannel.getFrontend()
 		if not self.frontend:

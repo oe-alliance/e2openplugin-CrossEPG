@@ -107,12 +107,12 @@ class CrossEPG_Auto:
 		if CrossEPGTime > 0:
 			if CrossEPGTime < now + atLeast:
 				if self.config.download_daily_enabled:
-					CrossEPGTime += 24*3600
-					while (int(CrossEPGTime)-30) < now:
-						CrossEPGTime += 24*3600
+					CrossEPGTime += 24 * 3600
+					while (int(CrossEPGTime) - 30) < now:
+						CrossEPGTime += 24 * 3600
 				elif self.config.download_standby_enabled:
 					CrossEPGTime += 3600
-					while (int(CrossEPGTime)-30) < now:
+					while (int(CrossEPGTime) - 30) < now:
 						CrossEPGTime += 3600
 			next = CrossEPGTime - now
 			self.crossepgtimer.startLongTimer(next)
