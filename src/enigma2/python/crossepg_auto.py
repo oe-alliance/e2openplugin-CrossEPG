@@ -216,10 +216,10 @@ class CrossEPG_Auto:
 				self.pdefrag = CrossEPG_Defragmenter(self.session, self.defragCallback, True)
 			self.config.last_defrag_timestamp = time()
 			self.config.save()
-			
+
 	def defragCallback(self, ret):
 		self.pdefrag = None
-		
+
 	def importer(self):
 		print "[CrossEPG_Auto] start csv import"
 		if self.osd:

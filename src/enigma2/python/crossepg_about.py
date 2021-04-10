@@ -100,4 +100,3 @@ class CrossEPG_About(Screen):
 
 	def quit(self):
 		self.close()
-
