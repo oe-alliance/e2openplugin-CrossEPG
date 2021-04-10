@@ -63,7 +63,7 @@ class CrossEPG_Downloader(Screen):
 
 		self.frontend = None
 
-		self["Frontend"] = FrontendStatus(frontend_source=lambda : self.frontend, update_interval=100)
+		self["Frontend"] = FrontendStatus(frontend_source=lambda: self.frontend, update_interval=100)
 		
 		self.rawchannel = None
 		self.retValue = True
