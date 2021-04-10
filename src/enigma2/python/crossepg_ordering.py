@@ -163,4 +163,3 @@ class CrossEPG_Ordering(Screen):
 	def keySave(self):
 		self.config.save()
 		self.close()
-

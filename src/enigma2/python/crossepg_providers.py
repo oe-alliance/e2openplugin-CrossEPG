@@ -197,4 +197,3 @@ class CrossEPG_Providers(Screen):
 	def keySave(self):
 		self.config.save()
 		self.close()
-

@@ -195,4 +195,3 @@ class CrossEPG_Rytec_Update(Screen):
 				count += 1
 			f.write("preferred_language=eng")
 			f.close()
-

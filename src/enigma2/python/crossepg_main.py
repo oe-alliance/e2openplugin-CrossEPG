@@ -26,11 +26,11 @@ class CrossEPG_Main:
 		else:
 			self.config.deleteLog()
 			self.session.openWithCallback(self.downloadCallback, CrossEPG_Downloader, self.config.providers)
-			
+
 	def configureCallback(self, result):
 		if result is True:
 			self.session.open(CrossEPG_Setup)
-		      
+
 	def loaderAsPlugin(self, session):
 		self.session = session
 		CrossEPG_Auto.instance.lock = True

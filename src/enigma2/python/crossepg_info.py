@@ -89,4 +89,3 @@ class CrossEPG_Info(Screen):
 			self["last_update"].text = _("Last update time: %s") % (param)
 		elif event == CrossEPG_Wrapper.INFO_VERSION:
 			self["version"].text = _("Version: %s") % (param)
-

@@ -121,5 +121,3 @@ class webif_class:
         # WARNING: if DM is switched off, sending a message cause a lock/crash in the system
         if is_on != None:
             self.WI("message?text=" + quote_plus("E2_LOADEPG - " + txt) + "&type=" + str(type) + "&timeout=" + str(timeout))
-
-

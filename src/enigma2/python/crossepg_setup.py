@@ -418,4 +418,3 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 				self.showWarning()
 
 		self.close()
-
