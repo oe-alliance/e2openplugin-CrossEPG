@@ -20,8 +20,9 @@ import _enigma
 import os
 import sys
 
+
 class CrossEPG_Loader(Screen):
-	def __init__(self, session, pcallback = None, noosd = False):
+	def __init__(self, session, pcallback=None, noosd=False):
 		self.session = session
 		if (getDesktop(0).size().width() < 800):
 			skin = "%s/skins/downloader_sd.xml" % os.path.dirname(sys.modules[__name__].__file__)
@@ -70,25 +71,25 @@ class CrossEPG_Loader(Screen):
 
 		# check for common patches
 		try:
-			self.xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21,None,eEPGCache)
+			self.xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
 			print "[CrossEPG_Loader] patch crossepg v2.1 found"
 		except Exception, e:
 			self.xepgpatch = None
 
 		try:
-			self.epgpatch = new.instancemethod(_enigma.eEPGCache_load,None,eEPGCache)
+			self.epgpatch = new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
 			print "[CrossEPG_Loader] patch epgcache.load() found"
 		except Exception, e:
 			self.epgpatch = None
 
 		try:
-			self.edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg,None,eEPGCache)
+			self.edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
 			print "[CrossEPG_Loader] patch EDG NEMESIS found"
 		except Exception, e:
 			self.edgpatch = None
 
 		try:
-			self.oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent,None,eEPGCache)
+			self.oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
 			print "[CrossEPG_Loader] patch Oudeis found"
 		except Exception, e:
 			self.oudeispatch = None
@@ -123,7 +124,7 @@ class CrossEPG_Loader(Screen):
 			self.hideprogress = eTimer()
 			self.hideprogress.callback.append(self["progress"].hide)
 
-			self.epg_channel = None;
+			self.epg_channel = None
 			self.epg_tuple = ()
 			self.epg_starttime = 0
 			self.epg_length = 0
@@ -156,12 +157,14 @@ class CrossEPG_Loader(Screen):
 		print "[CrossEPG_Loader:loadEPG] %s" % (cmd)
 		try:
 			global container  # Need to keep a ref alive...
+
 			def appClosed(retval):
 				global container
 				print "[CrossEPG_Loader:loadEPG] loadEPG complete, result: ", retval
 				self.epgpatch(eEPGCache.getInstance())
 				self.closeAndCallback(True)
 				container = None
+
 			def dataAvail(data):
 				print "[CrossEPG_Loader:loadEPG]", data.rstrip()
 			container = eConsoleAppContainer()
@@ -177,12 +180,14 @@ class CrossEPG_Loader(Screen):
 		cmd = "%s/crossepg_epgcopy %s/ext.epg.dat %s/epg.dat" % (self.home_directory, self.db_root, config.nemepg.path.value)
 		try:
 			global container  # Need to keep a ref alive...
+
 			def appClosed(retval):
 				global container
 				print "[CrossEPG_Loader:loadEDG] loadEDG complete, result: ", retval
 				self.edgpatch(eEPGCache.getInstance())
 				self.closeAndCallback(True)
 				container = None
+
 			def dataAvail(data):
 				print "[CrossEPG_Loader:loadEDG]", data.rstrip()
 			container = eConsoleAppContainer()
@@ -247,7 +252,7 @@ class CrossEPG_Loader(Screen):
 			self.closeAndCallback(self.retValue)
 
 		elif event == CrossEPG_Wrapper.EVENT_ERROR:
-			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type = MessageBox.TYPE_INFO, timeout = 20)
+			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type=MessageBox.TYPE_INFO, timeout=20)
 			self.retValue = False
 			self.quit()
 
@@ -268,4 +273,3 @@ class CrossEPG_Loader(Screen):
 	def doCallback(self):
 		if self.pcallback:
 			self.pcallback(self.retValue)
-

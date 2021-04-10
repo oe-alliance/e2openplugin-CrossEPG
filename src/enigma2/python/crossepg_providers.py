@@ -23,6 +23,7 @@ try:
 except:
 	pass
 
+
 class CrossEPG_Providers(Screen):
 	def __init__(self, session, protocol):
 		if (getDesktop(0).size().width() < 800):
@@ -56,7 +57,7 @@ class CrossEPG_Providers(Screen):
 
 		self.has_chnaged = False
 		self.old_service = None
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.list = []
 
 		self["list"] = List(self.list)
@@ -161,7 +162,7 @@ class CrossEPG_Providers(Screen):
 			return
 
 		index = self["list"].getIndex()
-		self.session.openWithCallback(self.downloadCallback, CrossEPG_Downloader, [self.list[index][2],])
+		self.session.openWithCallback(self.downloadCallback, CrossEPG_Downloader, [self.list[index][2], ])
 
 	def downloadCallback(self, ret):
 		if ret:
@@ -187,7 +188,7 @@ class CrossEPG_Providers(Screen):
 		self.close()
 
 	def keyCancel(self):
-		if self.has_chnaged :
+		if self.has_chnaged:
 			self.session.openWithCallback(self.cancelConfirm, MessageBox, _("Really close without saving settings?"))
 		else:
 			self.close()
@@ -195,4 +196,3 @@ class CrossEPG_Providers(Screen):
 	def keySave(self):
 		self.config.save()
 		self.close()
-

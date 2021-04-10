@@ -23,6 +23,7 @@ from time import *
 
 import os
 
+
 class CrossEPG_Setup(ConfigListScreen, Screen):
 	def __init__(self, session):
 		if (getDesktop(0).size().width() < 800):
@@ -89,9 +90,9 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		self.automatictype.append(_("once a day"))
 		self.automatictype.append(_("every hour (only in standby)"))
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.list = []
-		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)
+		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 
 		self["information"] = Label("")
 		self["key_red"] = Button(_("Cancel"))
@@ -156,7 +157,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		return True
 
 	def showWarning(self):
-		self.session.open(MessageBox, _("PLEASE READ!\nA hard drive or an usb pen is STRONGLY SUGGESTED. If you still want use your internal flash pay attention to:\n(1) If you don't have enough free space your box may completely block and you need to flash it again\n(2) Many write operations on your internal flash may damage your flash memory"), type = MessageBox.TYPE_ERROR)
+		self.session.open(MessageBox, _("PLEASE READ!\nA hard drive or an usb pen is STRONGLY SUGGESTED. If you still want use your internal flash pay attention to:\n(1) If you don't have enough free space your box may completely block and you need to flash it again\n(2) Many write operations on your internal flash may damage your flash memory"), type=MessageBox.TYPE_ERROR)
 
 	def keyLeft(self):
 		self["config"].handleKey(KEY_LEFT)
@@ -257,30 +258,30 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		self.config.csv_import_enabled = int(self.list[i][1].getValue())
 
 		if getImageDistro() != "openvix":
-			self.config.force_load_on_boot = int(self.list[i+1][1].getValue())
+			self.config.force_load_on_boot = int(self.list[i + 1][1].getValue())
 		else:
 			i -= 1
 
 		dailycache = self.config.download_daily_enabled
 		standbycache = self.config.download_standby_enabled
 		if getImageDistro() != "openvix":
-			if self.list[i+2][1].getIndex() == 0:
+			if self.list[i + 2][1].getIndex() == 0:
 				self.config.download_daily_enabled = 0
 				self.config.download_standby_enabled = 0
-			elif self.list[i+2][1].getIndex() == 1:
+			elif self.list[i + 2][1].getIndex() == 1:
 				self.config.download_daily_enabled = 1
 				self.config.download_standby_enabled = 0
 			else:
 				self.config.download_daily_enabled = 0
 				self.config.download_standby_enabled = 1
 		else:
-			if int(self.list[i+2][1].getIndex()) == 0:
+			if int(self.list[i + 2][1].getIndex()) == 0:
 				self.config.download_daily_enabled = 0
 				self.config.download_standby_enabled = 0
-			elif int(self.list[i+2][1].getIndex()) == 1:
+			elif int(self.list[i + 2][1].getIndex()) == 1:
 				self.config.download_daily_enabled = 1
 				self.config.download_standby_enabled = 0
-			elif int(self.list[i+2][1].getIndex()) == 2:
+			elif int(self.list[i + 2][1].getIndex()) == 2:
 				self.config.download_daily_enabled = 0
 				self.config.download_standby_enabled = 1
 
@@ -295,13 +296,13 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 		if not self.fastpatch:
 			self.config.download_daily_reboot = int(self.list[i][1].getValue())
-			self.config.download_manual_reboot = int(self.list[i+1][1].getValue())
+			self.config.download_manual_reboot = int(self.list[i + 1][1].getValue())
 			i += 2
 
 		self.config.show_plugin = int(self.list[i][1].getValue())
-		self.config.show_extension = int(self.list[i+1][1].getValue())
+		self.config.show_extension = int(self.list[i + 1][1].getValue())
 		if getImageDistro() != "openvix":
-			self.config.show_force_reload_as_plugin = int(self.list[i+2][1].getValue())
+			self.config.show_force_reload_as_plugin = int(self.list[i + 2][1].getValue())
 		else:
 			i += 1
 
@@ -416,4 +417,3 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 				self.showWarning()
 
 		self.close()
-

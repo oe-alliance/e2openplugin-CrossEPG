@@ -17,6 +17,8 @@ import os
 
 retrycount = 0
 autoCrossEPGTimer = None
+
+
 def CrossEPGautostart(reason, session=None, **kwargs):
 	"called with reason=1 to during /sbin/shutdown.sysvinit, with reason=0 at startup?"
 	global autoCrossEPGTimer
@@ -32,8 +34,10 @@ def CrossEPGautostart(reason, session=None, **kwargs):
 		print "[CrossEPG_Auto] Stop"
 		autoCrossEPGTimer.stop()
 
+
 class CrossEPG_Auto:
 	instance = None
+
 	def __init__(self, session):
 		self.session = session
 		self.crossepgtimer = eTimer()
@@ -99,7 +103,7 @@ class CrossEPG_Auto:
 		now = localtime(nowt)
 		return int(mktime((now.tm_year, now.tm_mon, now.tm_mday, self.config.download_daily_hours, self.config.download_daily_minutes, 0, now.tm_wday, now.tm_yday, now.tm_isdst)))
 
-	def crossepgdate(self, atLeast = 0):
+	def crossepgdate(self, atLeast=0):
 		self.crossepgtimer.stop()
 		global CrossEPGTime
 		CrossEPGTime = self.getCrossEPGTime()
@@ -107,12 +111,12 @@ class CrossEPG_Auto:
 		if CrossEPGTime > 0:
 			if CrossEPGTime < now + atLeast:
 				if self.config.download_daily_enabled:
-					CrossEPGTime += 24*3600
-					while (int(CrossEPGTime)-30) < now:
-						CrossEPGTime += 24*3600
+					CrossEPGTime += 24 * 3600
+					while (int(CrossEPGTime) - 30) < now:
+						CrossEPGTime += 24 * 3600
 				elif self.config.download_standby_enabled:
 					CrossEPGTime += 3600
-					while (int(CrossEPGTime)-30) < now:
+					while (int(CrossEPGTime) - 30) < now:
 						CrossEPGTime += 3600
 			next = CrossEPGTime - now
 			self.crossepgtimer.startLongTimer(next)
@@ -141,7 +145,7 @@ class CrossEPG_Auto:
 					self.doCrossEPG(False)
 				elif not inStandby:
 					message = _("Your epg about to update,\nDo you want to allow this?")
-					ybox = self.session.openWithCallback(self.doCrossEPG, MessageBox, message, MessageBox.TYPE_YESNO, timeout = 30)
+					ybox = self.session.openWithCallback(self.doCrossEPG, MessageBox, message, MessageBox.TYPE_YESNO, timeout=30)
 					ybox.setTitle('Scheduled CrossEPG.')
 				else:
 					self.doCrossEPG(True)
@@ -152,7 +156,7 @@ class CrossEPG_Auto:
 		now = int(time())
 		if answer is False:
 			if retrycount < 2:
-				print '[CrossEPG_Auto] Number of retries',retrycount
+				print '[CrossEPG_Auto] Number of retries', retrycount
 				print "[CrossEPG_Auto] delayed."
 				repeat = retrycount
 				repeat += 1
@@ -163,7 +167,7 @@ class CrossEPG_Auto:
 			else:
 				atLeast = 60
 				print "[CrossEPG_Auto] Enough Retries, delaying till next schedule.", strftime("%c", localtime(now))
-				self.session.open(MessageBox, _("Enough Retries, delaying till next schedule."), MessageBox.TYPE_INFO, timeout = 10)
+				self.session.open(MessageBox, _("Enough Retries, delaying till next schedule."), MessageBox.TYPE_INFO, timeout=10)
 				retrycount = 0
 				self.crossepgdate(atLeast)
 		else:
@@ -212,10 +216,10 @@ class CrossEPG_Auto:
 				self.pdefrag = CrossEPG_Defragmenter(self.session, self.defragCallback, True)
 			self.config.last_defrag_timestamp = time()
 			self.config.save()
-			
+
 	def defragCallback(self, ret):
 		self.pdefrag = None
-		
+
 	def importer(self):
 		print "[CrossEPG_Auto] start csv import"
 		if self.osd:
