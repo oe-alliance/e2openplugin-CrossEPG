@@ -48,7 +48,6 @@ class Description_parser(sgmllib.SGMLParser):
 		self.start_div_boxtxt = False
 		self.description = ''
 
-
 	def start_div(self, attributes):
 		for name, value in attributes:
 			if name == "class":
@@ -62,13 +61,12 @@ class Description_parser(sgmllib.SGMLParser):
 			self.start_div_box = False
 			self.start_div_boxtxt = False
 
-
 	def handle_data(self, data):
 		if self.start_div_boxtxt == True:
 			self.description += data.decode('iso-8859-1')
 
 	def get_descr(self):
-		return (self.description.strip(' \n\r') )
+		return (self.description.strip(' \n\r'))
 
 # =================================================================
 
@@ -101,8 +99,7 @@ class main:
 	FIELD_SEPARATOR = '###'
 	CHANNELLIST = {}
 
-
-	def log(self,s,video=0):
+	def log(self, s, video=0):
 		self.logging.log(self.CONF_LOG_PREFIX + str(s))
 		if video == 1:
 			self.log2video(str(s))
@@ -114,13 +111,12 @@ class main:
 		daystandard = time.strftime("%Y%m%d", time.strptime(dmp, "%Y/%m/%d"))
 		return daystandard
 
-
 	def get_description(self, url):
 
 		if url[:7] != 'http://':
 			return('')
 
-		if (url[-5:] != '.html') and (url[-4:] != '.htm') :
+		if (url[-5:] != '.html') and (url[-4:] != '.htm'):
 			return('')
 
 		self.log("   downloading description \'" + url + "\'")
@@ -149,8 +145,6 @@ class main:
 
 		return('')
 
-
-
 	def __init__(self, confdir, dbroot):
 
 		# initialize logging
@@ -158,13 +152,12 @@ class main:
 		# write to video OSD the script name
 		self.logging.log2video_scriptname(self.CONF_LOG_SCRIPT_NAME)
 
-
 		# check swap memory available
 		osp = os.popen('free | awk \'/Swap/ { print $2 }\'', 'r')
 		ret = osp.readlines()
 		if len(ret) > 0:
 			try:
-				m = int(ret[0])/1024
+				m = int(ret[0]) / 1024
 			except:
 				self.log("Error get SWAP value, abort", 1)
 				time.sleep(10)
@@ -181,9 +174,8 @@ class main:
 
 		osp.close()
 
-
 		CONF_FILE = os.path.join(confdir, self.CONF_CONFIGFILENAME)
-		if not os.path.exists(CONF_FILE) :
+		if not os.path.exists(CONF_FILE):
 			self.log("ERROR: %s not present" % CONF_FILE, 1)
 			sys.exit(1)
 
@@ -205,7 +197,7 @@ class main:
 			#self.DELTA_UTC = -scriptlib.delta_utc() # return negative if timezone is east of GMT (like Italy), invert sign
 			self.DELTA_UTC = 0
 		else:
-			self.DELTA_UTC = float(self.CONF_GMT_ZONE)*3600.0
+			self.DELTA_UTC = float(self.CONF_GMT_ZONE) * 3600.0
 			if self.DELTA_UTC >= 0:
 				self.DELTA_UTC = self.DELTA_UTC + scriptlib.delta_dst()
 			else:
@@ -219,13 +211,13 @@ class main:
 			os.mkdir(self.CONF_CACHEDIR)
 
 		# reading [channels] section
-		temp = config.items("channels");
+		temp = config.items("channels")
 
 		# create a dictionary (Python array) with index = channel ID
 		for i in temp:
 			self.CHANNELLIST[i[0].strip(' \n\r').lower()] = six.text_type(i[1].strip(' \n\r').lower(), 'utf-8')
 
-		if len(self.CHANNELLIST) == 0 :
+		if len(self.CHANNELLIST) == 0:
 			self.log("ERROR: [channels] section empty ?", 1)
 			sys.exit(1)
 
@@ -234,10 +226,9 @@ class main:
 
 		self.TODAYMP = time.strftime("%Y/%m/%d")
 		# create a list filled with dates (format AAAA/MM/DD) from today to today+ MAX_DAY_EPG
-		self.DAYCACHEMP=[self.TODAYMP]
+		self.DAYCACHEMP = [self.TODAYMP]
 		for day in range(1, self.CONF_MAX_DAY_EPG):
-			self.DAYCACHEMP.append(time.strftime("%Y/%m/%d", time.localtime(time.time()+86400*day)))
-
+			self.DAYCACHEMP.append(time.strftime("%Y/%m/%d", time.localtime(time.time() + 86400 * day)))
 
 
 # ----------------------------------------------------------------------
@@ -252,7 +243,7 @@ class main:
 
 		chlist = self.CHANNELLIST
 
-		self.log("Start download XML data from \'" + self.CONF_URL+"\'")
+		self.log("Start download XML data from \'" + self.CONF_URL + "\'")
 		self.log2video("downloading XML data ...")
 
 		i = self.HTTP_ERROR_RETRY
@@ -269,7 +260,7 @@ class main:
 				if hasattr(e, 'msg'):
 					serr += " , " + str(e.msg)
 
-				self.log("\'" + self.CONF_URL + "\' connection error. Reason: "+serr+". Waiting "+str(self.HTTP_ERROR_WAIT_RETRY)+" sec. and retry ["+str(i)+"] ...")
+				self.log("\'" + self.CONF_URL + "\' connection error. Reason: " + serr + ". Waiting " + str(self.HTTP_ERROR_WAIT_RETRY) + " sec. and retry [" + str(i) + "] ...")
 				time.sleep(self.HTTP_ERROR_WAIT_RETRY) # add sleep
 				i -= 1
 
@@ -293,7 +284,6 @@ class main:
 			time.sleep(5)
 			sys.exit(1)
 
-
 		self.log("End process XML data")
 		self.log2video("end process XML data")
 
@@ -301,13 +291,13 @@ class main:
 		xmlref_giorno = xmldoc.getElementsByTagName('giorno')
 		for xml_gg in xmlref_giorno:
 			gg = xml_gg.attributes["data"].value
-			if gg not in self.DAYCACHEMP :
+			if gg not in self.DAYCACHEMP:
 				continue
 
 			xmlref_canale = xml_gg.getElementsByTagName('canale')
 			for xml_ch in xmlref_canale:
 				chid = xml_ch.attributes["id"].value.strip(' \n\r').lower()
-				if chid not in chlist :
+				if chid not in chlist:
 						self.log("Warning: new channel \"id=%s name=%s\" found in XML data" % (xml_ch.attributes["id"].value, xml_ch.attributes["description"]))
 						continue
 
@@ -330,8 +320,8 @@ class main:
 						continue
 
 					channel_name = ''
-					if len(chlist[c].split(",")) > 1 :
-						if chlist[c].split(",")[1] != '' :
+					if len(chlist[c].split(",")) > 1:
+						if chlist[c].split(",")[1] != '':
 							# channel renamed, new name provided by user
 							channel_name = chlist[c].split(",")[1].strip(' \n\r').lower()
 
@@ -341,8 +331,8 @@ class main:
 						sys.exit(1)
 
 					channel_provider = self.CONF_DEFAULT_PROVIDER
-					if len(chlist[c].split(",")) > 2 :
-						if chlist[c].split(",")[2] != '' :
+					if len(chlist[c].split(",")) > 2:
+						if chlist[c].split(",")[2] != '':
 							channel_provider = chlist[c].split(",")[2].strip(' \n\r').lower()
 
 					# if channel name is not present as option in channel_list.conf , quit with error
@@ -369,7 +359,7 @@ class main:
 					self.log("  Writing in cache \'" + eventfilename + "\'", 2)
 					self.log2video(" extracting \"%s\" [%d] (%s)" % (channel_name, num_events, day))
 
-					fd=codecs.open(eventfilepath, "w", 'utf-8')
+					fd = codecs.open(eventfilepath, "w", 'utf-8')
 
 					fd.write(str(c) + self.FIELD_SEPARATOR + channel_name + self.FIELD_SEPARATOR + channel_provider + self.FIELD_SEPARATOR + day + '\n')
 					fd.write("Local Time (human readeable)###Unix GMT Time###Event Title###Event Description\n")
@@ -378,7 +368,7 @@ class main:
 					for xml_ee in xmlref_events:
 						orainiz = xml_ee.attributes["orainizio"].value
 
-						if (orainiz >='00:00') and (orainiz <= '05:59') :
+						if (orainiz >= '00:00') and (orainiz <= '05:59'):
 							nextdayevent = 86400
 						else:
 							nextdayevent = 0
@@ -392,14 +382,13 @@ class main:
 							# normal channel, not "+1"
 							event_startime_unix_gmt = str(int(time.mktime(time.strptime(event_starttime, "%Y/%m/%d %H:%M"))) - self.DELTA_UTC + nextdayevent)
 
-
 						event_title = six.text_type(xml_ee.getElementsByTagName('titolo')[0].firstChild.data)
 						event_title = event_title.replace('\r', '')
 						event_title = event_title.replace('\n', '')
 						event_title = event_title.strip(u' ')
 
 						event_description = ''
-						if self.CONF_DL_DESC == 1 :
+						if self.CONF_DL_DESC == 1:
 							url_desc = xml_ee.getElementsByTagName('linkScheda')[0].firstChild.data
 							event_description = six.text_type(self.get_description(url_desc.strip(' \n\r'))[:self.CONF_DLDESCMAXCHAR])
 							event_description = event_description.replace('\r', '')
@@ -410,13 +399,11 @@ class main:
 						num_events += 1
 						self.log2video(" extracting \"%s\" [%d] (%s)" % (channel_name, num_events, day))
 
-
 					fd.close()
 
 		del xmldoc
 
 # ----------------------------------------------------------------------
-
 
 	def process_cache(self):
 		self.log("--- START PROCESSING CACHE ---")
@@ -441,15 +428,15 @@ class main:
 		filelist = sorted(os.listdir(self.CONF_CACHEDIR))
 		filelist.append('***END***')
 
-		for f in filelist :
+		for f in filelist:
 			id = f.split(self.FIELD_SEPARATOR)[0]
 			if previous_id == '':
 				previous_id = id
 
-			if id != previous_id :
+			if id != previous_id:
 				total_events += len(events)
 				self.log("  ...processing \'%s\' , nr. events %d" % (previous_id, len(events)))
-				self.log2video("processed %d events ..." % total_events )
+				self.log2video("processed %d events ..." % total_events)
 
 				for c in channels_name:
 					# a channel can have zero or more SID (different channel with same name)
@@ -478,8 +465,8 @@ class main:
 							items = e.split(self.FIELD_SEPARATOR)
 							e_starttime = int(items[1])
 
-							if i < L :
-								e_length = int(events[i+1].split(self.FIELD_SEPARATOR)[1]) - e_starttime
+							if i < L:
+								e_length = int(events[i + 1].split(self.FIELD_SEPARATOR)[1]) - e_starttime
 							else:
 								# last event, dummy length 90 min.
 								e_length = 5400
@@ -492,7 +479,7 @@ class main:
 							e_summarie = items[3].encode('utf-8')
 
 							# add_event(start_time , duration , title , summarie , ISO639_language_code , strings_encoded_with_UTF-8)
-							crossdb.add_event(e_starttime, e_length, e_title, e_summarie, 'ita', True )
+							crossdb.add_event(e_starttime, e_length, e_title, e_summarie, 'ita', True)
 
 				if f == '***END***':
 					break
@@ -521,11 +508,9 @@ class main:
 		self.log2video("END , events processed: %d" % total_events)
 
 
-
 # ****************************************************************************************************************************
 
 # MAIN CODE: SCRIPT START HERE
-
 # increase this process niceness (other processes have higher priority)
 os.nice(10)
 
@@ -554,4 +539,3 @@ script_class.download_and_cache()
 
 # read cached data and inject into CrossEPG database
 script_class.process_cache()
-

@@ -26,6 +26,8 @@ import scriptlib
 
 # -------------------------------------------------
 # this is the main function
+
+
 def main():
 
 	# log_add() print to stdout a text message
@@ -39,7 +41,6 @@ def main():
 
 	crossepg.log_add("Installation dir : %s" % instdir)
 
-
 	# get dbroot path
 	dbroot = crossepg.epgdb_get_dbroot()
 	if dbroot == False:
@@ -48,29 +49,25 @@ def main():
 
 	crossepg.log_add("Database dir : %s" % dbroot)
 
-
 	# open CrossEPG internal database
 	if crossepg.epgdb_open(dbroot):
-		crossepg.log_add("EPGDB opened successfully (root = %s)" % dbroot);
+		crossepg.log_add("EPGDB opened successfully (root = %s)" % dbroot)
 	else:
-		crossepg.log_add("Error opening EPGDB");
-		crossepg.epgdb_close();
+		crossepg.log_add("Error opening EPGDB")
+		crossepg.epgdb_close()
 		sys.exit(1)
 
-	crossepg.log_add("Closing EPGDB");
-	crossepg.epgdb_close();
-
+	crossepg.log_add("Closing EPGDB")
+	crossepg.epgdb_close()
 
 	delta_timezone = scriptlib.delta_utc()
 	crossepg.log_add("GMT vs. LocalTime difference (in seconds): %d" % delta_timezone)
 	delta_daylight = scriptlib.delta_dst()
 	crossepg.log_add("DayLight Saving (DST) difference now: %d" % delta_daylight)
-	
-	
 
 	crossepg.log_add("---- END EXAMPLE TEST SCRIPT ----")
+
 
 # -------------------------------------------------
 # run main() function
 main()
-

@@ -14,6 +14,7 @@ from crossepg_locale import _
 
 from crossepglib import *
 
+
 class CrossEPG_Ordering(Screen):
 	def __init__(self, session):
 		if (getDesktop(0).size().width() < 800):
@@ -31,7 +32,7 @@ class CrossEPG_Ordering(Screen):
 		self.config.load()
 		self.has_chnaged = False
 		self.providers = self.config.getAllProviders()
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.list = []
 
 		self["list"] = List(self.list)
@@ -154,7 +155,7 @@ class CrossEPG_Ordering(Screen):
 		self.close()
 
 	def keyCancel(self):
-		if self.has_chnaged :
+		if self.has_chnaged:
 			self.session.openWithCallback(self.cancelConfirm, MessageBox, _("Really close without saving settings?"))
 		else:
 			self.close()
@@ -162,4 +163,3 @@ class CrossEPG_Ordering(Screen):
 	def keySave(self):
 		self.config.save()
 		self.close()
-

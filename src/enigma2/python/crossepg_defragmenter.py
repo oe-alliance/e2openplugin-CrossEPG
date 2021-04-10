@@ -18,8 +18,9 @@ from crossepg_locale import _
 import os
 import sys
 
+
 class CrossEPG_Defragmenter(Screen):
-	def __init__(self, session, pcallback = None, noosd = False):
+	def __init__(self, session, pcallback=None, noosd=False):
 		self.session = session
 		if (getDesktop(0).size().width() < 800):
 			skin = "%s/skins/downloader_sd.xml" % os.path.dirname(sys.modules[__name__].__file__)
@@ -100,7 +101,7 @@ class CrossEPG_Defragmenter(Screen):
 				self.wrapper.delCallback(self.wrapperCallback)
 				self.wrapper.quit()
 				self.closeAndCallback(self.retValue)
-				
+
 			self.status += 1
 
 		elif event == CrossEPG_Wrapper.EVENT_ACTION:
@@ -128,7 +129,7 @@ class CrossEPG_Defragmenter(Screen):
 			self.closeAndCallback(self.retValue)
 
 		elif event == CrossEPG_Wrapper.EVENT_ERROR:
-			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type = MessageBox.TYPE_INFO, timeout = 20)
+			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type=MessageBox.TYPE_INFO, timeout=20)
 			self.retValue = False
 			self.quit()
 
@@ -147,4 +148,3 @@ class CrossEPG_Defragmenter(Screen):
 	def doCallback(self):
 		if self.pcallback:
 			self.pcallback(self.retValue)
-

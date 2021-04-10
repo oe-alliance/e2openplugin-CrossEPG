@@ -39,6 +39,7 @@ from time import *
 import _enigma
 from boxbranding import getImageDistro
 
+
 class CrossEPG_Menu(Screen):
 	def __init__(self, session):
 		if (getDesktop(0).size().width() < 800):
@@ -61,7 +62,7 @@ class CrossEPG_Menu(Screen):
 		self.config.load()
 		self.patchtype = getEPGPatchType()
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		l = []
 		l.append(self.buildListEntry(_("Configure"), "configure.png"))
 		l.append(self.buildListEntry(_("OpenTV providers"), "opentv.png"))
@@ -219,9 +220,10 @@ class CrossEPG_Menu(Screen):
 	def loader(self):
 		self.session.open(CrossEPG_Loader)
 
+
 class CrossEPG_MenuSummary(Screen):
 	def __init__(self, session, parent):
-		Screen.__init__(self, session, parent = parent)
+		Screen.__init__(self, session, parent=parent)
 		self["SetupTitle"] = StaticText(_(parent.setup_title))
 		self["SetupEntry"] = StaticText("")
 		self["SetupValue"] = StaticText("")
@@ -240,4 +242,3 @@ class CrossEPG_MenuSummary(Screen):
 	def selectionChanged(self):
 		self["SetupEntry"].text = self.parent.getCurrentEntry()
 		self["SetupValue"].text = self.parent.getCurrentValue()
-

@@ -25,11 +25,13 @@ except:
 
 SIFTEAM_HOST = "crossepg.sifteam.eu"
 
+
 class CrossEPG_Xepgdb_Source(object):
 	def __init__(self):
 		self.headers_url = ""
 		self.descriptors_url = ""
 		self.description = ""
+
 
 class CrossEPG_Xepgdb_Update(Screen):
 	def __init__(self, session):
@@ -88,9 +90,9 @@ class CrossEPG_Xepgdb_Update(Screen):
 	def start(self):
 		if self.load():
 			self.save(self.config.home_directory + "/providers/")
-			self.session.open(MessageBox, _("%d providers updated") % len(self.sources), type = MessageBox.TYPE_INFO, timeout = 5)
+			self.session.open(MessageBox, _("%d providers updated") % len(self.sources), type=MessageBox.TYPE_INFO, timeout=5)
 		else:
-			self.session.open(MessageBox, _("Cannot retrieve xepgdb sources"), type = MessageBox.TYPE_ERROR, timeout = 10)
+			self.session.open(MessageBox, _("Cannot retrieve xepgdb sources"), type=MessageBox.TYPE_ERROR, timeout=10)
 		self.close()
 
 	def load(self):
@@ -99,7 +101,7 @@ class CrossEPG_Xepgdb_Update(Screen):
 			conn.request("GET", "/sources.xml")
 			httpres = conn.getresponse()
 			if httpres.status == 200:
-				f = open ("/tmp/crossepg_xepgdb_tmp", "w")
+				f = open("/tmp/crossepg_xepgdb_tmp", "w")
 				f.write(httpres.read())
 				f.close()
 				self.loadFromFile("/tmp/crossepg_xepgdb_tmp")
@@ -135,8 +137,7 @@ class CrossEPG_Xepgdb_Update(Screen):
 				filename = "xepgdb_" + filename
 			f = open(destination + "/" + filename + ".conf", "w")
 			f.write("description=" + source.description + "\n")
-			f.write("protocol=xepgdb\n");
+			f.write("protocol=xepgdb\n")
 			f.write("headers_url =" + source.headers + "\n")
 			f.write("descriptors_url =" + source.descriptors + "\n")
 			f.close()
-

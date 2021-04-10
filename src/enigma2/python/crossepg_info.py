@@ -14,6 +14,7 @@ from crossepg_locale import _
 import os
 import sys
 
+
 class CrossEPG_Info(Screen):
 	def __init__(self, session):
 		self.session = session
@@ -61,7 +62,6 @@ class CrossEPG_Info(Screen):
 		else:
 			self.wrapper.init(CrossEPG_Wrapper.CMD_INFO, self.config.db_root)
 
-
 	def quit(self):
 		if not self.wrapper.running():
 			self.close()
@@ -89,4 +89,3 @@ class CrossEPG_Info(Screen):
 			self["last_update"].text = _("Last update time: %s") % (param)
 		elif event == CrossEPG_Wrapper.INFO_VERSION:
 			self["version"].text = _("Version: %s") % (param)
-

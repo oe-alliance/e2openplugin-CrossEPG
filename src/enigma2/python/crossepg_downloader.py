@@ -26,11 +26,12 @@ try:
 except:
 	pass
 
+
 class CrossEPG_Downloader(Screen):
 	LOCK_TIMEOUT_FIXED = 100 	# 100ms for tick - 10 sec
 	LOCK_TIMEOUT_ROTOR = 1200 	# 100ms for tick - 120 sec
-	
-	def __init__(self, session, providers, pcallback = None, noosd = False):
+
+	def __init__(self, session, providers, pcallback=None, noosd=False):
 		from Components.Sources.StaticText import StaticText
 		from Components.Sources.Progress import Progress
 		if (getDesktop(0).size().width() < 800):
@@ -63,8 +64,8 @@ class CrossEPG_Downloader(Screen):
 
 		self.frontend = None
 
-		self["Frontend"] = FrontendStatus(frontend_source = lambda : self.frontend, update_interval = 100)
-		
+		self["Frontend"] = FrontendStatus(frontend_source=lambda: self.frontend, update_interval=100)
+
 		self.rawchannel = None
 		self.retValue = True
 		self.provider_index = 0
@@ -151,13 +152,13 @@ class CrossEPG_Downloader(Screen):
 			self.doTune(transponder)
 		else:
 			self.wrapper.download(self.providers[self.provider_index])
-			
+
 	def error(self, message):
 		print("[CrossEPG_Downloader] Error: %s" % message)
-		self.session.open(MessageBox, _("CrossEPG error: %s") % (message), type = MessageBox.TYPE_INFO, timeout = 20)
+		self.session.open(MessageBox, _("CrossEPG error: %s") % (message), type=MessageBox.TYPE_INFO, timeout=20)
 		self.retValue = False
 		self.quit()
-		
+
 	def doTune(self, transponder):
 		nimList = []
 		for nim in nimmanager.nim_slots:
@@ -167,7 +168,7 @@ class CrossEPG_Downloader(Screen):
 				nimconfig = nim.config.dvbs
 			else:
 				nimconfig = nim.config
-			
+
 			config_mode = nimconfig.configMode.value
 
 			if config_mode == 'advanced':
@@ -195,7 +196,6 @@ class CrossEPG_Downloader(Screen):
 			del self.session.pip
 			print("[CrossEPG_Downloader] Stopping PIP.")
 
-		
 		# stop currently playing service if it is using a tuner in ("loopthrough", "satposdepends")
 		currentlyPlayingNIM = None
 		currentService = self.session and self.session.nav.getCurrentService()
@@ -208,9 +208,9 @@ class CrossEPG_Downloader(Screen):
 					nimconfig = nimmanager.nim_slots[currentlyPlayingNIM].config.dvbs
 				else:
 					nimconfig = nimmanager.nim_slots[currentlyPlayingNIM].config
-				
+
 				nimConfigMode = nimconfig.configMode.value
-			
+
 				if nimConfigMode in ("loopthrough", "satposdepends"):
 					self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 					self.session.nav.stopService()
@@ -284,10 +284,10 @@ class CrossEPG_Downloader(Screen):
 		# set extended timeout for rotors
 		if self.isRotorSat(current_slotid, transponder["orbital_position"]):
 			self.LOCK_TIMEOUT = self.LOCK_TIMEOUT_ROTOR
-			print("[CrossEPG_Downloader] Motorised dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10))
+			print("[CrossEPG_Downloader] Motorised dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT / 10))
 		else:
 			self.LOCK_TIMEOUT = self.LOCK_TIMEOUT_FIXED
-			print("[CrossEPG_Downloader] Fixed dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT/10))
+			print("[CrossEPG_Downloader] Fixed dish. Will wait up to %i seconds for tuner lock." % (self.LOCK_TIMEOUT / 10))
 
 		self.frontend = self.rawchannel.getFrontend()
 		if not self.frontend:
@@ -352,7 +352,7 @@ class CrossEPG_Downloader(Screen):
 			return
 
 		self.locktimer.start(100, 1)
-		
+
 	def doDownload(self):
 		self.wrapper.download(self.providers[self.provider_index])
 
@@ -366,7 +366,7 @@ class CrossEPG_Downloader(Screen):
 
 			self.frontend = None
 			self.rawchannel = None
-			
+
 			if self.saved and self.open:
 				self.wrapper.close()
 				self.open = False
@@ -418,7 +418,7 @@ class CrossEPG_Downloader(Screen):
 		elif event == CrossEPG_Wrapper.EVENT_QUIT:
 			self.closeAndCallback(self.retValue)
 		elif event == CrossEPG_Wrapper.EVENT_ERROR:
-			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type = MessageBox.TYPE_INFO, timeout = 20)
+			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type=MessageBox.TYPE_INFO, timeout=20)
 			self.retValue = False
 			self.quit()
 
@@ -428,7 +428,7 @@ class CrossEPG_Downloader(Screen):
 
 		self.frontend = None
 		self.rawchannel = None
-		
+
 		if self.wrapper.running():
 			self.retValue = False
 			self.wrapper.quit()
@@ -443,4 +443,3 @@ class CrossEPG_Downloader(Screen):
 	def doCallback(self):
 		if self.pcallback:
 			self.pcallback(self.retValue)
-

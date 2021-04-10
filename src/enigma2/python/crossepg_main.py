@@ -10,6 +10,7 @@ from crossepg_setup import CrossEPG_Setup
 from crossepg_menu import CrossEPG_Menu
 from crossepg_auto import CrossEPG_Auto
 
+
 class CrossEPG_Main:
 	def __init__(self):
 		self.config = CrossEPG_Config()
@@ -21,15 +22,15 @@ class CrossEPG_Main:
 		CrossEPG_Auto.instance.stop()
 		self.config.load()
 		if self.config.configured == 0:
-			self.session.openWithCallback(self.configureCallback, MessageBox, _("You need to configure crossepg before starting downloader.\nWould You like to do it now ?"), type = MessageBox.TYPE_YESNO)
+			self.session.openWithCallback(self.configureCallback, MessageBox, _("You need to configure crossepg before starting downloader.\nWould You like to do it now ?"), type=MessageBox.TYPE_YESNO)
 		else:
 			self.config.deleteLog()
 			self.session.openWithCallback(self.downloadCallback, CrossEPG_Downloader, self.config.providers)
-			
+
 	def configureCallback(self, result):
 		if result is True:
 			self.session.open(CrossEPG_Setup)
-		      
+
 	def loaderAsPlugin(self, session):
 		self.session = session
 		CrossEPG_Auto.instance.lock = True
@@ -89,5 +90,6 @@ class CrossEPG_Main:
 	def setupCallback(self):
 		CrossEPG_Auto.instance.lock = False
 		CrossEPG_Auto.instance.doneConfiguring()
+
 
 crossepg_main = CrossEPG_Main()

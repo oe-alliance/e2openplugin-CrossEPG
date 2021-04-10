@@ -24,11 +24,13 @@ try:
 except:
 	pass
 
+
 class CrossEPG_Rytec_Source(object):
 	def __init__(self):
 		self.channels_urls = []
 		self.epg_urls = []
 		self.description = ""
+
 
 class CrossEPG_Rytec_Update(Screen):
 	def __init__(self, session):
@@ -46,7 +48,7 @@ class CrossEPG_Rytec_Update(Screen):
 		self.skinName = "downloader"
 		Screen.setTitle(self, _("CrossEPG"))
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.sources = []
 		self.session = session
 		self.mirrors = []
@@ -89,9 +91,9 @@ class CrossEPG_Rytec_Update(Screen):
 		self.loadSourceList()
 		if self.load():
 			self.save(self.config.home_directory + "/providers/")
-			self.session.open(MessageBox, _("%d providers updated") % len(self.sources), type = MessageBox.TYPE_INFO, timeout = 5)
+			self.session.open(MessageBox, _("%d providers updated") % len(self.sources), type=MessageBox.TYPE_INFO, timeout=5)
 		else:
-			self.session.open(MessageBox, _("Cannot retrieve rytec sources"), type = MessageBox.TYPE_ERROR, timeout = 10)
+			self.session.open(MessageBox, _("Cannot retrieve rytec sources"), type=MessageBox.TYPE_ERROR, timeout=10)
 		self.close()
 
 	def loadSourceList(self):
@@ -181,7 +183,7 @@ class CrossEPG_Rytec_Update(Screen):
 				filename = "rytec_" + filename
 			f = open(destination + "/" + filename + ".conf", "w")
 			f.write("description=" + source.description + "\n")
-			f.write("protocol=xmltv\n");
+			f.write("protocol=xmltv\n")
 			count = 0
 			for url in source.channels_urls:
 				f.write("channels_url_" + str(count) + "=" + url + "\n")
@@ -191,6 +193,5 @@ class CrossEPG_Rytec_Update(Screen):
 			for url in source.epg_urls:
 				f.write("epg_url_" + str(count) + "=" + url + "\n")
 				count += 1
-			f.write("preferred_language=eng");
+			f.write("preferred_language=eng")
 			f.close()
-
