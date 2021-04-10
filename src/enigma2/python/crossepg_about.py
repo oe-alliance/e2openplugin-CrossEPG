@@ -21,6 +21,7 @@ try:
 except:
 	pass
 
+
 class CrossEPG_About(Screen):
 	def __init__(self, session):
 		self.session = session

@@ -37,7 +37,6 @@ class main:
 	# log text
 	CONF_LOG_SCRIPT_NAME = "ALIAS EPG"
 
-
 	def __init__(self, confdir, dbroot):
 
 		# initialize logging
@@ -46,7 +45,6 @@ class main:
 		self.log.log2video_scriptname(self.CONF_LOG_SCRIPT_NAME)
 		
 		self.log.log("=== RUNNING SCRIPT %s ===" % self.CONF_LOG_SCRIPT_NAME)
-
 
 		CONF_FILE = os.path.join(confdir, self.CONF_CONFIGFILENAME)
 		if not os.path.exists(CONF_FILE):
@@ -72,7 +70,6 @@ class main:
 
 # ----------------------------------------------------------------------
 
-
 	def do_epg_alias(self):
 		self.log.log("--- START PROCESSING ---")
 		self.log.log("Loading lamedb indexed by channel name")
@@ -89,7 +86,6 @@ class main:
 		pbar_index = 1
 		self.log.log2video_pbar_on()
 		self.log.log2video_pbar(0)
-
 
 		for src_channel in self.CHANNELLIST:
 			self.log.log2video_pbar(int(pbar_index * pbar_maxvalue))
@@ -170,7 +166,6 @@ class main:
 					self.log.log('   copying EPG data from "%s" to "%s" sid "%s")' % (src_channel, dst, dsid))
 					self.log.log2video_status("copy %s -> %s (%d/%d)" % (src_channel, dst, num_events, total_events))
 
-
 					# add channel into db
 					# doesn't matter if the channel already exist... epgdb do all the work
 					# this make a reference to the dest. channel
@@ -199,10 +194,8 @@ class main:
 						if (num_events % 25) == 0:
 							self.log.log2video_status("copy %s -> %s (%d/%d)" % (src_channel, dst, num_events, total_events))
 
-
 					total_events += num_events
 					self.log.log("   copied %d events" % num_events)
-
 
 		self.log.log2video_pbar(0)
 		self.log.log2video_pbar_off()

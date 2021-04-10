@@ -33,6 +33,8 @@ def fn_escape(s):
 	return(s.encode('utf-8'))
 
 # logging class
+
+
 class logging_class:
 	
 	FDlog = None
@@ -48,7 +50,6 @@ class logging_class:
 		else:
 			print("[scriptlib] WARNING: cannot open crossepg dbroot. Log not initialized !!")
 			
-
 	def log(self, s):
 		if self.FDlog != None:
 			self.FDlog.write("%s %s\n" % (time.strftime("%d/%m/%Y %H:%M:%S"), s))
@@ -80,6 +81,8 @@ class logging_class:
 		sys.stdout.flush()
 
 # decompress gzipped data
+
+
 class zlib_class:
 	GZTMP_FILE = "gunzip_temp.gz"
 	UNGZTMP_FILE = "gunzip_temp"
@@ -168,7 +171,6 @@ class lamedb_class:
 		else:
 			return(u)
 
-
 	def read_lamedb(self):
 		if not os.path.exists(self.LAMEDB):
 			print("ERROR ! \'%s\' NOT FOUND" % self.LAMEDB)
@@ -250,14 +252,11 @@ class lamedb_class:
 				else:
 					self.lamedb_provid_dict[provider_name] = [sp]
 
-				
-
 		fd.close()
 
 		if len(self.lamedb_dict) == 0:
 			print("ERROR lamedb empty ?")
 			sys.exit(1)
-
 
 	def get_sid_byname(self, channel_name):
 		sid_list = []
@@ -268,7 +267,6 @@ class lamedb_class:
 				sid_list.append(v[0])
 
 		return(sid_list)
-
 
 	def get_provid_byname(self, channel_name):
 		provid_list = []
@@ -287,7 +285,6 @@ class lamedb_class:
 			sidprov_list = self.lamedb_dict[channel_name]
 
 		return(sidprov_list)
-
 
 	def get_chnames_byprov(self, provider_name):
 		if self.INDEXBYPROVID == True:
@@ -345,9 +342,9 @@ class crossepg_db_class:
 		crossepg.epgdb_close()
 		crossepg.epgdb_clean()
 
-
 	# add channel into db and get a reference to the structure
 	# doesn't matter if the channel already exist... epgdb do all the work
+
 	def add_channel(self, ch_sid):
 		# epgdb_channels_add(onid, tsid, sid)
 		self.db_channel_ref = crossepg.epgdb_channels_add(ch_sid[2], ch_sid[1], ch_sid[0])
@@ -382,7 +379,6 @@ class crossepg_db_class:
 		# remember to use always the new structure reference
 		# if the event already exist epgdb update it and automatically destroy the new structure
 		event_ref = crossepg.epgdb_titles_add(self.db_channel_ref, event_ref)
-
 
 		#print("DEBUG , title DATA TYPE: \'%s\'" % type(title).__name__ )
 		#print("DEBUG , summarie DATA TYPE: \'%s\'" % type(summarie).__name__ )

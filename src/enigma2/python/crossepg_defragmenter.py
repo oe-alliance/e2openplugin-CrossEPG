@@ -18,6 +18,7 @@ from crossepg_locale import _
 import os
 import sys
 
+
 class CrossEPG_Defragmenter(Screen):
 	def __init__(self, session, pcallback=None, noosd=False):
 		self.session = session

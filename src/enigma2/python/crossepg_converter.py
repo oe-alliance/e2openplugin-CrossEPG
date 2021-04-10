@@ -24,6 +24,7 @@ try:
 except:
 	pass
 
+
 class CrossEPG_Converter(Screen):
 	def __init__(self, session, pcallback=None, noosd=False):
 		self.session = session

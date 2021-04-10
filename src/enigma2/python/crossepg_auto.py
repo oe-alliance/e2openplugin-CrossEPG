@@ -18,6 +18,8 @@ import os
 
 retrycount = 0
 autoCrossEPGTimer = None
+
+
 def CrossEPGautostart(reason, session=None, **kwargs):
 	"called with reason=1 to during /sbin/shutdown.sysvinit, with reason=0 at startup?"
 	global autoCrossEPGTimer
@@ -33,8 +35,10 @@ def CrossEPGautostart(reason, session=None, **kwargs):
 		print("[CrossEPG_Auto] Stop")
 		autoCrossEPGTimer.stop()
 
+
 class CrossEPG_Auto:
 	instance = None
+
 	def __init__(self, session):
 		self.session = session
 		self.crossepgtimer = eTimer()

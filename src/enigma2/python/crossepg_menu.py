@@ -39,6 +39,7 @@ from time import *
 import _enigma
 from boxbranding import getImageDistro
 
+
 class CrossEPG_Menu(Screen):
 	def __init__(self, session):
 		if (getDesktop(0).size().width() < 800):
@@ -218,6 +219,7 @@ class CrossEPG_Menu(Screen):
 
 	def loader(self):
 		self.session.open(CrossEPG_Loader)
+
 
 class CrossEPG_MenuSummary(Screen):
 	def __init__(self, session, parent):

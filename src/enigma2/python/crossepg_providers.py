@@ -24,6 +24,7 @@ try:
 except:
 	pass
 
+
 class CrossEPG_Providers(Screen):
 	def __init__(self, session, protocol):
 		if (getDesktop(0).size().width() < 800):

@@ -25,11 +25,13 @@ except:
 
 SIFTEAM_HOST = "crossepg.sifteam.eu"
 
+
 class CrossEPG_Xepgdb_Source(object):
 	def __init__(self):
 		self.headers_url = ""
 		self.descriptors_url = ""
 		self.description = ""
+
 
 class CrossEPG_Xepgdb_Update(Screen):
 	def __init__(self, session):

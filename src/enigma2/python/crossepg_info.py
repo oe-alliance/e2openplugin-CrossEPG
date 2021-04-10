@@ -14,6 +14,7 @@ from crossepg_locale import _
 import os
 import sys
 
+
 class CrossEPG_Info(Screen):
 	def __init__(self, session):
 		self.session = session
@@ -60,7 +61,6 @@ class CrossEPG_Info(Screen):
 			self.wrapper.init(CrossEPG_Wrapper.CMD_INFO, config.misc.epgcachepath.value + 'crossepg')
 		else:
 			self.wrapper.init(CrossEPG_Wrapper.CMD_INFO, self.config.db_root)
-
 
 	def quit(self):
 		if not self.wrapper.running():

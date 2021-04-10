@@ -34,10 +34,8 @@ class webif_class:
         self.WEBIF_AUTH_REALM = auth_realm
         self.WEBIF_IP = ip
 
-
     def get_use_webif(self):
         return(self.USE_WEBIF)
-
 
     # WebInterface routines
     # see http://dream.reichholf.net/wiki/Enigma2:WebInterface
@@ -85,7 +83,6 @@ class webif_class:
             current_sid = self.currentchannelsid()
 
         return(current_sid)
-
 
     def zap(self, channelsid):
         self.WI('zap?sRef=' + channelsid)
