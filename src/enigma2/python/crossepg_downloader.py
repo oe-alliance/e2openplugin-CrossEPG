@@ -30,7 +30,7 @@ class CrossEPG_Downloader(Screen):
 	LOCK_TIMEOUT_FIXED = 100 	# 100ms for tick - 10 sec
 	LOCK_TIMEOUT_ROTOR = 1200 	# 100ms for tick - 120 sec
 	
-	def __init__(self, session, providers, pcallback = None, noosd = False):
+	def __init__(self, session, providers, pcallback=None, noosd=False):
 		from Components.Sources.StaticText import StaticText
 		from Components.Sources.Progress import Progress
 		if (getDesktop(0).size().width() < 800):
@@ -63,7 +63,7 @@ class CrossEPG_Downloader(Screen):
 
 		self.frontend = None
 
-		self["Frontend"] = FrontendStatus(frontend_source = lambda : self.frontend, update_interval = 100)
+		self["Frontend"] = FrontendStatus(frontend_source=lambda : self.frontend, update_interval=100)
 		
 		self.rawchannel = None
 		self.retValue = True
@@ -154,7 +154,7 @@ class CrossEPG_Downloader(Screen):
 			
 	def error(self, message):
 		print("[CrossEPG_Downloader] Error: %s" % message)
-		self.session.open(MessageBox, _("CrossEPG error: %s") % (message), type = MessageBox.TYPE_INFO, timeout = 20)
+		self.session.open(MessageBox, _("CrossEPG error: %s") % (message), type=MessageBox.TYPE_INFO, timeout=20)
 		self.retValue = False
 		self.quit()
 		
@@ -418,7 +418,7 @@ class CrossEPG_Downloader(Screen):
 		elif event == CrossEPG_Wrapper.EVENT_QUIT:
 			self.closeAndCallback(self.retValue)
 		elif event == CrossEPG_Wrapper.EVENT_ERROR:
-			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type = MessageBox.TYPE_INFO, timeout = 20)
+			self.session.open(MessageBox, _("CrossEPG error: %s") % (param), type=MessageBox.TYPE_INFO, timeout=20)
 			self.retValue = False
 			self.quit()
 

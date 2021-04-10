@@ -92,7 +92,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 		self.onChangedEntry = [ ]
 		self.list = []
-		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)
+		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 
 		self["information"] = Label("")
 		self["key_red"] = Button(_("Cancel"))
@@ -157,7 +157,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		return True
 
 	def showWarning(self):
-		self.session.open(MessageBox, _("PLEASE READ!\nA hard drive or an usb pen is STRONGLY SUGGESTED. If you still want use your internal flash pay attention to:\n(1) If you don't have enough free space your box may completely block and you need to flash it again\n(2) Many write operations on your internal flash may damage your flash memory"), type = MessageBox.TYPE_ERROR)
+		self.session.open(MessageBox, _("PLEASE READ!\nA hard drive or an usb pen is STRONGLY SUGGESTED. If you still want use your internal flash pay attention to:\n(1) If you don't have enough free space your box may completely block and you need to flash it again\n(2) Many write operations on your internal flash may damage your flash memory"), type=MessageBox.TYPE_ERROR)
 
 	def keyLeft(self):
 		self["config"].handleKey(KEY_LEFT)

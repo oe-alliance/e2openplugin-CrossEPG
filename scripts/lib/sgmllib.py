@@ -521,7 +521,7 @@ class TestSGMLParser(SGMLParser):
         self.flush()
 
 
-def test(args = None):
+def test(args=None):
     import sys
 
     if args is None:
