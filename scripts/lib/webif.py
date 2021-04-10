@@ -19,20 +19,20 @@ from six.moves.urllib.parse import quote_plus
 
 
 class webif_class:
-    USE_WEBIF=1
-    USE_WEBIF_AUTH=0
-    WEBIF_AUTH_USER='root'
-    WEBIF_AUTH_PASSW='qboxhd'
-    WEBIF_AUTH_REALM='dm7025'
-    WEBIF_IP='127.0.0.1'
+    USE_WEBIF = 1
+    USE_WEBIF_AUTH = 0
+    WEBIF_AUTH_USER = 'root'
+    WEBIF_AUTH_PASSW = 'qboxhd'
+    WEBIF_AUTH_REALM = 'dm7025'
+    WEBIF_IP = '127.0.0.1'
 
     def __init__(self, use, auth, auth_name, auth_passw, auth_realm, ip):
-        self.USE_WEBIF=use
-        self.USE_WEBIF_AUTH=auth
-        self.WEBIF_AUTH_USER=auth_name
-        self.WEBIF_AUTH_PASSW=auth_passw
-        self.WEBIF_AUTH_REALM=auth_realm
-        self.WEBIF_IP=ip
+        self.USE_WEBIF = use
+        self.USE_WEBIF_AUTH = auth
+        self.WEBIF_AUTH_USER = auth_name
+        self.WEBIF_AUTH_PASSW = auth_passw
+        self.WEBIF_AUTH_REALM = auth_realm
+        self.WEBIF_IP = ip
 
 
     def get_use_webif(self):
@@ -50,8 +50,8 @@ class webif_class:
             urllib.request.install_opener(opener)
 
         try:
-            sock=urllib.request.urlopen('http://' + self.WEBIF_IP + '/web/' + command)
-            data=sock.read()
+            sock = urllib.request.urlopen('http://' + self.WEBIF_IP + '/web/' + command)
+            data = sock.read()
         except urllib.error.URLError:
             pass
         except urllib.error.HTTPError:
@@ -63,7 +63,7 @@ class webif_class:
             return(data)
 
     def standby(self):
-        current_sid=self.currentchannelsid()
+        current_sid = self.currentchannelsid()
         if current_sid != None:
             self.WI('powerstate?newstate=0')
             time.sleep(5)
@@ -72,7 +72,7 @@ class webif_class:
         self.WI('powerstate?newstate=3')
 
     def switchon(self):
-        current_sid=self.currentchannelsid()
+        current_sid = self.currentchannelsid()
         if current_sid == None:
             # DM appears switched off. Switch it on !
 
@@ -82,13 +82,13 @@ class webif_class:
             self.WI('powerstate?newstate=0')
 
             time.sleep(5)
-            current_sid=self.currentchannelsid()
+            current_sid = self.currentchannelsid()
 
         return(current_sid)
 
 
     def zap(self, channelsid):
-        self.WI('zap?sRef='+channelsid)
+        self.WI('zap?sRef=' + channelsid)
 
     def reloadepgdat(self):
         self.WI('powerstate?newstate=10')
@@ -96,7 +96,7 @@ class webif_class:
     def currentchannelsid(self):
         # DM must be SWITCHED ON
         # if DM is in standby mode, it return 'none'
-        data=self.WI('subservices')
+        data = self.WI('subservices')
 
         if data == None:
             return(None)
@@ -106,23 +106,23 @@ class webif_class:
         except:
             return(None)
 
-        r=xmldoc.getElementsByTagName('e2servicereference')[0].firstChild.data
+        r = xmldoc.getElementsByTagName('e2servicereference')[0].firstChild.data
         if r == 'N/A':
             return(None)
 
         return(r)
 
     def is_recording(self):
-        data=self.WI("timerlist")
+        data = self.WI("timerlist")
         if data.find("<e2state>2</e2state>") == -1:
             return(False) # not recording
         else:
             return(True) # recording
 
     def message(self,txt,timeout=10,type=1):
-        is_on=self.currentchannelsid()
+        is_on = self.currentchannelsid()
         # WARNING: if DM is switched off, sending a message cause a lock/crash in the system
         if is_on != None:
-            self.WI("message?text="+quote_plus("E2_LOADEPG - "+txt)+"&type="+str(type)+"&timeout="+str(timeout))
+            self.WI("message?text=" + quote_plus("E2_LOADEPG - " + txt) + "&type=" + str(type) + "&timeout=" + str(timeout))
 
 
