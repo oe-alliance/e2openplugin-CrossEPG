@@ -20,6 +20,7 @@ import _enigma
 import os
 import sys
 
+
 class CrossEPG_Loader(Screen):
 	def __init__(self, session, pcallback=None, noosd=False):
 		self.session = session
@@ -156,12 +157,14 @@ class CrossEPG_Loader(Screen):
 		print "[CrossEPG_Loader:loadEPG] %s" % (cmd)
 		try:
 			global container  # Need to keep a ref alive...
+
 			def appClosed(retval):
 				global container
 				print "[CrossEPG_Loader:loadEPG] loadEPG complete, result: ", retval
 				self.epgpatch(eEPGCache.getInstance())
 				self.closeAndCallback(True)
 				container = None
+
 			def dataAvail(data):
 				print "[CrossEPG_Loader:loadEPG]", data.rstrip()
 			container = eConsoleAppContainer()
@@ -177,12 +180,14 @@ class CrossEPG_Loader(Screen):
 		cmd = "%s/crossepg_epgcopy %s/ext.epg.dat %s/epg.dat" % (self.home_directory, self.db_root, config.nemepg.path.value)
 		try:
 			global container  # Need to keep a ref alive...
+
 			def appClosed(retval):
 				global container
 				print "[CrossEPG_Loader:loadEDG] loadEDG complete, result: ", retval
 				self.edgpatch(eEPGCache.getInstance())
 				self.closeAndCallback(True)
 				container = None
+
 			def dataAvail(data):
 				print "[CrossEPG_Loader:loadEDG]", data.rstrip()
 			container = eConsoleAppContainer()
