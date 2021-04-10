@@ -89,7 +89,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		self.automatictype.append(_("once a day"))
 		self.automatictype.append(_("every hour (only in standby)"))
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.list = []
 		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 

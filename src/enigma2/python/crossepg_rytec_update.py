@@ -45,7 +45,7 @@ class CrossEPG_Rytec_Update(Screen):
 		self.skinName = "downloader"
 		Screen.setTitle(self, _("CrossEPG"))
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.sources = []
 		self.session = session
 		self.mirrors = []

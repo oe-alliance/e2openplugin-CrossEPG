@@ -61,7 +61,7 @@ class CrossEPG_Menu(Screen):
 		self.config.load()
 		self.patchtype = getEPGPatchType()
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		l = []
 		l.append(self.buildListEntry(_("Configure"), "configure.png"))
 		l.append(self.buildListEntry(_("OpenTV providers"), "opentv.png"))

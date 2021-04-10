@@ -31,7 +31,7 @@ class CrossEPG_Ordering(Screen):
 		self.config.load()
 		self.has_chnaged = False
 		self.providers = self.config.getAllProviders()
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.list = []
 
 		self["list"] = List(self.list)
@@ -154,7 +154,7 @@ class CrossEPG_Ordering(Screen):
 		self.close()
 
 	def keyCancel(self):
-		if self.has_chnaged :
+		if self.has_chnaged:
 			self.session.openWithCallback(self.cancelConfirm, MessageBox, _("Really close without saving settings?"))
 		else:
 			self.close()
