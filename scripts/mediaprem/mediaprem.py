@@ -322,7 +322,7 @@ class main(sgmllib.SGMLParser):
 		return daystandard
 
 
-	def get_description(self,url,maxchar=128):
+	def get_description(self, url, maxchar=128):
 
 		if url[:7] != 'http://':
 			return('')

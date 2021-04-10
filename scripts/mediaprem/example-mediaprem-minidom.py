@@ -102,7 +102,7 @@ class main:
 	CHANNELLIST = {}
 
 
-	def log(self,s,video=0):
+	def log(self, s, video=0):
 		self.logging.log(self.CONF_LOG_PREFIX + str(s))
 		if video == 1:
 			self.log2video(str(s))

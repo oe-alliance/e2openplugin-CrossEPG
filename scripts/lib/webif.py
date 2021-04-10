@@ -119,7 +119,7 @@ class webif_class:
         else:
             return(True) # recording
 
-    def message(self,txt,timeout=10,type=1):
+    def message(self, txt, timeout=10, type=1):
         is_on = self.currentchannelsid()
         # WARNING: if DM is switched off, sending a message cause a lock/crash in the system
         if is_on != None:
