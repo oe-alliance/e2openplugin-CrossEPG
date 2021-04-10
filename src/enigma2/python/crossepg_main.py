@@ -21,7 +21,7 @@ class CrossEPG_Main:
 		CrossEPG_Auto.instance.stop()
 		self.config.load()
 		if self.config.configured == 0:
-			self.session.openWithCallback(self.configureCallback, MessageBox, _("You need to configure crossepg before starting downloader.\nWould You like to do it now ?"), type = MessageBox.TYPE_YESNO)
+			self.session.openWithCallback(self.configureCallback, MessageBox, _("You need to configure crossepg before starting downloader.\nWould You like to do it now ?"), type=MessageBox.TYPE_YESNO)
 		else:
 			self.config.deleteLog()
 			self.session.openWithCallback(self.downloadCallback, CrossEPG_Downloader, self.config.providers)

@@ -88,9 +88,9 @@ class CrossEPG_Rytec_Update(Screen):
 		self.loadSourceList()
 		if self.load():
 			self.save(self.config.home_directory + "/providers/")
-			self.session.open(MessageBox, _("%d providers updated") % len(self.sources), type = MessageBox.TYPE_INFO, timeout = 5)
+			self.session.open(MessageBox, _("%d providers updated") % len(self.sources), type=MessageBox.TYPE_INFO, timeout=5)
 		else:
-			self.session.open(MessageBox, _("Cannot retrieve rytec sources"), type = MessageBox.TYPE_ERROR, timeout = 10)
+			self.session.open(MessageBox, _("Cannot retrieve rytec sources"), type=MessageBox.TYPE_ERROR, timeout=10)
 		self.close()
 
 	def loadSourceList(self):

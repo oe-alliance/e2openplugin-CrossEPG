@@ -99,7 +99,7 @@ class CrossEPG_Auto:
 		now = localtime(nowt)
 		return int(mktime((now.tm_year, now.tm_mon, now.tm_mday, self.config.download_daily_hours, self.config.download_daily_minutes, 0, now.tm_wday, now.tm_yday, now.tm_isdst)))
 
-	def crossepgdate(self, atLeast = 0):
+	def crossepgdate(self, atLeast=0):
 		self.crossepgtimer.stop()
 		global CrossEPGTime
 		CrossEPGTime = self.getCrossEPGTime()
@@ -141,7 +141,7 @@ class CrossEPG_Auto:
 					self.doCrossEPG(False)
 				elif not inStandby:
 					message = _("Your epg about to update,\nDo you want to allow this?")
-					ybox = self.session.openWithCallback(self.doCrossEPG, MessageBox, message, MessageBox.TYPE_YESNO, timeout = 30)
+					ybox = self.session.openWithCallback(self.doCrossEPG, MessageBox, message, MessageBox.TYPE_YESNO, timeout=30)
 					ybox.setTitle('Scheduled CrossEPG.')
 				else:
 					self.doCrossEPG(True)
@@ -163,7 +163,7 @@ class CrossEPG_Auto:
 			else:
 				atLeast = 60
 				print "[CrossEPG_Auto] Enough Retries, delaying till next schedule.", strftime("%c", localtime(now))
-				self.session.open(MessageBox, _("Enough Retries, delaying till next schedule."), MessageBox.TYPE_INFO, timeout = 10)
+				self.session.open(MessageBox, _("Enough Retries, delaying till next schedule."), MessageBox.TYPE_INFO, timeout=10)
 				retrycount = 0
 				self.crossepgdate(atLeast)
 		else:
