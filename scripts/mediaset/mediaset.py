@@ -174,7 +174,7 @@ class main(sgmllib.SGMLParser):
 			for name, value in attr:
 				if name == "idref":
 					self.SGML_EVENT_IDREF = str(value).strip(' \n\r').lower()
-					if not self.CHANNELLIST.has_key(self.SGML_EVENT_IDREF):
+					if self.SGML_EVENT_IDREF not in self.CHANNELLIST:
 						self.log.log("WARNING: new channel id=%s found in XML data" % self.SGML_EVENT_IDREF)
 				elif name == "timestamp":
 					self.SGML_EVENT_TIMESTAMP = str(value).strip(' \n\r')
@@ -183,7 +183,7 @@ class main(sgmllib.SGMLParser):
 					self.SGML_EVENT_TITLE = self.SGML_EVENT_TITLE.encode('utf-8')
 
 	def end_programma(self):
-		if self.SGML_FD.has_key(self.SGML_EVENT_IDREF):
+		if self.SGML_EVENT_IDREF in self.SGML_FD:
 
 			event_starttime = self.SGML_EVENT_TIMESTAMP
 			event_startime_unix_gmt = str(int(time.mktime(time.strptime(event_starttime, "%Y%m%d%H%M"))) - self.DELTA_UTC)

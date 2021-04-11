@@ -238,14 +238,14 @@ class lamedb_class:
 			if self.INDEXBYCHNAME == True:
 				sp = (sid, provider_name)
 				if channel_name != '':
-					if self.lamedb_dict.has_key(channel_name):
+					if channel_name in self.lamedb_dict:
 						self.lamedb_dict[channel_name].append(sp)
 					else:
 						self.lamedb_dict[channel_name] = [sp]
 
 			if self.INDEXBYPROVID == True:
 				sp = (sid, channel_name)
-				if self.lamedb_provid_dict.has_key(provider_name):
+				if provider_name in self.lamedb_provid_dict:
 					self.lamedb_provid_dict[provider_name].append(sp)
 				else:
 					self.lamedb_provid_dict[provider_name] = [sp]
@@ -259,7 +259,7 @@ class lamedb_class:
 	def get_sid_byname(self, channel_name):
 		sid_list = []
 
-		if self.lamedb_dict.has_key(channel_name):
+		if channel_name in self.lamedb_dict:
 			for v in self.lamedb_dict[channel_name]:
 				# (sid,provider_name)
 				sid_list.append(v[0])
@@ -269,7 +269,7 @@ class lamedb_class:
 	def get_provid_byname(self, channel_name):
 		provid_list = []
 
-		if self.lamedb_dict.has_key(channel_name):
+		if channel_name in self.lamedb_dict:
 			for v in self.lamedb_dict[channel_name]:
 				# (sid,provider_name)
 				provid_list.append(v[1])
@@ -278,7 +278,7 @@ class lamedb_class:
 
 	def get_sidprovid_byname(self, channel_name):
 		sidprov_list = []
-		if self.lamedb_dict.has_key(channel_name):
+		if channel_name in self.lamedb_dict:
 			# (sid,provider_name)
 			sidprov_list = self.lamedb_dict[channel_name]
 
@@ -286,7 +286,7 @@ class lamedb_class:
 
 	def get_chnames_byprov(self, provider_name):
 		if self.INDEXBYPROVID == True:
-			if self.lamedb_provid_dict.has_key(provider_name):
+			if provider_name in self.lamedb_provid_dict:
 				return self.lamedb_provid_dict[provider_name]
 			else:
 				return None

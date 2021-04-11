@@ -167,7 +167,7 @@ class main(sgmllib.SGMLParser):
 
 					self.SGML_CHID = str(value).strip(' \n\r').lower()
 
-					if not self.CHANNELLIST.has_key(self.SGML_CHID):
+					if self.SGML_CHID not in self.CHANNELLIST:
 							self.log.log("WARNING: new channel id=%s found in XML data" % self.SGML_CHID)
 							break
 
@@ -328,7 +328,7 @@ class main(sgmllib.SGMLParser):
 
 		url_hash = hash(url)
 
-		if self.DESCRIPTIONS_WEBCACHE.has_key(url_hash):
+		if url_hash in self.DESCRIPTIONS_WEBCACHE:
 			self.log.log("   description (from cache): " + url)
 			return(self.DESCRIPTIONS_WEBCACHE[url_hash])
 
