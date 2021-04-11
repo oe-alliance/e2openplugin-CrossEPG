@@ -297,12 +297,12 @@ class main:
 			xmlref_canale = xml_gg.getElementsByTagName('canale')
 			for xml_ch in xmlref_canale:
 				chid = xml_ch.attributes["id"].value.strip(' \n\r').lower()
-				if not chlist.has_key(chid):
+				if chid not in chlist:
 						self.log("Warning: new channel \"id=%s name=%s\" found in XML data" % (xml_ch.attributes["id"].value, xml_ch.attributes["description"]))
 						continue
 
 				clist = [chid]
-				if self.CHANNELLIST.has_key(chid + '+1'):
+				if chid + '+1' in self.CHANNELLIST:
 					clist.append(chid + '+1')
 
 				for c in clist:
