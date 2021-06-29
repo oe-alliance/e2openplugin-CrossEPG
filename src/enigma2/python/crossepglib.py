@@ -412,12 +412,15 @@ class CrossEPG_Wrapper:
 		self.cmd.dataAvail.remove(self.__cmdData)
 
 	def __cmdData(self, data):
+		data = six.ensure_str(data)
+		print("[crossepg][cmdData] data = %s" % data)		
 		if self.cache is None:
 			self.cache = data
 		else:
 			self.cache += data
 
 		if '\n' in data:
+			print("[crossepg][cmdData] \n in data = %s" % data)			
 			splitcache = self.cache.split('\n')
 			if self.cache[-1] == '\n':
 				iteration = splitcache
@@ -427,9 +430,11 @@ class CrossEPG_Wrapper:
 				self.cache = splitcache[-1]
 			for mydata in iteration:
 				if mydata != '':
+					print("[crossepg][cmdData] parse mydata = %s" % mydata)
 					self.__parseLine(mydata)
 
 	def __parseLine(self, data):
+		print("[crossepg][parseline] parse data = %s" % data)	
 		if data.find("CHANNEL ") == 0:
 			self.__callCallbacks(self.EVENT_CHANNEL, data[7:])
 		elif data.find("STARTTIME ") == 0:

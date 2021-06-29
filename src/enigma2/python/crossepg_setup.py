@@ -390,7 +390,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 				config.misc.epgcache_filename.save()
 				configfile.save()
 			except Exception as e:
-				print("custom epgcache filename not supported by current enigma2 version")
+				print("[crossepg_setup:keySave] custom epgcache filename not supported by current enigma2 version")
 
 		if getEPGPatchType() == -1:
 			# exec crossepg_prepare_pre_start for unpatched images
