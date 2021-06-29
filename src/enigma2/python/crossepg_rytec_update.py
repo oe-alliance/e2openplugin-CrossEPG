@@ -106,7 +106,7 @@ class CrossEPG_Rytec_Update(Screen):
 			response = urlopen(url)
 			content_raw = response.read()
 			CType = response.info().getheader('Content-Type') if six.PY2 else response.getheader("Content-Type")
-			if 'gzip' in CType::
+			if 'gzip' in CType:
 				if six.PY2:
 					self.mirrors = [x.strip() for x in gzip.GzipFile(fileobj=StringIO(content_raw)).read().strip().split("\n")]
 				else:

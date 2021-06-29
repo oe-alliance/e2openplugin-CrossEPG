@@ -18,7 +18,6 @@ from . crossepg_converter import CrossEPG_Converter
 from . crossepg_loader import CrossEPG_Loader
 from . crossepg_locale import _
 from . crossepglib import *
-from . crossepg_menu import CrossEPG_MenuSummary
 
 
 class CrossEPG_Providers(Screen):
@@ -92,6 +91,7 @@ class CrossEPG_Providers(Screen):
 			return ""
 
 	def createSummary(self):
+		from . crossepg_menu import CrossEPG_MenuSummary
 		return CrossEPG_MenuSummary
 
 	def buildList(self):
