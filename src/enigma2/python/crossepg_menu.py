@@ -1,3 +1,44 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+from time import *
+
+from enigma import *
+import _enigma
+from boxbranding import getImageDistro
+from Components.ActionMap import ActionMap
+from Components.Button import Button
+from Components.Label import Label
+from Components.Harddisk import harddiskmanager
+from Components.MenuList import MenuList
+from Components.MultiContent import MultiContentEntryText
+from Components.PluginComponent import plugins
+from Components.Sources.List import List
+from Components.Sources.StaticText import StaticText
+from Plugins.Plugin import PluginDescriptor
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Screens.Standby import TryQuitMainloop
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_CURRENT_SKIN
+from Tools.LoadPixmap import LoadPixmap
+
+from . crossepglib import *
+from . crossepg_info import CrossEPG_Info
+from . crossepg_about import CrossEPG_About
+from . crossepg_providers import CrossEPG_Providers
+from . crossepg_setup import CrossEPG_Setup
+from . crossepg_downloader import CrossEPG_Downloader
+from . crossepg_importer import CrossEPG_Importer
+from . crossepg_converter import CrossEPG_Converter
+from . crossepg_loader import CrossEPG_Loader
+from . crossepg_ordering import CrossEPG_Ordering
+from . crossepg_rytec_update import CrossEPG_Rytec_Update
+from . crossepg_xepgdb_update import CrossEPG_Xepgdb_Update
+from . crossepg_defragmenter import CrossEPG_Defragmenter
+from . crossepg_locale import _
+
+
+
 
 
 class CrossEPG_Menu(Screen):

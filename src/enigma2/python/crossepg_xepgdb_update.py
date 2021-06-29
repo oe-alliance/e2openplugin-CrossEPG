@@ -1,3 +1,24 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+import xml.etree.cElementTree
+import re
+import os
+
+
+from enigma import getDesktop, eTimer
+from Components.Label import Label
+from Components.Pixmap import Pixmap
+from Components.ProgressBar import ProgressBar
+from Components.Sources.Progress import Progress
+from Components.Sources.StaticText import StaticText
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
+
+
+from . crossepglib import *
+from . crossepg_locale import _
 
 SIFTEAM_HOST = "crossepg.sifteam.eu"
 

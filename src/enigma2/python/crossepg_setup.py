@@ -1,3 +1,26 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+import os
+from time import *
+
+from enigma import getDesktop
+from boxbranding import getImageDistro
+from Components.ActionMap import NumberActionMap
+from Components.Button import Button
+from Components.config import KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_0, KEY_ASCII, ConfigYesNo, ConfigSelection, ConfigClock, config, configfile
+from Components.ConfigList import ConfigListScreen
+from Components.Harddisk import harddiskmanager
+from Components.Label import Label
+from Components.PluginComponent import plugins
+from Plugins.Plugin import PluginDescriptor
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Screens.Setup import SetupSummary
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS
+
+from . crossepglib import *
+from . crossepg_locale import _
 
 
 class CrossEPG_Setup(ConfigListScreen, Screen):

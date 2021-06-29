@@ -1,3 +1,28 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+import os
+import sys
+
+from enigma import getDesktop, eTimer
+from boxbranding import getImageDistro
+from Components.ActionMap import NumberActionMap
+from Components.config import config
+from Components.Label import Label
+from Components.Pixmap import Pixmap
+from Components.ProgressBar import ProgressBar
+from Components.Sources.Progress import Progress
+from Components.Sources.StaticText import StaticText
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
+
+
+from . crossepglib import *
+from . crossepg_locale import _
+
+
+
 
 class CrossEPG_Converter(Screen):
 	def __init__(self, session, pcallback=None, noosd=False):

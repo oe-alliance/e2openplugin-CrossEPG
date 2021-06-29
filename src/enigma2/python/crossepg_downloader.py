@@ -1,3 +1,30 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+import os
+import sys
+
+from enigma import getDesktop, iPlayableService, eTimer, eServiceReference
+from boxbranding import getImageDistro
+from Components.ActionMap import NumberActionMap
+from Components.config import config
+from Components.Label import Label
+from Components.NimManager import nimmanager
+from Components.Pixmap import Pixmap
+from Components.ProgressBar import ProgressBar
+from Components.ServiceEventTracker import ServiceEventTracker
+from Components.Sources.FrontendStatus import FrontendStatus
+from Components.Sources.Progress import Progress
+from Components.Sources.StaticText import StaticText
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
+
+
+from . crossepglib import *
+from . crossepg_locale import _
+
+
 
 
 class CrossEPG_Downloader(Screen):

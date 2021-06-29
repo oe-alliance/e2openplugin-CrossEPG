@@ -1,3 +1,19 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+import os
+import re
+import sys
+from time import *
+
+import traceback
+
+from enigma import *
+import _enigma
+from boxbranding import getImageDistro
+from Tools.Directories import crawlDirectory, pathExists, createDir
+
+from . crossepg_locale import _
 
 # return value
 # -1 none

@@ -1,3 +1,21 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
+import os
+import sys
+
+from enigma import getDesktop
+from Components.ActionMap import ActionMap
+from Components.Button import Button
+from Components.Label import Label
+from Components.Pixmap import Pixmap
+from Screens.Screen import Screen
+from Tools.LoadPixmap import LoadPixmap
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
+
+from . crossepglib import *
+from . crossepg_locale import _
+
 
 class CrossEPG_About(Screen):
 	def __init__(self, session):
@@ -35,7 +53,7 @@ class CrossEPG_About(Screen):
 		self["key_blue"] = Button("")
 
 		try:
-			from version import version
+			from . version import version
 		except Exception as e:
 			version = "unknow version"
 
