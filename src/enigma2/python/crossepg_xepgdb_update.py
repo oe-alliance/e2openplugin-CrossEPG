@@ -1,10 +1,15 @@
 from __future__ import print_function
 from __future__ import absolute_import
+import six
 
 import xml.etree.cElementTree
 import re
 import os
 
+if six.PY2:
+	import httplib
+else:
+	import http.client as httplib
 
 from enigma import getDesktop, eTimer
 from Components.Label import Label
@@ -90,6 +95,7 @@ class CrossEPG_Xepgdb_Update(Screen):
 			conn = httplib.HTTPConnection(SIFTEAM_HOST)
 			conn.request("GET", "/sources.xml")
 			httpres = conn.getresponse()
+			print("[crossepg_xepgdb_update] load response = %s" % httpres)			
 			if httpres.status == 200:
 				f = open("/tmp/crossepg_xepgdb_tmp", "w")
 				f.write(httpres.read())
@@ -98,7 +104,7 @@ class CrossEPG_Xepgdb_Update(Screen):
 				os.unlink("/tmp/crossepg_xepgdb_tmp")
 				return True
 		except Exception as e:
-			print(e)
+			print("[crossepg_xepgdb_update] exception on load = %s" % e)
 		return False
 
 	def loadFromFile(self, filename):
