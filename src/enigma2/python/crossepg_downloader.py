@@ -1,30 +1,3 @@
-from __future__ import print_function
-from enigma import getDesktop, iPlayableService, eTimer, eServiceReference
-
-from Components.Label import Label
-from Components.Pixmap import Pixmap
-from Components.ProgressBar import ProgressBar
-from Components.Sources.FrontendStatus import FrontendStatus
-from Components.ServiceEventTracker import ServiceEventTracker
-from Components.ActionMap import NumberActionMap
-from Components.config import config
-from Components.NimManager import nimmanager
-
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from boxbranding import getImageDistro
-from crossepglib import *
-from crossepg_locale import _
-
-import os
-import sys
-
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
-try:
-	from Tools.Directories import SCOPE_ACTIVE_SKIN
-except:
-	pass
 
 
 class CrossEPG_Downloader(Screen):
@@ -32,8 +5,6 @@ class CrossEPG_Downloader(Screen):
 	LOCK_TIMEOUT_ROTOR = 1200 	# 100ms for tick - 120 sec
 
 	def __init__(self, session, providers, pcallback=None, noosd=False):
-		from Components.Sources.StaticText import StaticText
-		from Components.Sources.Progress import Progress
 		if (getDesktop(0).size().width() < 800):
 			skin = "%s/skins/downloader_sd.xml" % os.path.dirname(sys.modules[__name__].__file__)
 			self.isHD = 0
@@ -109,17 +80,11 @@ class CrossEPG_Downloader(Screen):
 
 	def firstExec(self):
 		if self.isHD:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background_hd.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background_hd.png" % os.path.dirname(sys.modules[__name__].__file__)
 		else:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background.png" % os.path.dirname(sys.modules[__name__].__file__)
 		self["background"].instance.setPixmapFromFile(png)

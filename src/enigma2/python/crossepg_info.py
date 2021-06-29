@@ -1,19 +1,3 @@
-from enigma import getDesktop
-
-from Screens.Screen import Screen
-
-from Components.Label import Label
-from Components.Button import Button
-from Components.ActionMap import ActionMap
-from Components.config import config
-
-from boxbranding import getImageDistro
-from crossepglib import *
-from crossepg_locale import _
-
-import os
-import sys
-
 
 class CrossEPG_Info(Screen):
 	def __init__(self, session):

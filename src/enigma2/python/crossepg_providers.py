@@ -1,28 +1,3 @@
-from __future__ import print_function
-from enigma import getDesktop
-
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from Components.Label import Label
-from Components.Sources.StaticText import StaticText
-from Components.Button import Button
-from Components.ActionMap import ActionMap
-from Components.Sources.List import List
-
-from Tools.LoadPixmap import LoadPixmap
-
-from crossepg_downloader import CrossEPG_Downloader
-from crossepg_converter import CrossEPG_Converter
-from crossepg_loader import CrossEPG_Loader
-from crossepg_locale import _
-from crossepglib import *
-
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
-try:
-	from Tools.Directories import SCOPE_ACTIVE_SKIN
-except:
-	pass
 
 
 class CrossEPG_Providers(Screen):
@@ -39,7 +14,6 @@ class CrossEPG_Providers(Screen):
 			protocol_title = _("XMLTV")
 		elif protocol == "opentv":
 			protocol_title = _("OpenTV")
-			from Components.NimManager import nimmanager
 			self.configured_sats = nimmanager.getConfiguredSats()
 		elif protocol == "xepgdb":
 			protocol_title = _("XEPGDB")
@@ -97,7 +71,6 @@ class CrossEPG_Providers(Screen):
 			return ""
 
 	def createSummary(self):
-		from crossepg_menu import CrossEPG_MenuSummary
 		return CrossEPG_MenuSummary
 
 	def buildList(self):
@@ -128,10 +101,7 @@ class CrossEPG_Providers(Screen):
 
 	def buildListEntry(self, name, description, enabled):
 		if enabled:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/enabled.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/enabled.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/enabled.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/enabled.png" % os.path.dirname(sys.modules[__name__].__file__)
 			pixmap = LoadPixmap(cached=True, path=png)

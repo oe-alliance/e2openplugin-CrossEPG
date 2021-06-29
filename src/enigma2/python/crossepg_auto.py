@@ -1,20 +1,3 @@
-from __future__ import print_function
-from enigma import * #, quitMainloop
-from Components.ServiceEventTracker import ServiceEventTracker
-from Screens.MessageBox import MessageBox
-from Tools.Directories import fileExists
-from crossepglib import *
-from crossepg_downloader import CrossEPG_Downloader
-from crossepg_converter import CrossEPG_Converter
-from crossepg_loader import CrossEPG_Loader
-from crossepg_importer import CrossEPG_Importer
-from crossepg_defragmenter import CrossEPG_Defragmenter
-from crossepg_locale import _
-from Screens.Screen import Screen
-
-from time import *
-
-import os
 
 retrycount = 0
 autoCrossEPGTimer = None
@@ -138,7 +121,6 @@ class CrossEPG_Auto:
 		if wake - now < 60:
 			atLeast = 60
 			print("[CrossEPG_Auto] onTimer occured at", strftime("%c", localtime(now)))
-			from Screens.Standby import inStandby
 			self.config.load()
 			if (self.config.download_standby_enabled and inStandby) or self.config.download_daily_enabled:
 				if self.lock or self.session.nav.RecordTimer.isRecording() or abs(self.session.nav.RecordTimer.getNextRecordingTime() - time()) <= 900 or abs(self.session.nav.RecordTimer.getNextZapTime() - time()) <= 900:
@@ -179,7 +161,6 @@ class CrossEPG_Auto:
 
 	def doautostartdownload(self):
 		self.config.load()
-		from Screens.Standby import inStandby
 		if self.config.download_standby_enabled and inStandby:
 			self.osd = False
 		elif self.config.download_daily_enabled:
@@ -252,7 +233,6 @@ class CrossEPG_Auto:
 				self.loader()
 			else:
 				if self.config.download_daily_reboot:
-					from Screens.Standby import inStandby
 					if inStandby:
 						# Modded by IAmATeaf 13/04/2012
 						# os.system("touch /tmp/crossepg.standby")
@@ -262,7 +242,6 @@ class CrossEPG_Auto:
 						# os.system("rm /tmp/crossepg.standby")
 						os.unlink("/tmp/crossepg.standby")
 					print("[CrossEPG_Auto] rebooting")
-					from Screens.Standby import TryQuitMainloop
 					self.session.open(TryQuitMainloop, 3)
 
 	def loader(self):
@@ -293,10 +272,8 @@ class CrossEPG_Auto:
 			self.pdefrag = None
 
 	def backToStandby(self):
-		from Screens.Standby import inStandby
 		if inStandby == None:
 			print("[CrossEPG_Auto] coming back in standby")
-			from Screens.Standby import Standby
 			self.session.open(Standby)
 
 	def doneConfiguring(self):

@@ -1,27 +1,3 @@
-from __future__ import print_function
-from enigma import getDesktop, eTimer
-
-from Components.Label import Label
-from Components.Pixmap import Pixmap
-from Components.ProgressBar import ProgressBar
-from Components.Sources.Progress import Progress
-
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from crossepglib import *
-from crossepg_locale import _
-
-import httplib
-import xml.etree.cElementTree
-import re
-import os
-
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
-try:
-	from Tools.Directories import SCOPE_ACTIVE_SKIN
-except:
-	pass
 
 SIFTEAM_HOST = "crossepg.sifteam.eu"
 
@@ -35,7 +11,6 @@ class CrossEPG_Xepgdb_Source(object):
 
 class CrossEPG_Xepgdb_Update(Screen):
 	def __init__(self, session):
-		from Components.Sources.StaticText import StaticText
 		if (getDesktop(0).size().width() < 800):
 			skin = "%s/skins/downloader_sd.xml" % os.path.dirname(sys.modules[__name__].__file__)
 			self.isHD = 0
@@ -71,17 +46,11 @@ class CrossEPG_Xepgdb_Update(Screen):
 
 	def firstExec(self):
 		if self.isHD:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background_hd.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background_hd.png" % os.path.dirname(sys.modules[__name__].__file__)
 		else:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background.png" % os.path.dirname(sys.modules[__name__].__file__)
 		self["background"].instance.setPixmapFromFile(png)

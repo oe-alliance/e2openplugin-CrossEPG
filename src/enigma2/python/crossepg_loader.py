@@ -1,26 +1,3 @@
-from __future__ import print_function
-from future.utils import raise_
-from enigma import getDesktop, eTimer, eConsoleAppContainer
-
-from Components.config import config
-from Components.Label import Label
-from Components.Sources.StaticText import StaticText
-from Components.Pixmap import Pixmap
-from Components.ProgressBar import ProgressBar
-from Components.Sources.Progress import Progress
-from Components.ActionMap import NumberActionMap
-from Components.config import config
-
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from boxbranding import getImageDistro
-from crossepglib import *
-from crossepg_locale import _
-
-import _enigma
-import os
-import sys
 
 
 class CrossEPG_Loader(Screen):

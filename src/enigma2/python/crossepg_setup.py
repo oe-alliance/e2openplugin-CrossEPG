@@ -1,28 +1,3 @@
-from __future__ import print_function
-from enigma import getDesktop
-
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from Components.config import KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_0, KEY_ASCII, ConfigYesNo, ConfigSelection, ConfigClock, config, configfile
-from Components.ConfigList import ConfigListScreen
-from Components.Button import Button
-from Components.Label import Label
-from Components.Harddisk import harddiskmanager
-from Components.PluginComponent import plugins
-from Components.ActionMap import NumberActionMap
-
-from Tools.Directories import resolveFilename, SCOPE_PLUGINS
-
-from Plugins.Plugin import PluginDescriptor
-
-from boxbranding import getImageDistro
-from crossepglib import *
-from crossepg_locale import _
-
-from time import *
-
-import os
 
 
 class CrossEPG_Setup(ConfigListScreen, Screen):
@@ -145,7 +120,6 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		return self["config"].getCurrent() and str(self["config"].getCurrent()[1].getText()) or ""
 
 	def createSummary(self):
-		from Screens.Setup import SetupSummary
 		return SetupSummary
 
 	def isMountedInRW(self, path):

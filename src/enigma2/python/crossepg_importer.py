@@ -1,28 +1,3 @@
-from enigma import getDesktop, eTimer
-
-from Components.Label import Label
-from Components.Sources.StaticText import StaticText
-from Components.Pixmap import Pixmap
-from Components.ProgressBar import ProgressBar
-from Components.Sources.Progress import Progress
-from Components.ActionMap import NumberActionMap
-from Components.config import config
-
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from boxbranding import getImageDistro
-from crossepglib import *
-from crossepg_locale import _
-
-import os
-import sys
-
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
-try:
-	from Tools.Directories import SCOPE_ACTIVE_SKIN
-except:
-	pass
 
 
 class CrossEPG_Importer(Screen):
@@ -87,17 +62,11 @@ class CrossEPG_Importer(Screen):
 
 	def firstExec(self):
 		if self.isHD:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background_hd.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background_hd.png" % os.path.dirname(sys.modules[__name__].__file__)
 		else:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background.png" % os.path.dirname(sys.modules[__name__].__file__)
 		self["background"].instance.setPixmapFromFile(png)
