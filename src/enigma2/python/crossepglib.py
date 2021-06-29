@@ -1,11 +1,12 @@
 from __future__ import print_function
 from __future__ import absolute_import
+import six
 
 import os
 import re
 import sys
 from time import *
-
+from types import MethodType as instancemethod
 import traceback
 
 from enigma import *
@@ -25,25 +26,25 @@ from . crossepg_locale import _
 
 def getEPGPatchType():
 	try:
-		xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
+		xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
 		return 3
 	except Exception as e:
 		pass
 
 	try:
-		epgpatch = new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
+		epgpatch = instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
 		return 0
 	except Exception as e:
 		pass
 
 	try:
-		edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
+		edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
 		return 1
 	except Exception as e:
 		pass
 
 	try:
-		oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
+		oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
 		return 2
 	except Exception as e:
 		pass
