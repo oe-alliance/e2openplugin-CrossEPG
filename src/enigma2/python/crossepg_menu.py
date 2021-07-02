@@ -52,7 +52,7 @@ class CrossEPG_Menu(Screen):
 		f.close()
 		Screen.__init__(self, session)
 		try:
-			from version import version
+			from . version import version
 			self.setup_title = _("CrossEPG") + " - " + version[:5]
 			Screen.setTitle(self, self.setup_title)
 		except Exception as e:
