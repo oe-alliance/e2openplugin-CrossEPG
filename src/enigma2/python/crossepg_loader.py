@@ -1,10 +1,14 @@
 from __future__ import print_function
 from future.utils import raise_
 
-from types import MethodType as instancemethod
+if six.PY3:
+	from types import MethodType as instancemethod
+else:
+	import new	
 import _enigma
 import os
 import sys
+from shutil import copyfile
 
 from enigma import getDesktop, eTimer, eConsoleAppContainer
 from boxbranding import getImageDistro
@@ -74,31 +78,71 @@ class CrossEPG_Loader(Screen):
 			print("[CrossEPG_Config] ERROR!! CrossEPG binaries non found")
 
 		# check for common patches
-		try:
-			self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
-			print("[CrossEPG_Loader] patch crossepg v2.1 found")
-		except Exception as e:
+		#	Explanation of different kind of EPG patches in images:
+		#	- No patch used: The box (Enigma2) needs to be restarted to load the EPG data. While starting GUI can freeze/crash.
+		#	- CrossEPG patch:loading data with crossepg patch v2
+		#	- EPG patch: EPG data is written in epg.dat. At the end the "load" command is given to read epg.dat
+		#	- Oudeis patch: EPG data is immediately loaded and accessible, even while the xmltv-plugin is running. Normaly there are no issues while loading.
+		#	- Pli patch: Same as Oudeis patch but the xmltv-plugin runs in a seperate "thread" so no issues at all in the GUI or other components.		
+
+		if six.PY2:
+			try:
+				self.xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
+				print("[CrossEPG_Loader] patch crossepg v2.1 found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
+				self.xepgpatch = None
+
+			try:
+				self.epgpatch = new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
+				print("[CrossEPG_Loader] patch epgcache.load() found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch epgcache.load() not found e = %s" % e)
+				self.epgpatch = None
+
+			try:
+				self.edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
+				print("[CrossEPG_Loader] patch EDG NEMESIS found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch EDG NEMESIS not found e = %s" % e)		
+				self.edgpatch = None
+
+			try:
+				self.oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
+				print("[CrossEPG_Loader] patch Oudeis found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
+				self.oudeispatch = None
+		else:
+#			try:
+#				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, (None, eEPGCache))
+#				print("[CrossEPG_Loader] patch crossepg v2.1 found")
+#			except Exception as e:
+#				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
 			self.xepgpatch = None
 
-		try:
-			self.epgpatch = instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
-			print("[CrossEPG_Loader] patch epgcache.load() found")
-		except Exception as e:
-			self.epgpatch = None
+			try:
+				self.epgpatch = instancemethod(_enigma.eEPGCache_load, (None, eEPGCache))
+				print("[CrossEPG_Loader] patch epgcache.load() found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch epgcache.load() not found e = %s" % e)
+				self.epgpatch = None
 
-		try:
-			self.edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
-			print("[CrossEPG_Loader] patch EDG NEMESIS found")
-		except Exception as e:
-			self.edgpatch = None
+			try:
+				self.edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, (None, eEPGCache))
+				print("[CrossEPG_Loader] patch EDG NEMESIS found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch EDG NEMESIS not found e = %s" % e)		
+				self.edgpatch = None
 
-		try:
-			self.oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
-			print("[CrossEPG_Loader] patch Oudeis found")
-		except Exception as e:
-			self.oudeispatch = None
+			try:
+				self.oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, (None, eEPGCache))
+				print("[CrossEPG_Loader] patch Oudeis found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
+				self.oudeispatch = None				
 
-		if self.xepgpatch:
+		if self.xepgpatch and not six.PY3:
 			self.timer = eTimer()
 			self.timer.callback.append(self.loadEPG2)
 			self.timer.start(200, 1)
