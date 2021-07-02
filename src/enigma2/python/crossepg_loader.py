@@ -1,5 +1,6 @@
 from __future__ import print_function
 from future.utils import raise_
+import six
 
 if six.PY3:
 	from types import MethodType as instancemethod
@@ -194,34 +195,61 @@ class CrossEPG_Loader(Screen):
 
 	def loadEPG2(self):
 		print("[CrossEPG_Loader] loading data with crossepg patch v2")
-		self.xepgpatch(eEPGCache.getInstance(), self.db_root)
+		if six.PY3:
+			self.xepgpatch(self.db_root)
+		else:
+			self.xepgpatch(eEPGCache.getInstance(), self.db_root)			
 		self.closeAndCallback(True)
 
 	def loadEPG(self):
-		try:
-			cmd = "%s/crossepg_epgcopy %s/ext.epg.dat %s" % (self.home_directory, self.db_root, config.misc.epgcache_filename.value)
-		except Exception as e:
-			cmd = "%s/crossepg_epgcopy %s/ext.epg.dat /hdd/epg.dat" % (self.home_directory, self.db_root)
-		print("[CrossEPG_Loader:loadEPG] %s" % (cmd))
-		try:
-			global container  # Need to keep a ref alive...
-
-			def appClosed(retval):
-				global container
-				print("[CrossEPG_Loader:loadEPG] loadEPG complete, result: ", retval)
-				self.epgpatch(eEPGCache.getInstance())
-				self.closeAndCallback(True)
-				container = None
-
-			def dataAvail(data):
-				print("[CrossEPG_Loader:loadEPG]", data.rstrip())
-			container = eConsoleAppContainer()
-			if container.execute(cmd):
-				raise_(Exception, "Failed to execute: " + cmd)
-			container.appClosed.append(appClosed)
-			container.dataAvail.append(dataAvail)
-		except Exception as e:
-			print("[CrossEPG_Loader:loadEPG] loadEPG FAILED: ", e)
+		print("[CrossEPG_Loader] loading data with epg patch")
+		if six.PY3:	
+			source1 = os.path.join(self.db_root, "ext.epg.dat")
+			dest1 = config.misc.epgcache_filename.value 
+			dest2 = "/hdd/epg.dat"
+			try:
+				print("[CrossEPG_Loader:copyEPG] source = %s, dest = %s" % (source1, dest1))		
+				copyfile(source1, dest1)
+			except Exception as e:
+				print("[CrossEPG_Loader] exception copying data1  e = %s" % e)
+				print("[CrossEPG_Loader:copyEPG] source = %s, dest = %s" % (source1, dest2))			
+				try:			
+					copyfile(source1, dest2)
+				except Exception as e:
+					print("[CrossEPG_Loader] exception copying data2  e = %s" % e)
+					return			
+			from enigma import eEPGCache
+			epgcache = eEPGCache.getInstance()
+			epgcache.load()
+			print("[CrossEPG_Loader:loadEPG] complete")		
+			self.closeAndCallback(True)
+		else:
+			try:
+				cmd = "%s/crossepg_epgcopy %s/ext.epg.dat %s" % (self.home_directory, self.db_root, config.misc.epgcache_filename.value)
+			except Exception as e:
+				print("[CrossEPG_Loader] exception loading data with epg patch e = %s" % e)			
+				cmd = "%s/crossepg_epgcopy %s/ext.epg.dat /hdd/epg.dat" % (self.home_directory, self.db_root)
+			print("[CrossEPG_Loader:loadEPG] %s" % (cmd))
+			try:
+				global container  # Need to keep a ref alive...
+	
+				def appClosed(retval):
+					global container
+					print("[CrossEPG_Loader:loadEPG] loadEPG complete, result: ", retval)
+					if six.py2:
+						self.epgpatch(eEPGCache.getInstance())
+					self.closeAndCallback(True)
+					container = None
+	
+				def dataAvail(data):
+					print("[CrossEPG_Loader:loadEPG]", data.rstrip())
+					container = eConsoleAppContainer()
+					if container.execute(cmd):
+						raise_(Exception, "Failed to execute: " + cmd)
+					container.appClosed.append(appClosed)
+					container.dataAvail.append(dataAvail)
+			except Exception as e:
+				print("[CrossEPG_Loader:loadEPG] loadEPG FAILED: ", e)
 
 	def loadEDG(self):
 		print("[CrossEPG_Loader:loadEDG] %s" % (cmd))
