@@ -194,7 +194,7 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 		buf = _malloc (length + 2);		
 		buf[0] = 0x01;
 		buf[1] = 0x00;
-		buf[2] = length ;
+		buf[2] = length;
 		buf[3] = (event_id >> 8) & 0xff;
 		buf[4] = event_id & 0xff;
 		buf[5] = (start_mjd >> 8) & 0xff;
