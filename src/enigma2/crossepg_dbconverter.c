@@ -188,6 +188,10 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 		_free (ldescription);
 		
 		events_count++;
+		uint16_t event_id = events_count;
+		uint16_t start_mjd = title->mjd;
+		length = 10 + (crcs_count * 4);
+		buf = _malloc (length + 2)		
 		buf[0] = 0x01;
 		buf[1] = 0x00;
 		buf[2] = length ;
