@@ -191,7 +191,7 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 		uint16_t event_id = events_count;
 		uint16_t start_mjd = title->mjd;
 		length = 10 + (crcs_count * 4);
-		buf = _malloc (length + 2);		
+		buf = _malloc (length + 3);
 		buf[0] = 0x01;
 		buf[1] = 0x00;
 		buf[2] = length;
@@ -210,7 +210,7 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 			memcpy (buf+13+(i*4), &crcs[i], 4);
 		}
 		
-		fwrite (buf, length+2, 1, fd);
+		fwrite (buf, length+3, 1, fd);
 		_free (buf);
 		
 		title = title->next;
