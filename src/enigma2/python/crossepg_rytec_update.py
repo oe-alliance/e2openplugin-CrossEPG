@@ -98,7 +98,6 @@ class CrossEPG_Rytec_Update(Screen):
 
 	def loadSourceList(self):
 		try:
-#			url = "http://epgalfasite.dyndns.tv/crossepgsources.gz"
 			url = "http://rytecepg.dyndns.tv/epg_data/crossepgsources.gz"
 			distro = getImageDistro()
 			if distro == "openvix":

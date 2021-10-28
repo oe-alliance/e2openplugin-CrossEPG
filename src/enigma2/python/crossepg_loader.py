@@ -115,35 +115,35 @@ class CrossEPG_Loader(Screen):
 				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
 				self.oudeispatch = None
 		else:
-#			try:
-#				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, (None, eEPGCache))
-#				print("[CrossEPG_Loader] patch crossepg v2.1 found")
-#			except Exception as e:
-#				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
-			self.xepgpatch = None
+			try:
+				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
+				print("[CrossEPG_Loader] patch crossepg v2.1 found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
+				self.xepgpatch = None
 
 			try:
-				self.epgpatch = instancemethod(_enigma.eEPGCache_load, (None, eEPGCache))
+				self.epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
 				print("[CrossEPG_Loader] patch epgcache.load() found")
 			except Exception as e:
 				print("[CrossEPG_Loader] patch epgcache.load() not found e = %s" % e)
 				self.epgpatch = None
 
 			try:
-				self.edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, (None, eEPGCache))
+				self.edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache)
 				print("[CrossEPG_Loader] patch EDG NEMESIS found")
 			except Exception as e:
 				print("[CrossEPG_Loader] patch EDG NEMESIS not found e = %s" % e)		
 				self.edgpatch = None
 
 			try:
-				self.oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, (None, eEPGCache))
+				self.oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache)
 				print("[CrossEPG_Loader] patch Oudeis found")
 			except Exception as e:
 				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
 				self.oudeispatch = None				
 
-		if self.xepgpatch and not six.PY3:
+		if self.xepgpatch:
 			self.timer = eTimer()
 			self.timer.callback.append(self.loadEPG2)
 			self.timer.start(200, 1)
@@ -196,7 +196,7 @@ class CrossEPG_Loader(Screen):
 	def loadEPG2(self):
 		print("[CrossEPG_Loader] loading data with crossepg patch v2")
 		if six.PY3:
-			self.xepgpatch(self.db_root)
+			_enigma.eEPGCache_crossepgImportEPGv21(None, self.db_root)
 		else:
 			self.xepgpatch(eEPGCache.getInstance(), self.db_root)			
 		self.closeAndCallback(True)
