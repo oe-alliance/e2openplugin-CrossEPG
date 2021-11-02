@@ -143,12 +143,12 @@ class CrossEPG_Loader(Screen):
 				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
 				self.oudeispatch = None				
 
-		if self.xepgpatch:
-			self.timer = eTimer()
-			self.timer.callback.append(self.loadEPG2)
-			self.timer.start(200, 1)
+#		if self.xepgpatch:						# does not work for OpenPli or python3
+#			self.timer = eTimer()
+#			self.timer.callback.append(self.loadEPG2)
+#			self.timer.start(200, 1)
 
-		elif self.epgpatch:
+		if self.epgpatch:
 			self.timer = eTimer()
 			self.timer.callback.append(self.loadEPG)
 			self.timer.start(200, 1)
