@@ -1,8 +1,12 @@
-from crossepg_auto import CrossEPGautostart
-from crossepglib import CrossEPG_Config
-from crossepg_main import crossepg_main
-from crossepg_locale import _
+from __future__ import print_function
+from __future__ import absolute_import
+
 from Plugins.Plugin import PluginDescriptor
+
+from . crossepg_auto import CrossEPGautostart
+from . crossepglib import CrossEPG_Config
+from . crossepg_main import crossepg_main
+from . crossepg_locale import _
 
 
 def setup(menuid, **kwargs):

@@ -1,14 +1,18 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 from enigma import *
 from Screens.MessageBox import MessageBox
+from Screens.Standby import TryQuitMainloop
 
-from crossepglib import *
-from crossepg_downloader import CrossEPG_Downloader
-from crossepg_importer import CrossEPG_Importer
-from crossepg_converter import CrossEPG_Converter
-from crossepg_loader import CrossEPG_Loader
-from crossepg_setup import CrossEPG_Setup
-from crossepg_menu import CrossEPG_Menu
-from crossepg_auto import CrossEPG_Auto
+from . crossepglib import *
+from . crossepg_downloader import CrossEPG_Downloader
+from . crossepg_importer import CrossEPG_Importer
+from . crossepg_converter import CrossEPG_Converter
+from . crossepg_loader import CrossEPG_Loader
+from . crossepg_setup import CrossEPG_Setup
+from . crossepg_menu import CrossEPG_Menu
+from . crossepg_auto import CrossEPG_Auto
 
 
 class CrossEPG_Main:
@@ -70,7 +74,6 @@ class CrossEPG_Main:
 				self.loader()
 			else:
 				if self.config.download_manual_reboot:
-					from Screens.Standby import TryQuitMainloop
 					self.session.open(TryQuitMainloop, 3)
 				else:
 					CrossEPG_Auto.instance.lock = False

@@ -191,25 +191,26 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 		uint16_t event_id = events_count;
 		uint16_t start_mjd = title->mjd;
 		length = 10 + (crcs_count * 4);
-		buf = _malloc (length + 2);
+		buf = _malloc (length + 3);
 		buf[0] = 0x01;
-		buf[1] = length ;
-		buf[2] = (event_id >> 8) & 0xff;
-		buf[3] = event_id & 0xff;
-		buf[4] = (start_mjd >> 8) & 0xff;
-		buf[5] = start_mjd & 0xff;
-		buf[6] = toBCD (start_time.tm_hour);
-		buf[7] = toBCD (start_time.tm_min);
-		buf[8] = toBCD (start_time.tm_sec);
-		buf[9] = toBCD (title->length / (60*60));
-		buf[10] = toBCD ((title->length / 60) % 60);
-		buf[11] = toBCD (title->length % 60);
+		buf[1] = 0x00;
+		buf[2] = length;
+		buf[3] = (event_id >> 8) & 0xff;
+		buf[4] = event_id & 0xff;
+		buf[5] = (start_mjd >> 8) & 0xff;
+		buf[6] = start_mjd & 0xff;
+		buf[7] = toBCD (start_time.tm_hour);
+		buf[8] = toBCD (start_time.tm_min);
+		buf[9] = toBCD (start_time.tm_sec);
+		buf[10] = toBCD (title->length / (60*60));
+		buf[11] = toBCD ((title->length / 60) % 60);
+		buf[12] = toBCD (title->length % 60);
 		for (i=0; i<crcs_count; i++)
 		{
-			memcpy (buf+12+(i*4), &crcs[i], 4);
+			memcpy (buf+13+(i*4), &crcs[i], 4);
 		}
 		
-		fwrite (buf, length+2, 1, fd);
+		fwrite (buf, length+3, 1, fd);
 		_free (buf);
 		
 		title = title->next;
@@ -253,7 +254,7 @@ static void write_epgdat ()
 	
 	unsigned int magic = 0x98765432;
 	fwrite (&magic, sizeof (int), 1, fd);
-	const char *header = "UNFINISHED_V7";
+	const char *header = "UNFINISHED_V8";
 	fwrite (header, 13, 1, fd);
 	fwrite (&ccount, sizeof (int), 1, fd); 		// write the exact number at the end
 		
@@ -334,7 +335,7 @@ static void write_epgdat ()
 	/* sync data on disk and mark epg.dat as a good epg */
 	fsync (fileno (fd));
 	fseek (fd, sizeof (int), SEEK_SET);
-	fwrite ("ENIGMA_EPG_V7", 13, 1, fd);
+	fwrite ("ENIGMA_EPG_V8", 13, 1, fd);
 
 write_end:
 	if (fd) fclose (fd);

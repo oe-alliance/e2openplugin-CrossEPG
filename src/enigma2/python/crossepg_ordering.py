@@ -1,18 +1,18 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 from enigma import getDesktop
 
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from Components.Label import Label
-from Components.Button import Button
 from Components.ActionMap import ActionMap
+from Components.Button import Button
+from Components.Label import Label
 from Components.Sources.List import List
-
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
 from Tools.LoadPixmap import LoadPixmap
 
-from crossepg_locale import _
-
-from crossepglib import *
+from . crossepg_locale import _
+from . crossepglib import *
 
 
 class CrossEPG_Ordering(Screen):
@@ -69,7 +69,7 @@ class CrossEPG_Ordering(Screen):
 		return ""
 
 	def createSummary(self):
-		from crossepg_menu import CrossEPG_MenuSummary
+		from . crossepg_menu import CrossEPG_MenuSummary
 		return CrossEPG_MenuSummary
 
 	def getProviderDescription(self, provider):

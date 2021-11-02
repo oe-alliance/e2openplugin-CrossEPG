@@ -1,28 +1,35 @@
 from __future__ import print_function
-from enigma import getDesktop, eTimer
+from __future__ import absolute_import
+import six
 
+import random
+import re
+import os
+import xml.etree.cElementTree
+import gzip
+if six.PY2:
+	import httplib
+	from urllib2 import urlopen, HTTPError, URLError
+	from StringIO import StringIO	
+else:
+	import http.client as httplib
+	from urllib.request import urlopen, Request # raises ImportError in Python 2
+	from urllib.error import HTTPError, URLError # raises ImportError in Python 2	
+	from io import BytesIO	
+
+from enigma import getDesktop, eTimer
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.ProgressBar import ProgressBar
 from Components.Sources.Progress import Progress
-
-from Screens.Screen import Screen
+from Components.Sources.StaticText import StaticText
 from Screens.MessageBox import MessageBox
-
-from crossepglib import *
-from crossepg_locale import _
-
-import httplib
-import xml.etree.cElementTree
-import re
-import os
-import random
-
+from Screens.Screen import Screen
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
-try:
-	from Tools.Directories import SCOPE_ACTIVE_SKIN
-except:
-	pass
+
+
+from . crossepglib import *
+from . crossepg_locale import _
 
 
 class CrossEPG_Rytec_Source(object):
@@ -34,7 +41,6 @@ class CrossEPG_Rytec_Source(object):
 
 class CrossEPG_Rytec_Update(Screen):
 	def __init__(self, session):
-		from Components.Sources.StaticText import StaticText
 		if (getDesktop(0).size().width() < 800):
 			skin = "%s/skins/downloader_sd.xml" % os.path.dirname(sys.modules[__name__].__file__)
 			self.isHD = 0
@@ -71,17 +77,11 @@ class CrossEPG_Rytec_Update(Screen):
 
 	def firstExec(self):
 		if self.isHD:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background_hd.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background_hd.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background_hd.png" % os.path.dirname(sys.modules[__name__].__file__)
 		else:
-			try:
-				png = resolveFilename(SCOPE_ACTIVE_SKIN, "crossepg/background.png")
-			except:
-				png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
+			png = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/crossepg/background.png")
 			if png == None or not os.path.exists(png):
 				png = "%s/images/background.png" % os.path.dirname(sys.modules[__name__].__file__)
 		self["background"].instance.setPixmapFromFile(png)
@@ -98,20 +98,22 @@ class CrossEPG_Rytec_Update(Screen):
 
 	def loadSourceList(self):
 		try:
-			from boxbranding import getImageDistro
-			import urllib2
-			import gzip
-			from StringIO import StringIO
-			url = "http://epgalfasite.dyndns.tv/crossepgsources.gz"
+			url = "http://rytecepg.dyndns.tv/epg_data/crossepgsources.gz"
 			distro = getImageDistro()
 			if distro == "openvix":
 				url = "http://www.openvix.co.uk/crossepgsources.gz"
 			print("[crossepg_rytec_update:loadSourceList] downloading source list from %s" % url)
-			response = urllib2.urlopen(url)
+			response = urlopen(url)
 			content_raw = response.read()
-			if 'gzip' in response.info().getheader('Content-Type'):
-				self.mirrors = [x.strip() for x in gzip.GzipFile(fileobj=StringIO(content_raw)).read().strip().split("\n")]
+			CType = response.info().getheader('Content-Type') if six.PY2 else response.getheader("Content-Type")
+			if 'gzip' in CType:
+				if six.PY2:
+					self.mirrors = [x.strip() for x in gzip.GzipFile(fileobj=StringIO(content_raw)).read().strip().split("\n")]
+				else:
+					self.mirrors = gzip.GzipFile(fileobj=BytesIO(content_raw), mode='rb').read()
+					self.mirrors = six.ensure_str(self.mirrors).strip().split("\n")
 				random.shuffle(self.mirrors)
+				print("[crossepg_rytec_update:loadSourceList] mirrors2 %s" % self.mirrors)
 			else:
 				print("[crossepg_rytec_update:loadSourceList] Fetched data is not Gzip format")
 				print("[crossepg_rytec_update:loadSourceList] content_raw:", content_raw)
@@ -123,24 +125,27 @@ class CrossEPG_Rytec_Update(Screen):
 		for mirror in self.mirrors:
 			mirror = mirror.replace('\t', '')
 			try:
-				print("downloading from %s" % (mirror))
+				print("[crossepg_rytec_update:load] downloading from %s" % (mirror))
 				smirror = mirror.lstrip("http://")
 				host = smirror.split("/")[0]
 				path = smirror.lstrip(host)
 				conn = httplib.HTTPConnection(host)
 				conn.request("GET", path)
 				httpres = conn.getresponse()
+				print("[crossepg_rytec_update:load] host =%s, path=%s, httpres=%s" % (host, path, httpres))				
 				if httpres.status == 200:
 					f = open("/tmp/crossepg_rytec_tmp", "w")
-					f.write(httpres.read())
+					databytes = httpres.read()
+					datastr = six.ensure_str(databytes)
+					f.write(datastr)
 					f.close()
 					self.loadFromFile("/tmp/crossepg_rytec_tmp")
 					os.unlink("/tmp/crossepg_rytec_tmp")
 					ret = True
 				else:
-					print("http error: %d (%s)" % (httpres.status, mirror))
+					print("[crossepg_rytec_update:load] http error: %d (%s)" % (httpres.status, mirror))
 			except Exception as e:
-				print(e)
+				print("[crossepg_rytec_update:load] exception =%s" % e)
 		return ret
 
 	def getServer(self, description):

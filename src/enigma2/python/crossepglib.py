@@ -1,17 +1,23 @@
 from __future__ import print_function
-from enigma import *
-from crossepg_locale import _
-from Tools.Directories import crawlDirectory, pathExists, createDir
-from types import *
-from time import *
+from __future__ import absolute_import
+import six
 
-import sys
-import traceback
 import os
 import re
-import new
+import sys
+from time import *
+if six.PY3:
+	from types import MethodType as instancemethod
+else:
+	import new
+import traceback
+
+from enigma import *
 import _enigma
 from boxbranding import getImageDistro
+from Tools.Directories import crawlDirectory, pathExists, createDir
+
+from . crossepg_locale import _
 
 # return value
 # -1 none
@@ -22,31 +28,74 @@ from boxbranding import getImageDistro
 
 
 def getEPGPatchType():
-	try:
-		xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
-		return 3
-	except Exception as e:
-		pass
+	if six.PY2:
+		try:
+			xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
+			print("[crossepglib] patch crossepg v2.1 found")
+			return 3
+		except Exception as e:
+			print("[crossepglib] patch crossepg v2.1 not found")	
+			pass
 
-	try:
-		epgpatch = new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
-		return 0
-	except Exception as e:
-		pass
+		try:
+			epgpatch = new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
+			print("[crossepglib] patch epgcache.load() found")		
+			return 0
+		except Exception as e:
+			print("[crossepglib] patch epgcache.load() not found")	
+			pass
 
-	try:
-		edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
-		return 1
-	except Exception as e:
-		pass
+		try:
+			edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
+			print("[crossepglib] patch EDG NEMESIS found")		
+			return 1
+		except Exception as e:
+			print("[crossepglib] patch EDG NEMESIS not found")		
+			pass
 
-	try:
-		oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
-		return 2
-	except Exception as e:
-		pass
+		try:
+			oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
+			print("[crossepglib] patch Oudeis found")		
+			return 2
+		except Exception as e:
+			print("[crossepglib] patch Oudeis not found")	
+			pass
 
-	return -1
+		return -1
+	else:
+		try:
+			xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
+			print("[crossepglib] patch crossepg v2.1 found")
+			return 3
+		except Exception as e:
+			print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
+			pass
+
+		try:
+			epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
+			print("[crossepglib] patch epgcache.load() found")		
+			return 0
+		except Exception as e:
+			print("[crossepglib] patch epgcache.load() not found e = %s" % e)	
+			pass
+
+		try:
+			edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache)
+			print("[crossepglib] patch EDG NEMESIS found")		
+			return 1
+		except Exception as e:
+			print("[crossepglib] patch EDG NEMESIS not found e = %s" % e)		
+			pass
+
+		try:
+			oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache)
+			print("[crossepglib] patch Oudeis found")		
+			return 2
+		except Exception as e:
+			print("[crossepglib] patch Oudeis not found e = %s" % e)	
+			pass
+
+		return -1						
 
 
 class CrossEPG_Config:
@@ -409,12 +458,15 @@ class CrossEPG_Wrapper:
 		self.cmd.dataAvail.remove(self.__cmdData)
 
 	def __cmdData(self, data):
+		data = six.ensure_str(data)
+		print("[crossepg][cmdData] data = %s" % data)		
 		if self.cache is None:
 			self.cache = data
 		else:
 			self.cache += data
 
 		if '\n' in data:
+			print("[crossepg][cmdData] \n in data = %s" % data)			
 			splitcache = self.cache.split('\n')
 			if self.cache[-1] == '\n':
 				iteration = splitcache
@@ -424,9 +476,11 @@ class CrossEPG_Wrapper:
 				self.cache = splitcache[-1]
 			for mydata in iteration:
 				if mydata != '':
+					print("[crossepg][cmdData] parse mydata = %s" % mydata)
 					self.__parseLine(mydata)
 
 	def __parseLine(self, data):
+		print("[crossepg][parseline] parse data = %s" % data)	
 		if data.find("CHANNEL ") == 0:
 			self.__callCallbacks(self.EVENT_CHANNEL, data[7:])
 		elif data.find("STARTTIME ") == 0:
