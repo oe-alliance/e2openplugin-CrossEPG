@@ -147,6 +147,7 @@ class CrossEPG_Config:
 						key = entry[0][0].strip()
 						value = entry[0][1].strip()
 						if key == "db_root":
+							print("[crossepglib][CrossEPG_Config1] read self.db_root = %s" % value)
 							self.db_root = value
 						if key == "lamedb":
 							self.lamedb = value
@@ -203,7 +204,7 @@ class CrossEPG_Config:
 			if len(p) > 0:
 					tmp.append(p)
 		self.providers = tmp
-
+		print("[crossepglib][CrossEPG_Config2] write self.db_root = %s" % self.db_root)
 		f.write("db_root=%s\n" % (self.db_root))
 		f.write("lamedb=%s\n" % (self.lamedb))
 		f.write("providers=%s\n" % ("|".join(self.providers)))

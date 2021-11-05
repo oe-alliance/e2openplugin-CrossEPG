@@ -100,7 +100,7 @@ class CrossEPG_Rytec_Update(Screen):
 		try:
 			url = "http://rytecepg.dyndns.tv/epg_data/crossepgsources.gz"
 			distro = getImageDistro()
-			if distro == "openvix":
+			if distro in ("openvix", "openbh"):
 				url = "http://www.openvix.co.uk/crossepgsources.gz"
 			print("[crossepg_rytec_update:loadSourceList] downloading source list from %s" % url)
 			response = urlopen(url)

@@ -121,7 +121,7 @@ class CrossEPG_Downloader(Screen):
 		if len(self.providers) == 0:
 			self.closeAndCallback(True)
 		else:
-			if getImageDistro() != "openvix":
+			if getImageDistro() not in  ("openvix", "openbh"):
 				self.wrapper.init(CrossEPG_Wrapper.CMD_DOWNLOADER, self.config.db_root)
 			else:
 				self.wrapper.init(CrossEPG_Wrapper.CMD_DOWNLOADER, config.misc.epgcachepath.value + 'crossepg')
