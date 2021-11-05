@@ -211,13 +211,13 @@ class CrossEPG_Loader(Screen):
 				print("[CrossEPG_Loader:copyEPG] source = %s, dest = %s" % (source1, dest1))		
 				copyfile(source1, dest1)
 			except Exception as e:
-				print("[CrossEPG_Loader] exception copying data1  e = %s" % e)
+				print("[CrossEPG_Loader] 1st exception copying data1  e = %s" % e)
 				print("[CrossEPG_Loader:copyEPG] source = %s, dest = %s" % (source1, dest2))			
 				try:			
 					copyfile(source1, dest2)
 				except Exception as e:
-					print("[CrossEPG_Loader] exception copying data2  e = %s" % e)
-					return			
+					print("[CrossEPG_Loader] 2nd exception copying data2  e = %s - NO epg.dat created" % e)
+					self.closeAndCallback(True)		
 			from enigma import eEPGCache
 			epgcache = eEPGCache.getInstance()
 			epgcache.load()
