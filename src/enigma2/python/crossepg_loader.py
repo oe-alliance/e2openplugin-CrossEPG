@@ -59,10 +59,10 @@ class CrossEPG_Loader(Screen):
 		self.config.load()
 		if getImageDistro() in ("openvix", "openbh"):
 			self.db_root = config.misc.epgcachepath.value + 'crossepg'
-			print("[CrossEPG_Config] self.db_root = %s config.misc.epgcachepath.value = %s" % (self.db_root, config.misc.epgcachepath.value)			
+			print("[CrossEPG_Config] self.db_root = %s config.misc.epgcachepath.value = %s" % (self.db_root, config.misc.epgcachepath.value))			
 		else:
 			self.db_root = self.config.db_root
-		print("[CrossEPG_Config] self.db_root = %s self.config-db_root = %s" % (self.db_root, self.config.db_root)			
+		print("[CrossEPG_Config] self.db_root = %s self.config-db_root = %s" % (self.db_root, self.config.db_root))			
 		if not pathExists(self.db_root):
 			if not createDir(self.db_root):
 				self.db_root = "/hdd/crossepg"
