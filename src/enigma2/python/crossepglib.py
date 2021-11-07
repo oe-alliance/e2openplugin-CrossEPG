@@ -63,13 +63,13 @@ def getEPGPatchType():
 
 		return -1
 	else:
-		try:
-			xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
-			print("[crossepglib] patch crossepg v2.1 found")
-			return 3
-		except Exception as e:
-			print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
-			pass
+#		try:
+#			xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
+#			print("[crossepglib] patch crossepg v2.1 found")
+#			return 3
+#		except Exception as e:
+#			print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
+#			pass
 
 		try:
 			epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
