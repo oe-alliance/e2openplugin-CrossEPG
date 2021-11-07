@@ -57,10 +57,12 @@ class CrossEPG_Loader(Screen):
 		self.retValue = True
 		self.config = CrossEPG_Config()
 		self.config.load()
-		if getImageDistro() in ('openvix'):
+		if getImageDistro() in ("openvix", "openbh"):
 			self.db_root = config.misc.epgcachepath.value + 'crossepg'
+			print("[CrossEPG_Config] self.db_root = %s config.misc.epgcachepath.value = %s" % (self.db_root, config.misc.epgcachepath.value))			
 		else:
 			self.db_root = self.config.db_root
+		print("[CrossEPG_Config] self.db_root = %s self.config-db_root = %s" % (self.db_root, self.config.db_root))			
 		if not pathExists(self.db_root):
 			if not createDir(self.db_root):
 				self.db_root = "/hdd/crossepg"
@@ -86,7 +88,35 @@ class CrossEPG_Loader(Screen):
 		#	- Oudeis patch: EPG data is immediately loaded and accessible, even while the xmltv-plugin is running. Normaly there are no issues while loading.
 		#	- Pli patch: Same as Oudeis patch but the xmltv-plugin runs in a seperate "thread" so no issues at all in the GUI or other components.		
 
-		if six.PY2:
+		if six.PY3:
+			try:
+				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
+				print("[CrossEPG_Loader] patch crossepg v2.1 found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
+				self.xepgpatch = None
+
+			try:
+				self.epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
+				print("[CrossEPG_Loader] patch epgcache.load() found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch epgcache.load() not found e = %s" % e)
+				self.epgpatch = None
+
+			try:
+				self.edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache)
+				print("[CrossEPG_Loader] patch EDG NEMESIS found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch EDG NEMESIS not found e = %s" % e)		
+				self.edgpatch = None
+
+			try:
+				self.oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache)
+				print("[CrossEPG_Loader] patch Oudeis found")
+			except Exception as e:
+				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
+				self.oudeispatch = None		
+		else:
 			try:
 				self.xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
 				print("[CrossEPG_Loader] patch crossepg v2.1 found")
@@ -114,36 +144,9 @@ class CrossEPG_Loader(Screen):
 			except Exception as e:
 				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
 				self.oudeispatch = None
-		else:
-			try:
-				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
-				print("[CrossEPG_Loader] patch crossepg v2.1 found")
-			except Exception as e:
-				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
-				self.xepgpatch = None
+				
 
-			try:
-				self.epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
-				print("[CrossEPG_Loader] patch epgcache.load() found")
-			except Exception as e:
-				print("[CrossEPG_Loader] patch epgcache.load() not found e = %s" % e)
-				self.epgpatch = None
-
-			try:
-				self.edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache)
-				print("[CrossEPG_Loader] patch EDG NEMESIS found")
-			except Exception as e:
-				print("[CrossEPG_Loader] patch EDG NEMESIS not found e = %s" % e)		
-				self.edgpatch = None
-
-			try:
-				self.oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache)
-				print("[CrossEPG_Loader] patch Oudeis found")
-			except Exception as e:
-				print("[CrossEPG_Loader] patch Oudeis not found e = %s" % e)		
-				self.oudeispatch = None				
-
-#		if self.xepgpatch:						# does not work for OpenPli or python3
+#		if self.xepgpatch:						# epgcache changes OpenPli & python3 not working
 #			self.timer = eTimer()
 #			self.timer.callback.append(self.loadEPG2)
 #			self.timer.start(200, 1)
@@ -211,13 +214,13 @@ class CrossEPG_Loader(Screen):
 				print("[CrossEPG_Loader:copyEPG] source = %s, dest = %s" % (source1, dest1))		
 				copyfile(source1, dest1)
 			except Exception as e:
-				print("[CrossEPG_Loader] exception copying data1  e = %s" % e)
+				print("[CrossEPG_Loader] 1st exception copying data1  e = %s" % e)
 				print("[CrossEPG_Loader:copyEPG] source = %s, dest = %s" % (source1, dest2))			
 				try:			
 					copyfile(source1, dest2)
 				except Exception as e:
-					print("[CrossEPG_Loader] exception copying data2  e = %s" % e)
-					return			
+					print("[CrossEPG_Loader] 2nd exception copying data2  e = %s - NO epg.dat created" % e)
+					self.closeAndCallback(True)		
 			from enigma import eEPGCache
 			epgcache = eEPGCache.getInstance()
 			epgcache.load()

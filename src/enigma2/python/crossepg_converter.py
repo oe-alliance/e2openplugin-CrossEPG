@@ -56,10 +56,11 @@ class CrossEPG_Converter(Screen):
 		self.config = CrossEPG_Config()
 		self.config.load()
 		self.lamedb = self.config.lamedb
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix", "openbh"):
 			self.db_root = self.config.db_root
 		else:
 			self.db_root = config.misc.epgcachepath.value + 'crossepg'
+		print("[crossepg_converter] self.db_root = %s" % self.db_root)			
 		if not pathExists(self.db_root):
 			if not createDir(self.db_root):
 				self.db_root = "/hdd/crossepg"

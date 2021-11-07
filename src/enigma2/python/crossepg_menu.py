@@ -76,7 +76,7 @@ class CrossEPG_Menu(Screen):
 		# l.append(self.buildListEntry(_("Update xepgdb providers"), "xepgdb.png"))
 		l.append(self.buildListEntry(_("Download now"), "download.png"))
 		l.append(self.buildListEntry(_("Defragment database"), "conversion.png"))
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix", "openbh"):
 			l.append(self.buildListEntry(_("Force csv import now"), "csv.png"))
 			l.append(self.buildListEntry(_("Force epg.dat conversion now"), "conversion.png"))
 			l.append(self.buildListEntry(_("Force epg reload"), "reload.png"))

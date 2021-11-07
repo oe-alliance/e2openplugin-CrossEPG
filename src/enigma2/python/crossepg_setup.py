@@ -58,7 +58,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		self.show_plugin = self.config.show_plugin
 		self.show_force_reload_as_plugin = self.config.show_force_reload_as_plugin
 
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			## make devices entries
 			if self.config.isQBOXHD():
 				self.mountdescription.append(_("Internal flash"))
@@ -189,7 +189,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 	def makeList(self):
 		self.list = []
 
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			device_default = None
 			i = 0
 			for mountpoint in self.mountpoint:
@@ -201,7 +201,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 			if device_default == None:
 				self.config.db_root = self.mountpoint[0]
 				device_default = self.mountdescription[0]
-
+		print("[crosssepg_setup] self.config.db_root = %s" % self.config.db_root)
 		lamedb_default = _("main lamedb")
 		if self.config.lamedb != "lamedb":
 			lamedb_default = self.config.lamedb.replace("lamedb.", "").replace(".", " ")
@@ -214,13 +214,13 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		else:
 			scheduled_default = _("disabled")
 
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			self.list.append((_("Storage device"), ConfigSelection(self.mountdescription, device_default)))
 		if len(self.lamedbs_desc) > 1:
 			self.list.append((_("Preferred lamedb"), ConfigSelection(self.lamedbs_desc, lamedb_default)))
 
 		self.list.append((_("Enable csv import"), ConfigYesNo(self.config.csv_import_enabled > 0)))
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			self.list.append((_("Force epg reload on boot"), ConfigYesNo(self.config.force_load_on_boot > 0)))
 		self.list.append((_("Scheduled download"), ConfigSelection(self.automatictype, scheduled_default)))
 
@@ -234,7 +234,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 			self.list.append((_("Reboot after a manual download"), ConfigYesNo(self.config.download_manual_reboot > 0)))
 		self.list.append((_("Show as plugin"), ConfigYesNo(self.config.show_plugin > 0)))
 		self.list.append((_("Show as extension"), ConfigYesNo(self.config.show_extension > 0)))
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			self.list.append((_("Show 'Force reload' as plugin"), ConfigYesNo(self.config.show_force_reload_as_plugin > 0)))
 
 		self["config"].list = self.list
@@ -243,7 +243,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 	def update(self):
 		redraw = False
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			self.config.db_root = self.mountpoint[self.list[0][1].getIndex()]
 			i = 1
 		else:
@@ -255,14 +255,14 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 		self.config.csv_import_enabled = int(self.list[i][1].getValue())
 
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			self.config.force_load_on_boot = int(self.list[i + 1][1].getValue())
 		else:
 			i -= 1
 
 		dailycache = self.config.download_daily_enabled
 		standbycache = self.config.download_standby_enabled
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			if self.list[i + 2][1].getIndex() == 0:
 				self.config.download_daily_enabled = 0
 				self.config.download_standby_enabled = 0
@@ -299,7 +299,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 		self.config.show_plugin = int(self.list[i][1].getValue())
 		self.config.show_extension = int(self.list[i + 1][1].getValue())
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			self.config.show_force_reload_as_plugin = int(self.list[i + 2][1].getValue())
 		else:
 			i += 1
@@ -309,7 +309,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 	def setInfo(self):
 		index = self["config"].getCurrentIndex()
-		if getImageDistro() == "openvix":
+		if getImageDistro() in ("openvix",  "openbh"):
 			index += 1
 		if index == 0:
 			self["information"].setText(_("Drive where you save data.\nThe drive MUST be mounted in rw. If you can't see your device here probably is mounted as read only or autofs handle it only in read only mode. In case of mount it manually and try again"))
@@ -322,7 +322,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		if index == 2:
 			self["information"].setText(_("Import *.csv and *.bin from %s/import or %s/import\n(*.bin are binaries with a csv as stdout)") % (self.config.db_root, self.config.home_directory))
 			return
-		if getImageDistro() == "openvix":
+		if getImageDistro() in ("openvix",  "openbh"):
 			index += 1
 		if index == 3:
 			self["information"].setText(_("Reload epg at every boot.\nNormally it's not necessary but recover epg after an enigma2 crash"))
@@ -380,7 +380,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 		self.config.last_partial_download_timestamp = 0
 		self.config.configured = 1
 		self.config.save()
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			try:
 				if self.config.db_root[-8:] == "crossepg":
 					config.misc.epgcache_filename.setValue(self.config.db_root[:-9] + "/epg.dat")
@@ -391,7 +391,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 				configfile.save()
 			except Exception as e:
 				print("[crossepg_setup:keySave] custom epgcache filename not supported by current enigma2 version")
-
+		print("[crosssepg_setup][key_save] self.config.db_root = %s" % self.config.db_root)
 		if getEPGPatchType() == -1:
 			# exec crossepg_prepare_pre_start for unpatched images
 			os.system(self.config.home_directory + "/crossepg_prepare_pre_start.sh")
@@ -407,7 +407,7 @@ class CrossEPG_Setup(ConfigListScreen, Screen):
 
 			plugins.readPluginList(resolveFilename(SCOPE_PLUGINS))
 
-		if getImageDistro() != "openvix":
+		if getImageDistro() not in ("openvix",  "openbh"):
 			if (self.config.db_root == self.config.home_directory + "/data" and not self.config.isQBOXHD()) or self.config.db_root.startswith('/etc/enigma2'):
 				self.showWarning()
 		else:
