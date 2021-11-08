@@ -76,7 +76,7 @@ class CrossEPG_Menu(Screen):
 		# l.append(self.buildListEntry(_("Update xepgdb providers"), "xepgdb.png"))
 		l.append(self.buildListEntry(_("Download now"), "download.png"))
 		l.append(self.buildListEntry(_("Defragment database"), "conversion.png"))
-		if getImageDistro() not in ("openvix", "openbh"):
+		if getImageDistro() not in ("openvix", ):
 			l.append(self.buildListEntry(_("Force csv import now"), "csv.png"))
 			l.append(self.buildListEntry(_("Force epg.dat conversion now"), "conversion.png"))
 			l.append(self.buildListEntry(_("Force epg reload"), "reload.png"))
@@ -132,24 +132,15 @@ class CrossEPG_Menu(Screen):
 		if index == 2:
 			self.session.open(CrossEPG_Providers, "xmltv")
 			return
-		# if index == 3:
-		# 	self.session.open(CrossEPG_Providers, "xepgdb")
-		# 	return
 		if index == 3:
 			self.session.open(CrossEPG_Providers, "script")
 			return
-		# if index == 5:
-		# 	self.session.open(CrossEPG_Providers, "mhw2")
-		# 	return
 		if index == 4:
 			self.session.open(CrossEPG_Ordering)
 			return
 		if index == 5:
 			self.session.open(CrossEPG_Rytec_Update)
 			return
-		# if index == 6:
-		# 	self.session.open(CrossEPG_Xepgdb_Update)
-		# 	return
 		if index == 6:
 			self.config.load()
 			self.config.deleteLog()
