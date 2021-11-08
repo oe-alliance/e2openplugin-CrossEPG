@@ -19,9 +19,9 @@ from Tools.Directories import crawlDirectory, pathExists, createDir
 
 from . crossepg_locale import _
 
-# getEPGPatchType return values are:-
+# getEPGPatchType return values are:-	this is important as it defines whether converter is used(needed for epgpatch)
 # 	-1 none
-# 	0 simple epgcache.load() patch
+# 	0 simple epgcache.load() patch - invokes converter after imports
 # 	1 edg nemesis patch
 # 	2 oudeis patch
 # 	3 crossepg v2.1 patch - not used in python3
@@ -61,7 +61,7 @@ def getEPGPatchType():
 #			pass
 
 		return -1
-	else:		
+	else:
 		try:
 			xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
 			print("[crossepglib] patch crossepg v2.1 found")
