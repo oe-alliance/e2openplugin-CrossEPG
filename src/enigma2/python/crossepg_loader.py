@@ -146,12 +146,12 @@ class CrossEPG_Loader(Screen):
 				self.oudeispatch = None
 				
 
-#		if self.xepgpatch:						# epgcache changes OpenPli & python3 not working
-#			self.timer = eTimer()
-#			self.timer.callback.append(self.loadEPG2)
-#			self.timer.start(200, 1)
+		if self.xepgpatch:						# epgcache changes OpenPli & python3 not working
+			self.timer = eTimer()
+			self.timer.callback.append(self.loadEPG2)
+			self.timer.start(200, 1)
 
-		if self.epgpatch:
+		elif self.epgpatch:
 			self.timer = eTimer()
 			self.timer.callback.append(self.loadEPG)
 			self.timer.start(200, 1)
@@ -197,12 +197,13 @@ class CrossEPG_Loader(Screen):
 			self["background"].instance.setPixmapFromFile("%s/images/background.png" % (os.path.dirname(sys.modules[__name__].__file__)))
 
 	def loadEPG2(self):
-		print("[CrossEPG_Loader] loading data with crossepg patch v2")
+		print("[CrossEPG_Loader] loading data with crossepg patch v21")
 		if six.PY3:
-			_enigma.eEPGCache_crossepgImportEPGv21(None, self.db_root)
+			_enigma.eEPGCache_crossepgImportEPGv21(eEPGCache.getInstance(), self.db_root)
 		else:
 			self.xepgpatch(eEPGCache.getInstance(), self.db_root)			
 		self.closeAndCallback(True)
+		
 
 	def loadEPG(self):
 		print("[CrossEPG_Loader] loading data with epg patch")
@@ -239,8 +240,7 @@ class CrossEPG_Loader(Screen):
 				def appClosed(retval):
 					global container
 					print("[CrossEPG_Loader:loadEPG] loadEPG complete, result: ", retval)
-					if six.py2:
-						self.epgpatch(eEPGCache.getInstance())
+					self.epgpatch(eEPGCache.getInstance())
 					self.closeAndCallback(True)
 					container = None
 	

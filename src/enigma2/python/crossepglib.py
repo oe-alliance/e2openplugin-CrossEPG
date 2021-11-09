@@ -30,6 +30,13 @@ from . crossepg_locale import _
 def getEPGPatchType():
 	if six.PY3:
 		try:
+			xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
+			print("[crossepglib] patch crossepg v2.1 found")
+			return 3
+		except Exception as e:
+			print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
+			pass
+		try:
 			epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
 			print("[crossepglib] patch epgcache.load() found")		
 			return 0
@@ -52,13 +59,6 @@ def getEPGPatchType():
 		except Exception as e:
 			print("[crossepglib] patch Oudeis not found e = %s" % e)	
 			pass
-#		try:				# with epgcahe and python3 changes not used
-#			xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
-#			print("[crossepglib] patch crossepg v2.1 found")
-#			return 3
-#		except Exception as e:
-#			print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
-#			pass
 
 		return -1
 	else:
