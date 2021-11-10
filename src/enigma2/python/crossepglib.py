@@ -28,74 +28,38 @@ from . crossepg_locale import _
 
 
 def getEPGPatchType():
-	if six.PY3:
-		try:
-			xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
-			print("[crossepglib] patch crossepg v2.1 found")
-			return 3
-		except Exception as e:
-			print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
-			pass
-		try:
-			epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache)
-			print("[crossepglib] patch epgcache.load() found")		
-			return 0
-		except Exception as e:
-			print("[crossepglib] patch epgcache.load() not found e = %s" % e)	
-			pass
+	try:
+		xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache.getInstance()) if six.PY3 else new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
+		print("[crossepglib] patch crossepg v2.1 found")
+		return 3
+	except Exception as e:
+		print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
+		pass
+	try:
+		epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache) if six.PY3 else new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
+		print("[crossepglib] patch epgcache.load() found")		
+		return 0
+	except Exception as e:
+		print("[crossepglib] patch epgcache.load() not found e = %s" % e)	
+		pass
 
-		try:
-			edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache)
-			print("[crossepglib] patch EDG NEMESIS found")		
-			return 1
-		except Exception as e:
-			print("[crossepglib] patch EDG NEMESIS not found e = %s" % e)		
-			pass
+	try:
+		edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache) if six.PY3 else new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
+		print("[crossepglib] patch EDG NEMESIS found")		
+		return 1
+	except Exception as e:
+		print("[crossepglib] patch EDG NEMESIS not found e = %s" % e)		
+		pass
 
-		try:
-			oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache)
-			print("[crossepglib] patch Oudeis found")		
-			return 2
-		except Exception as e:
-			print("[crossepglib] patch Oudeis not found e = %s" % e)	
-			pass
+	try:
+		oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache) if six.PY3 else new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
+		print("[crossepglib] patch Oudeis found")		
+		return 2
+	except Exception as e:
+		print("[crossepglib] patch Oudeis not found e = %s" % e)	
+		pass
 
-		return -1
-	else:
-		try:
-			xepgpatch = new.instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, None, eEPGCache)
-			print("[crossepglib] patch crossepg v2.1 found")
-			return 3
-		except Exception as e:
-			print("[crossepglib] patch crossepg v2.1 not found")	
-			pass
-
-		try:
-			epgpatch = new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
-			print("[crossepglib] patch epgcache.load() found")		
-			return 0
-		except Exception as e:
-			print("[crossepglib] patch epgcache.load() not found")	
-			pass
-
-		try:
-			edgpatch = new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
-			print("[crossepglib] patch EDG NEMESIS found")		
-			return 1
-		except Exception as e:
-			print("[crossepglib] patch EDG NEMESIS not found")		
-			pass
-
-		try:
-			oudeispatch = new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
-			print("[crossepglib] patch Oudeis found")		
-			return 2
-		except Exception as e:
-			print("[crossepglib] patch Oudeis not found")	
-			pass
-
-		return -1
-
+	return -1
 
 class CrossEPG_Config:
 	providers = []
