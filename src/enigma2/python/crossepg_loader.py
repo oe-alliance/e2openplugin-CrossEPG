@@ -1,7 +1,6 @@
 from __future__ import print_function
-from future.utils import raise_
 import six
-
+from six import reraise as raise_
 if six.PY3:
 	from types import MethodType as instancemethod
 else:
@@ -212,6 +211,7 @@ class CrossEPG_Loader(Screen):
 				def appClosed(retval):
 					global container
 					print("[CrossEPG_Loader:loadEPG] loadEPG complete, result: ", retval)
+					from enigma import eEPGCache
 					self.epgpatch(eEPGCache.getInstance())
 					self.closeAndCallback(True)
 					container = None
