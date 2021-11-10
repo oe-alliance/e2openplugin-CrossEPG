@@ -90,7 +90,7 @@ class CrossEPG_Loader(Screen):
 
 		if six.PY3:
 			try:
-				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache)
+				self.xepgpatch = instancemethod(_enigma.eEPGCache_crossepgImportEPGv21, eEPGCache.getInstance())
 				print("[CrossEPG_Loader] patch crossepg v2.1 found")
 			except Exception as e:
 				print("[CrossEPG_Loader] patch crossepg v2.1 not found e = %s" % e)
@@ -148,7 +148,7 @@ class CrossEPG_Loader(Screen):
 
 		if self.xepgpatch:						# epgcache changes OpenPli & python3 not working
 			self.timer = eTimer()
-			self.timer.callback.append(self.loadEPG2)
+			self.timer.callback.append(self.loadEPGv21)
 			self.timer.start(200, 1)
 
 		elif self.epgpatch:
@@ -196,14 +196,14 @@ class CrossEPG_Loader(Screen):
 		else:
 			self["background"].instance.setPixmapFromFile("%s/images/background.png" % (os.path.dirname(sys.modules[__name__].__file__)))
 
-	def loadEPG2(self):
+	def loadEPGv21(self):
 		print("[CrossEPG_Loader] loading data with crossepg patch v21")
 		if six.PY3:
-			_enigma.eEPGCache_crossepgImportEPGv21(eEPGCache.getInstance(), self.db_root)
+			self.xepgpatch(self.db_root)			
 		else:
 			self.xepgpatch(eEPGCache.getInstance(), self.db_root)			
 		self.closeAndCallback(True)
-		
+	
 
 	def loadEPG(self):
 		print("[CrossEPG_Loader] loading data with epg patch")
@@ -246,11 +246,12 @@ class CrossEPG_Loader(Screen):
 	
 				def dataAvail(data):
 					print("[CrossEPG_Loader:loadEPG]", data.rstrip())
-					container = eConsoleAppContainer()
-					if container.execute(cmd):
-						raise_(Exception, "Failed to execute: " + cmd)
-					container.appClosed.append(appClosed)
-					container.dataAvail.append(dataAvail)
+					
+				container = eConsoleAppContainer()
+				if container.execute(cmd):
+					raise_(Exception, "Failed to execute: " + cmd)
+				container.appClosed.append(appClosed)
+				container.dataAvail.append(dataAvail)
 			except Exception as e:
 				print("[CrossEPG_Loader:loadEPG] loadEPG FAILED: ", e)
 
