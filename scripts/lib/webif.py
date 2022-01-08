@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # webif.py  by Ambrosa http://www.ambrosa.net
 # this module is used for manage Web Interface
