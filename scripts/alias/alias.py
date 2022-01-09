@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # alias.py  by Ambrosa http://www.ambrosa.net
 # this module is used for copy epg from a channel to another
 # 11-apr-2012

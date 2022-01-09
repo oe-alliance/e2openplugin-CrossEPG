@@ -58,6 +58,7 @@ FTP_USER = root
 FTP_PASSWORD = sifteam
 
 TARGET_ARCH ?= mips
+PYTHON_BASEVERSION ?= 3.8
 
 all:
 	$(MAKE) clean
@@ -150,9 +151,9 @@ clean:
 	$(SWIGS_OBJS) $(SWIGS_LIBS) $(SHARED_LIBS)
 
 install-python:
-	install -d $(D)$(libdir)/python3.8/lib-dynload
-	install -m 644 src/common/crossepg.py $(D)$(libdir)/python3.8
-	install -m 644 bin/_crossepg.so $(D)$(libdir)/python3.8/lib-dynload
+	install -d $(D)$(libdir)/python$(PYTHON_BASEVERSION)/lib-dynload
+	install -m 644 src/common/crossepg.py $(D)$(libdir)/python$(PYTHON_BASEVERSION)
+	install -m 644 bin/_crossepg.so $(D)$(libdir)/python$(PYTHON_BASEVERSION)/lib-dynload
 
 install-python-qboxhd:
 	install -d $(D)/usr/local/lib/python2.6/lib-dynload

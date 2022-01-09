@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # scriptlib.py  by Ambrosa http://www.ambrosa.net
 # derived from E2_LOADEPG
 # 22-Dec-2011

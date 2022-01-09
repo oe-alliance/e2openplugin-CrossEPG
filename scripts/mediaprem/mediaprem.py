@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # mediaprem.py  by Ambrosa http://www.ambrosa.net
 # this module is used for download EPG data from Mediaset website
 # derived from E2_LOADEPG

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # above is Python interpreter location
 
 # ambrosa 08-Jan-2011 http://www.ambrosa.net
