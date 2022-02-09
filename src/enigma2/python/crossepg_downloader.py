@@ -326,6 +326,8 @@ class CrossEPG_Downloader(Screen):
 
 	def checkTunerLock(self):
 		dict = {}
+		if self.frontend is None:
+			return
 		self.frontend.getFrontendStatus(dict)
 		if dict["tuner_state"] == "TUNING":
 			print("[CrossEPG] TUNING")
