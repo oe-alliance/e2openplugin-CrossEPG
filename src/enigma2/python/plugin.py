@@ -35,38 +35,45 @@ def Plugins(**kwargs):
 		plugins.append(PluginDescriptor(name=_("CrossEPG") + " " + _("Downloader"),
 										description=_("An EPG downloader"),
 										where=[PluginDescriptor.WHERE_EXTENSIONSMENU, PluginDescriptor.WHERE_PLUGINMENU],
-										fnc=call_downloader))
+										fnc=call_downloader,
+										needsRestart=True))
 	elif config.show_extension == 1:
 		plugins.append(PluginDescriptor(name=_("CrossEPG") + " " + _("Downloader"),
 										description=_("An EPG downloader"),
 										where=PluginDescriptor.WHERE_EXTENSIONSMENU,
-										fnc=call_downloader))
+										fnc=call_downloader,
+										needsRestart=True))
 	elif config.show_plugin == 1:
 		plugins.append(PluginDescriptor(name=_("CrossEPG") + " " + _("Downloader"),
 										description=_("An EPG downloader"),
 										where=PluginDescriptor.WHERE_PLUGINMENU,
-										fnc=call_downloader))
+										fnc=call_downloader,
+										needsRestart=True))
 
 	if config.isQBOXHD():
 		plugins.append(PluginDescriptor(name=_("CrossEPG"),
 										description=_("CrossEPG setup panel"),
 										where=PluginDescriptor.WHERE_PLUGINMENU,
-										fnc=call_setup))
+										fnc=call_setup,
+										needsRestart=True))
 	else:
 		plugins.append(PluginDescriptor(name=_("CrossEPG"),
 										description=_("CrossEPG setup panel"),
 										where=PluginDescriptor.WHERE_MENU,
-										fnc=setup))
+										fnc=setup,
+										needsRestart=True))
 
 	plugins.append(PluginDescriptor(name=_("CrossEPG") + " " + _("Auto"),
 									description=_("CrossEPG automatic actions"),
 									where=PluginDescriptor.WHERE_SESSIONSTART,
-									fnc=CrossEPGautostart))
+									fnc=CrossEPGautostart,
+										needsRestart=True))
 
 	if config.show_force_reload_as_plugin == 1:
 		plugins.append(PluginDescriptor(name=_("CrossEPG") + " " + _("Force Reload"),
 										description=_("CrossEPG Force Reload"),
 										where=PluginDescriptor.WHERE_PLUGINMENU,
-										fnc=call_loaderAsPlugin))
+										fnc=call_loaderAsPlugin,
+										needsRestart=True))
 
 	return plugins
