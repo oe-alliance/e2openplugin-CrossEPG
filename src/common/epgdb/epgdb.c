@@ -32,7 +32,7 @@ typedef struct epgdb_title_header_s
 {
 	uint16_t	event_id;
 	uint16_t	mjd;
-	uint32_t	start_time;
+	time_t	start_time;
 	uint16_t	length;
 	uint8_t		genre_id;
 	uint8_t		flags;
@@ -194,7 +194,7 @@ bool epgdb_save (void(*progress_callback)(int, int))
 		if (progress_callback != NULL)
 			progress_callback (progress_count, progress_max);
 	}
-	fseek (fd_h, strlen (MAGIC_HEADERS) + sizeof (unsigned char) + (sizeof (uint32_t) * 2), SEEK_SET);
+	fseek (fd_h, strlen (MAGIC_HEADERS) + sizeof (unsigned char) + (sizeof (time_t) * 2), SEEK_SET);
 	fwrite (&channels_count, sizeof (uint32_t), 1, fd_h);
 	fflush (fd_h);
 	fsync (fileno (fd_h));
@@ -285,7 +285,7 @@ bool epgdb_load ()
 	char tmp[256];
 	unsigned char revision;
 	uint32_t channels_count, i, j, aliases_groups_count, indexes_count;
-	uint32_t now = time (NULL);
+	time_t now = time (NULL);
 	
 	epgdb_index_init ();
 	
