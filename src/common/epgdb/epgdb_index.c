@@ -27,7 +27,7 @@ int epgdb_index_count ()
 			tmp = tmp->next;
 		}
 	}
-	
+
 	return count;
 }
 
@@ -40,7 +40,7 @@ int epgdb_index_empties_count ()
 		count++;
 		tmp = tmp->next;
 	}
-	
+
 	return count;
 }
 
@@ -76,7 +76,7 @@ void epgdb_index_clean ()
 		index_first[i] = NULL;
 		index_last[i] = NULL;
 	}
-	
+
 	epgdb_index_t *index = index_empties_first;
 	while (index != NULL)
 	{
@@ -91,13 +91,13 @@ void epgdb_index_clean ()
 epgdb_index_t *epgdb_index_get_by_crc_length (uint32_t crc, unsigned short int length)
 {
 	epgdb_index_t *tmp = index_first[crc & 0xffff];
-	
+
 	while (tmp != NULL)
 	{
 		if ((crc == tmp->crc) && (length == tmp->length)) return tmp;
 		tmp = tmp->next;
 	}
-	
+
 	return NULL;
 }
 
@@ -106,7 +106,7 @@ epgdb_index_t *epgdb_index_add (uint32_t crc, unsigned short int length, bool *a
 	epgdb_index_t *tmp = index_first[crc & 0xffff];
 	bool exist = false;
 	*added = false;
-	
+
 	while (tmp != NULL)
 	{
 		if ((crc == tmp->crc) && (length == tmp->length)) return tmp;
@@ -127,12 +127,12 @@ epgdb_index_t *epgdb_index_add (uint32_t crc, unsigned short int length, bool *a
 		}
 		tmp = tmp->next;
 	}
-	
+
 	if (!exist) tmp = _malloc (sizeof (epgdb_index_t));
 	tmp->crc = crc;
 	tmp->length = length;
 	tmp->seek = 0;
-	
+
 	if (index_last[crc & 0xffff] == NULL)
 	{
 		tmp->prev = NULL;
@@ -167,7 +167,7 @@ void epgdb_index_mark_all_as_unused ()
 void epgdb_index_mark_as_used (uint32_t crc, unsigned short int length)
 {
 	epgdb_index_t *tmp = index_first[crc & 0xffff];
-	
+
 	while (tmp != NULL)
 	{
 		if ((crc == tmp->crc) && (length == tmp->length))

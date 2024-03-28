@@ -26,17 +26,17 @@ epgdb_search_res_t *epgdb_search_by_name (char *name, int max_results)
 	int i;
 	for (i=0; i<length; i++) tmp[i] = towupper(name[i]);
 	tmp[length] = '\0';
-	
+
 	epgdb_search_res_t *ret = _malloc (sizeof (epgdb_search_res_t));
 	ret->titles = _malloc (sizeof (epgdb_title_t)*max_results);
 	ret->channels = _malloc (sizeof (epgdb_channel_t)*max_results);
 	ret->count = 0;
-	
+
 	epgdb_channel_t *channel = epgdb_channels_get_first ();
 	while (channel != NULL)
 	{
 		epgdb_title_t *title = channel->title_first;
-		
+
 		while (title != NULL)
 		{
 			if (title->description_length == length)
@@ -54,15 +54,15 @@ epgdb_search_res_t *epgdb_search_by_name (char *name, int max_results)
 				}
 				_free (desc);
 			}
-			
+
 			if (ret->count >= max_results) break;
 			title = title->next;
 		}
-		
+
 		if (ret->count >= max_results) break;
 		channel = channel->next;
 	}
-	
+
 	return ret;
 }
 
@@ -73,12 +73,12 @@ epgdb_title_t *epgdb_search_by_name_freq_time (char *name, int nid, int tsid, in
 	int i;
 	for (i=0; i<length; i++) tmp[i] = towupper(name[i]);
 	tmp[length] = '\0';
-	
+
 	epgdb_channel_t *channel = epgdb_channels_get_by_freq (nid, tsid, sid);
 	if (channel != NULL)
 	{
 		epgdb_title_t *title = channel->title_first;
-		
+
 		while (title != NULL)
 		{
 			if ((title->start_time >= from_time) && (title->start_time <= to_time))
@@ -98,10 +98,10 @@ epgdb_title_t *epgdb_search_by_name_freq_time (char *name, int nid, int tsid, in
 					_free (desc);
 				}
 			}
-			
+
 			title = title->next;
 		}
 	}
-	
+
 	return NULL;
 }

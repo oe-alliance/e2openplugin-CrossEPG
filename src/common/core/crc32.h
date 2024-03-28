@@ -68,9 +68,9 @@ static inline uint32_t crc32 (unsigned char *value, unsigned short length)
 		0x9ABC8BD5, 0x9E7D9662, 0x933EB0BB, 0x97FFAD0C,
 		0xAFB010B1, 0xAB710D06, 0xA6322BDF, 0xA2F33668,
 		0xBCB4666D, 0xB8757BDA, 0xB5365D03, 0xB1F740B4};
-		
+
 	uint32_t crc = 0;
-	
+
 	int i;
 
 	for (i=0; i<length; i++)

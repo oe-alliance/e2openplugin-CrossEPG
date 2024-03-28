@@ -31,12 +31,12 @@ size_t http_file_write(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
 	return fwrite(ptr, size, nmemb, stream);
 }
- 
+
 size_t http_file_read(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
 	return fread(ptr, size, nmemb, stream);
 }
- 
+
 int http_progress(void(*progress_callback)(int, int), double t, double d, double ultotal, double ulnow)
 {
 	if (progress_callback != NULL && t > 0) progress_callback ((int)d, (int)t);
@@ -101,7 +101,7 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 		log_add ("Can't create TCP socket");
 		return false;
 	}
-	
+
 	/* get ip */
 	memset (ip, 0, sizeof (ip));
 	if ((hent = gethostbyname (host)) == NULL)
@@ -109,13 +109,13 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 		log_add ("Can't get IP address");
 		return false;
 	}
-	
+
 	if (inet_ntop (AF_INET, hent->h_addr_list[0], ip, 15) == NULL)
 	{
 		log_add ("Can't resolve host");
 		return false;
 	}
-	
+
 	remote = _malloc (sizeof (struct sockaddr_in *));
 	remote->sin_family = AF_INET;
 	tmpres = inet_pton (AF_INET, ip, (void *)(&(remote->sin_addr.s_addr)));
@@ -132,17 +132,17 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 		return false;
 	}
 	remote->sin_port = htons (port);
-	
+
 	if (connect (sock, (struct sockaddr *)remote, sizeof (struct sockaddr)) < 0)
 	{
 		log_add ("Could not connect");
 		_free (remote);
 		return false;
 	}
-	
+
 	get = _build_get_query (host, page);
 	//fprintf(stderr, "Query is:\n<<START>>\n%s<<END>>\n", get);
-	
+
 	/* send the query to the server */
 	int sent = 0;
 	while (sent < strlen (get))
@@ -158,7 +158,7 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 		}
 		sent += tmpres;
 	}
-	
+
 	//now it is time to receive the page
 	fd = fdopen (tempfile, "w");
 	if (fd == NULL)
@@ -171,7 +171,7 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 	memset (buf, 0, sizeof (buf));
 	bool htmlstart = false;
 	char *htmlcontent;
-	
+
 	bool error = false;
 	while ((tmpres = recv (sock, buf, BUFSIZ, 0)) > 0 && *stop == false)
 	{
@@ -200,12 +200,12 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 						error = true;
 					}
 				}
-				
+
 				// Content-Length: 210060
 				int length;
 				if (sscanf (line, "Content-Length: %d", &length) == 1)
 					total_size = length;
-				
+
 				line = next_line;
 			}
 		}
@@ -213,9 +213,9 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 		{
 			htmlcontent = buf;
 		}
-		
+
 		if (error) break;
-		
+
 		if ((htmlstart) && (tmpres > 0))
 		{
 			fwrite (htmlcontent, tmpres, 1, fd);
@@ -224,7 +224,7 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 		}
 		memset (buf, 0, tmpres);
 	}
-	
+
 	if (tmpres < 0)
 	{
 		log_add ("Error receiving data");
@@ -237,7 +237,7 @@ bool http_get_old (char *host, char *page, int port, int tempfile, void(*progres
 	}
 	else
 		log_add ("Downloaded %d bytes", total_size);
-		
+
 	fclose (fd);
 	_free (get);
 	_free (remote);

@@ -46,13 +46,13 @@ void dvb_read (dvb_t *settings, bool(*data_callback)(int, unsigned char*))
 		int cycles, total_size, fd;
 		struct dmx_sct_filter_params params;
 		dmx_source_t ssource;
-		
+
 		char first[settings->buffer_size];
 		int first_length;
 		bool first_ok;
-		
+
 		ssource = DMX_SOURCE_FRONT0 + settings->frontend;
-		
+
 		memset(&params, 0, sizeof(params));
 		params.pid = settings->pids[i];
 		params.filter.filter[0] = settings->filter;
@@ -96,7 +96,7 @@ void dvb_read (dvb_t *settings, bool(*data_callback)(int, unsigned char*))
 			}
 
 			if (size < settings->min_length) continue;
-				
+
 			if (first_length == 0)
 			{
 				first_length = size;
@@ -120,7 +120,7 @@ void dvb_read (dvb_t *settings, bool(*data_callback)(int, unsigned char*))
 				log_add ("Done");
 				break;
 			}
-			
+
 			cycles++;
 		}
 
@@ -131,40 +131,40 @@ void dvb_read (dvb_t *settings, bool(*data_callback)(int, unsigned char*))
 	int cycles, i, total_size;
 	struct dmx_sct_filter_params params;
 	dmx_source_t ssource;
-	
+
 	char first[settings->pids_count][settings->buffer_size];
 	int first_length[settings->pids_count];
 	bool first_ok[settings->pids_count];
-	
+
 	ssource = DMX_SOURCE_FRONT0 + settings->frontend;
-	
+
 	for (i = 0; i < settings->pids_count; i++)
 	{
 		PFD[i].fd = open (settings->demuxer, O_RDWR|O_NONBLOCK);
 		PFD[i].events = POLLIN;
 		PFD[i].revents = 0;
-		
+
 		memset (&params, 0, sizeof (params));
 		params.pid = settings->pids[i];
 		params.timeout = 5000;
 		params.flags = DMX_CHECK_CRC|DMX_IMMEDIATE_START;
 		params.filter.filter[0] = settings->filter;
 		params.filter.mask[0] = settings->mask;
-		
+
 		if (ioctl(PFD[i].fd, DMX_SET_SOURCE, &ssource) < 0) {
 			log_add ("ioctl DMX_SET_SOURCE failed");
 		}
-		
+
 		if (ioctl (PFD[i].fd, DMX_SET_BUFFER_SIZE, settings->buffer_size * 4) < 0)
 			log_add ("ioctl DMX_SET_BUFFER_SIZE failed");
 
 		if (ioctl (PFD[i].fd, DMX_SET_FILTER, &params) < 0)
 			log_add ("ioctl DMX_SET_FILTER failed");
-		
+
 		first_length[i] = 0;
 		first_ok[i] = false;
 	}
-	
+
 	total_size = 0;
 	cycles = 0;
 	while ((cycles < MAX_OTV_LOOP_CYCLES) && (poll (PFD, settings->pids_count, 5000) > 0))
@@ -178,11 +178,11 @@ void dvb_read (dvb_t *settings, bool(*data_callback)(int, unsigned char*))
 			int size = 0;
 			if (PFD[i].revents & POLLIN)
 				size = read (PFD[i].fd, buf, sizeof (buf));
-			
+
 			if (size == -1) continue;
 			if (first_ok[i]) continue;
 			if (size < settings->min_length) continue;
-			
+
 			if (first_length[i] == 0)
 			{
 				first_length[i] = size;
@@ -192,22 +192,22 @@ void dvb_read (dvb_t *settings, bool(*data_callback)(int, unsigned char*))
 			{
 				if (memcmp (buf, first[i], size) == 0) first_ok[i] = true;
 			}
-			
+
 			total_size += size;
 			//data_callback (size, buf);
 			force_quit = !data_callback (size, buf);
 		}
-		
+
 		for (k = 0; k < settings->pids_count; k++)
 			ended &= first_ok[k];
-		
+
 		if (ended || force_quit) break;
-		
+
 		cycles++;
 	}
-	
+
 	if (cycles == MAX_OTV_LOOP_CYCLES) log_add ("Maximum loop exceded");
-	
+
 	for (i = 0; i < settings->pids_count; i++)	// close filters
 	{
 		if (ioctl (PFD[i].fd, DMX_STOP) < 0)

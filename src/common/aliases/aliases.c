@@ -33,7 +33,7 @@ char *aliastok (char *value)
 	static char field[1024];
 	static int pos;
 	int i, z;
-	
+
 	if (value != NULL)
 	{
 		strcpy (line, value);
@@ -48,7 +48,7 @@ char *aliastok (char *value)
 	}
 	pos = i+1;
 	if (z == 0) return NULL;
-	
+
 	field[z] = '\0';
 	return field;
 }
@@ -60,7 +60,7 @@ static char *_aliases_trim_spaces (char *text)
 	while (strlen (tmp) > 1)
 		if (tmp[strlen (tmp) - 1] == ' ') tmp[strlen (tmp) - 1] = '\0';
 		else break;
-	
+
 	if (tmp[0] == ' ') tmp[0] = '\0';
 	return tmp;
 }
@@ -82,7 +82,7 @@ int _aliases_get_id (alias_t *aliases /* alias_t array */, alias_t *alias /* ali
 			}
 		}
 	}
-	
+
 	return old_id;
 }
 
@@ -90,21 +90,21 @@ void _aliases_load (alias_t *aliases, int max_aliases, char *filename)
 {
 	char line[1024];
 	FILE *fd;
-	
+
 	fd = fopen (filename, "r");
 	if (fd == NULL)
 	{
 		log_add ("Cannot load aliases from file '%s'", filename);
 		return;
 	}
-	
-	while (fgets (line, sizeof (line), fd)) 
+
+	while (fgets (line, sizeof (line), fd))
 	{
 		if (line[strlen (line)-1] == '\n') line[strlen (line)-1] = '\0';
 		char *tmp = _aliases_trim_spaces (line);
 		// Skip comment and empty lines
 		if (tmp[0] == '#' || tmp[0] == '\0') continue;
-				
+
 		alias_t alias;
 		alias.count = 0;
 		char *tmp2 = aliastok (tmp);
@@ -125,7 +125,7 @@ void _aliases_load (alias_t *aliases, int max_aliases, char *filename)
 			}
 			while ((tmp2 = aliastok (NULL)) != NULL);
 		}
-		
+
 		if (alias.count > 1)
 		{
 			int id = _aliases_get_id (aliases, &alias);
@@ -157,10 +157,10 @@ void _aliases_load (alias_t *aliases, int max_aliases, char *filename)
 		}
 		else
 			log_add ("WARNING... aliases configuration file may be malfored");
-		
+
 		if (aliases_count >= max_aliases) break;
 	}
-	
+
 	fclose (fd);
 }
 
@@ -179,10 +179,10 @@ void aliases_make (char *home)
 	struct dirent *ep;
 	alias_t aliases[1024];
 	int i, j;
-	
+
 	log_add ("Clearing old aliases...");
 	epgdb_aliases_clear ();
-	
+
 	sprintf (dir, "%s/aliases", home);
 	dp = opendir (dir);
 	if (dp != NULL)
@@ -198,10 +198,10 @@ void aliases_make (char *home)
 			}
 		}
 		closedir (dp);
-		
+
 		log_add ("Loaded %d aliases", aliases_count);
 		log_add ("Adding new aliases...");
-		
+
 		for (i=0; i<aliases_count; i++)
 		{
 			if (aliases[i].count > 1)
@@ -212,10 +212,10 @@ void aliases_make (char *home)
 					channel = epgdb_channels_get_by_freq (aliases[i].nid[j], aliases[i].tsid[j], aliases[i].sid[j]);
 					if (channel != NULL) break;
 				}
-				
+
 				if (channel == NULL)
 					channel = epgdb_channels_add (aliases[i].nid[0], aliases[i].tsid[0], aliases[i].sid[0]);
-				
+
 				if (channel != NULL)
 				{
 					for (j=0; j<aliases[i].count; j++)

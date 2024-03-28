@@ -310,7 +310,7 @@ bool dbmerge_fromfile (char *hashes_filename, char *descriptors_filename, void(*
 {
 	FILE *fd_h, *fd_d;
 	bool ret = false;
-	
+
 	fd_h = fopen (hashes_filename, "r");
 	if (fd_h == NULL)
 	{

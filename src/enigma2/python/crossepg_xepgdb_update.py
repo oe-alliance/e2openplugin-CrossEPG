@@ -95,7 +95,7 @@ class CrossEPG_Xepgdb_Update(Screen):
 			conn = httplib.HTTPConnection(SIFTEAM_HOST)
 			conn.request("GET", "/sources.xml")
 			httpres = conn.getresponse()
-			print("[crossepg_xepgdb_update] load response = %s" % httpres)			
+			print("[crossepg_xepgdb_update] load response = %s" % httpres)
 			if httpres.status == 200:
 				f = open("/tmp/crossepg_xepgdb_tmp", "w")
 				f.write(httpres.read())

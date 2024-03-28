@@ -13,13 +13,13 @@
 void epgdb_aliases_clear ()
 {
 	epgdb_channel_t *tmp = epgdb_channels_get_first ();
-	
+
 	while (tmp != NULL)
 	{
 		if (tmp->aliases != NULL) _free (tmp->aliases);
 		tmp->aliases = NULL;
 		tmp->aliases_count = 0;
-		
+
 		tmp = tmp->next;
 	}
 }
@@ -27,7 +27,7 @@ void epgdb_aliases_clear ()
 epgdb_channel_t *epgdb_aliases_add (epgdb_channel_t *channel, unsigned short int nid, unsigned short int tsid, unsigned short int sid)
 {
 	epgdb_channel_t *tmp = epgdb_channels_get_by_freq (nid, tsid, sid);
-	
+
 	if (tmp == NULL)
 	{
 		if (channel->aliases == NULL)
@@ -55,13 +55,13 @@ epgdb_channel_t *epgdb_aliases_add (epgdb_channel_t *channel, unsigned short int
 			channel->aliases = tmp2;
 			channel->aliases_count++;
 		}
-		
+
 		return channel;
 	}
 	else if (tmp == channel)
 	{
 		return channel;
 	}
-	
+
 	return NULL;
 }

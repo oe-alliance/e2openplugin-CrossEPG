@@ -46,7 +46,7 @@ int main (int argc, char **argv)
 	bool useless = false;
 
 	sprintf (db_root, DEFAULT_DB_ROOT);
-	
+
 	while ((c = getopt (argc, argv, "d:k")) != -1)
 	{
 		switch (c)
@@ -72,11 +72,11 @@ int main (int argc, char **argv)
 		channelsfile = argv[argc-2];
 		eventsfile = argv[argc-1];
 	}
-	
+
 	while (db_root[strlen (db_root) - 1] == '/') db_root[strlen (db_root) - 1] = '\0';
-	
+
 	mkdir (db_root, S_IRWXU|S_IRWXG|S_IRWXO);
-	
+
 	log_open (db_root);
 	log_banner ("CrossEPG XMLTV Importer");
 
@@ -89,7 +89,7 @@ int main (int argc, char **argv)
 		return 0;
 	}
 	epgdb_load ();
-	
+
 	xmltv_encodings_init ();
 	xmltv_channels_init ();
 	xmltv_channels_load (channelsfile);
@@ -100,7 +100,7 @@ int main (int argc, char **argv)
 	log_add ("Saving data");
 	if (epgdb_save (NULL)) log_add ("Data saved");
 	else log_add ("Error saving data");
-	
+
 	epgdb_clean ();
 	memory_stats ();
 	log_close ();

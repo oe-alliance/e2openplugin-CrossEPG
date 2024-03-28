@@ -51,7 +51,7 @@ char *epgdb_read_long_description (epgdb_title_t *title)
 	memset (ret, '\0', title->long_description_length + 1);
 
 	if (epgdb_get_fdd () == NULL) return ret;
-	
+
 	fseek (epgdb_get_fdd (), title->long_description_seek, SEEK_SET);
 	fread (ret, title->long_description_length, 1, epgdb_get_fdd ());
 	return ret;
@@ -83,7 +83,7 @@ epgdb_title_t *epgdb_titles_set_description (epgdb_title_t *title, char *descrip
 			fwrite (description, index->length, 1, fd);
 		}
 	}
-	
+
 	title->description_seek = index->seek;
 	return title;
 }
@@ -93,7 +93,7 @@ epgdb_title_t *epgdb_titles_set_long_description (epgdb_title_t *title, char *de
 	bool added;
 	int length = strlen (description);
 	uint32_t crc = crc32 ((unsigned char*)description, length);
-	
+
 	if (title->description_length == length && title->description_crc == crc) return title;
 	if (!title->changed)
 	{
@@ -103,7 +103,7 @@ epgdb_title_t *epgdb_titles_set_long_description (epgdb_title_t *title, char *de
 	title->long_description_length = length;
 	title->long_description_crc = crc;
 	epgdb_index_t *index = epgdb_index_add (title->long_description_crc, title->long_description_length, &added);
-	
+
 	if (added)
 	{
 		FILE *fd = epgdb_get_fdd ();
@@ -116,7 +116,7 @@ epgdb_title_t *epgdb_titles_set_long_description (epgdb_title_t *title, char *de
 		}
 	}
 	title->long_description_seek = index->seek;
-	
+
 	return title;
 }
 
@@ -138,29 +138,29 @@ int epgdb_titles_count (epgdb_channel_t *channel)
 {
 	int count = 0;
 	epgdb_title_t *tmp = channel->title_first;
-	
+
 	while (tmp != NULL)
 	{
 		count++;
 		tmp = tmp->next;
 	}
-	
+
 	return count;
 }
 
 epgdb_title_t *epgdb_titles_get_by_time (epgdb_channel_t *channel, time_t ttime)
 {
 	if (channel == NULL) return NULL;
-	
+
 	epgdb_title_t *tmp = channel->title_first;
-	
+
 	while (tmp != NULL)
 	{
 		if (tmp->start_time + tmp->length >= ttime) break;
 		if (tmp->next == NULL) break;
 		tmp = tmp->next;
 	}
-	
+
 	return tmp;
 }
 
@@ -169,22 +169,22 @@ epgdb_title_t *epgdb_titles_get_by_id_and_mjd (epgdb_channel_t *channel, unsigne
 	if (channel == NULL) return NULL;
 
 	epgdb_title_t *tmp = channel->title_first;
-	
+
 	while (tmp != NULL)
 	{
 		if ((tmp->mjd == mjd_time) && (tmp->event_id == event_id)) break;
 		tmp = tmp->next;
 	}
-	
+
 	return tmp;
 }
 
 void epgdb_titles_delete_in_range (epgdb_channel_t *channel, time_t start_time, unsigned short int length)
 {
 	if (channel == NULL) return;
-	
+
 	epgdb_title_t *tmp = channel->title_first;
-	
+
 	while (tmp != NULL)
 	{
 		// do this check better
@@ -210,9 +210,9 @@ epgdb_title_t *epgdb_titles_add (epgdb_channel_t *channel, epgdb_title_t *title)
 {
 	if (channel == NULL) return NULL;
 	if (title == NULL) return NULL;
-	
+
 	epgdb_titles_delete_in_range (channel, title->start_time, title->length);
-	
+
 	title->description_length = 0;
 	title->description_crc = 0;
 	title->description_seek = 0;
@@ -221,8 +221,8 @@ epgdb_title_t *epgdb_titles_add (epgdb_channel_t *channel, epgdb_title_t *title)
 	title->long_description_seek = 0;
 	title->changed = true;
 	title->revision = 0;
-	
-	/* add into list */				
+
+	/* add into list */
 	if (channel->title_first == NULL)
 	{
 		title->next = NULL;
@@ -265,7 +265,7 @@ epgdb_title_t *epgdb_titles_add (epgdb_channel_t *channel, epgdb_title_t *title)
 					channel->title_first = title;
 				break;
 			}
-			
+
 			if (tmp->next == NULL)
 			{
 				title->prev = tmp;
@@ -274,10 +274,10 @@ epgdb_title_t *epgdb_titles_add (epgdb_channel_t *channel, epgdb_title_t *title)
 				channel->title_last = title;
 				break;
 			}
-			
+
 			tmp = tmp->next;
 		}
 	}
-	
+
 	return title;
 }

@@ -22,15 +22,15 @@ static int channels_count;
 bool enigma2_lamedb_read (char *filename)
 {
 	char line[512];
-	
+
 	FILE *fd = fopen (filename, "r");
 	if (!fd) return false;
 
 	channels_count = 0;
-	while (fgets (line, sizeof(line), fd)) 
+	while (fgets (line, sizeof(line), fd))
 	{
 		int nid, tsid, sid, namespace, trash2, trash3;
-		
+
 		if (sscanf (line, "%x:%x:%x:%x:%x:%x\n", &sid, &namespace, &tsid, &nid, &trash2, &trash3) == 6)
 		{
 			nids[channels_count] = nid;

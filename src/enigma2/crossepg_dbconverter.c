@@ -92,7 +92,7 @@ static ldesc_t* long_desc (char *value, unsigned char iso639_1, unsigned char is
 
 	for (i=0; i<ret->count; i++)
 		ret->size[i] = 254;
-		
+
 	if ((strlen (value) % maxchars) > 0)
 	{
 		ret->size[(int)ret->count] = (strlen (value) % maxchars) + 8;
@@ -100,7 +100,7 @@ static ldesc_t* long_desc (char *value, unsigned char iso639_1, unsigned char is
 			ret->size[(int)ret->count]++;
 		ret->count++;
 	}
-	
+
 	for (i=0; i<ret->count; i++)
 	{
 		ret->data[i] = _malloc (ret->size[i]);
@@ -120,7 +120,7 @@ static ldesc_t* long_desc (char *value, unsigned char iso639_1, unsigned char is
 		if (isutf8)
 			ret->data[i][8] = 0x15;
 	}
-	
+
 	return ret;
 }
 
@@ -148,19 +148,19 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 		uint32_t crcs[17];
 		char length;
 		struct tm start_time;
-		
+
 		/* description */
 		char *description = epgdb_read_description (title);
 		//if (strlen (description) > 245) description[245] = '\0';
 		if (strlen (description) > 246) description[246] = '\0';
 		gmtime_r ((time_t*)&title->start_time, &start_time);
 		sdesc_t *sdesc = short_desc (description, title->iso_639_1, title->iso_639_2, title->iso_639_3, IS_UTF8(title->flags));
-		
+
 		crcs[0] = crc32 (sdesc->data, sdesc->size);
 		if (!enigma2_hash_add (crcs[0], sdesc->data, sdesc->size)) _free (sdesc->data);
 		_free (sdesc);
 		_free (description);
-		
+
 		/* long description */
 		char *ldescription = epgdb_read_long_description (title);
 		if (strlen (ldescription) > 0)
@@ -174,19 +174,19 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 				if (strlen (ldescription) > (246*16)) ldescription[246*16] = '\0';
 			}
 			ldesc_t *ldesc = long_desc (ldescription, title->iso_639_1, title->iso_639_2, title->iso_639_3, IS_UTF8(title->flags));
-			
+
 			for (i=0; i<ldesc->count; i++)
 			{
 				crcs[i+1] = crc32 (ldesc->data[i], ldesc->size[i]);
 				if (!enigma2_hash_add (crcs[i+1], ldesc->data[i], ldesc->size[i])) _free (ldesc->data[i]);
 				crcs_count++;
 			}
-			
+
 			_free (ldesc);
 		}
-		
+
 		_free (ldescription);
-		
+
 		events_count++;
 		uint16_t event_id = events_count;
 		uint16_t start_mjd = title->mjd;
@@ -209,10 +209,10 @@ static void write_titles (epgdb_channel_t *channel, FILE *fd)
 		{
 			memcpy (buf+13+(i*4), &crcs[i], 4);
 		}
-		
+
 		fwrite (buf, length+3, 1, fd);
 		_free (buf);
-		
+
 		title = title->next;
 		//count++;
 		if (stop) return;
@@ -227,14 +227,14 @@ static void write_epgdat ()
 	int progress_max = epgdb_channels_count ();
 	int progress_now = 0;
 	FILE *fd;
-	
+
 	events_count = 0;
-	
+
 	interactive_send (ACTION_START);
 	interactive_send_text (ACTION_PROGRESS, "ON");
-	
+
 	enigma2_hash_init ();
-	
+
 	fd = fopen(epgdat, "w");
 	if (fd == NULL)
 	{
@@ -243,7 +243,7 @@ static void write_epgdat ()
 		goto write_end;
 	}
 	log_add ("EPG.DAT opened");
-	
+
 	if (!enigma2_lamedb_read (lamedb))
 	{
 		log_add ("Error reading lamedb");
@@ -251,15 +251,15 @@ static void write_epgdat ()
 		interactive_send_text (ACTION_ERROR, lamedb);
 		goto write_end;
 	}
-	
+
 	unsigned int magic = 0x98765432;
 	fwrite (&magic, sizeof (int), 1, fd);
 	const char *header = "UNFINISHED_V8";
 	fwrite (header, 13, 1, fd);
 	fwrite (&ccount, sizeof (int), 1, fd); 		// write the exact number at the end
-		
+
 	epgdb_channel_t *channel = epgdb_channels_get_first ();
-	
+
 	log_add ("Writing events...");
 	while (channel != NULL)
 	{
@@ -275,13 +275,13 @@ static void write_epgdat ()
 				fwrite (&nid, sizeof (int), 1, fd);
 				fwrite (&tsid, sizeof (int), 1, fd);
 				fwrite (&titles_count, sizeof (int), 1, fd);
-				
+
 				write_titles (channel, fd);
-				
+
 				if (stop) goto write_end;
 				ccount++;
 			}
-			
+
 			for (i = 0; i < channel->aliases_count; i++)
 			{
 				if (enigma2_lamedb_exist (channel->aliases[i].nid, channel->aliases[i].tsid, channel->aliases[i].sid))
@@ -293,22 +293,22 @@ static void write_epgdat ()
 					fwrite (&nid, sizeof (int), 1, fd);
 					fwrite (&tsid, sizeof (int), 1, fd);
 					fwrite (&titles_count, sizeof (int), 1, fd);
-					
+
 					write_titles (channel, fd);
-					
+
 					if (stop) goto write_end;
 					ccount++;
 				}
 			}
 		}
-		
+
 		progress_now++;
 		progress (progress_now, progress_max);
-		
+
 		channel = channel->next;
 		if (stop) goto write_end;
 	}
-	
+
 	log_add ("Sorting hashes...");
 	enigma2_hash_sort ();
 	log_add ("Writing descriptors...");
@@ -327,11 +327,11 @@ static void write_epgdat ()
 			hash = hash->next;
 		}
 	}
-	
+
 	/* write the exact number of channels */
 	fseek (fd, sizeof (int)+13, SEEK_SET);
 	fwrite (&ccount, sizeof (int), 1, fd);
-	
+
 	/* sync data on disk and mark epg.dat as a good epg */
 	fsync (fileno (fd));
 	fseek (fd, sizeof (int), SEEK_SET);
@@ -339,8 +339,8 @@ static void write_epgdat ()
 
 write_end:
 	if (fd) fclose (fd);
-	log_add ("EPG.DAT closed");	
-	
+	log_add ("EPG.DAT closed");
+
 	enigma2_hash_clean ();
 	interactive_send_text (ACTION_PROGRESS, "OFF");
 	interactive_send (ACTION_END);
@@ -353,9 +353,9 @@ char *format_text (char *value)
 	int count = 0;
 	for (i=0; i<strlen(value); i++)
 		if (value[i] == '\n') count++;
-	
+
 	char *ret = _malloc (strlen (value) + count + 1);
-	
+
 	for (i=0; i<strlen(value); i++)
 	{
 		if (value[i] == '\n')
@@ -420,7 +420,7 @@ void write_text ()
 		}
 		progress_now++;
 		progress (progress_now, progress_max);
-	
+
 		channel = channel->next;
 		if (stop) goto write_end;
 	}
@@ -449,9 +449,9 @@ void* interactive (void *args)
 	bool run = true;
 	pthread_t thread;
 	exec = false;
-	
+
 	interactive_send (ACTION_READY);
-	
+
 	while (run)
 	{
 		int i = 0, size = 0;
@@ -459,10 +459,10 @@ void* interactive (void *args)
 		while ((size = fread (&byte, 1, 1, stdin)))
 		{
 			if (byte == '\n') break;
-			buffer[i] = byte; 
+			buffer[i] = byte;
 			i++;
 		}
-		
+
 		if (memcmp (buffer, CMD_QUIT, strlen (CMD_QUIT)) == 0 || quit || size == 0)
 		{
 			run = false;
@@ -565,13 +565,13 @@ int main (int argc, char **argv)
 {
 	int c;
 	bool iactive = false;
-	
+
 	char *db_root = DEFAULT_DB_ROOT;
-	
+
 	strcpy (lamedb, DEFAULT_LAMEDB);
 	strcpy (epgdat, DEFAULT_EPG_DAT);
 	opterr = 0;
-	
+
 	while ((c = getopt (argc, argv, "l:e:h:d:k:r")) != -1)
 	{
 		switch (c)
@@ -609,9 +609,9 @@ int main (int argc, char **argv)
 				return 0;
 		}
 	}
-	
+
 	mkdir (db_root, S_IRWXU|S_IRWXG|S_IRWXO);
-	
+
 	log_open (db_root);
 	log_banner ("CrossEPG DB Converter");
 
@@ -623,7 +623,7 @@ int main (int argc, char **argv)
 		epgdb_close ();
 		return 0;
 	}
-	
+
 	log_add ("Reading EPGDB...");
 	if (epgdb_load ()) log_add ("Completed");
 	else
@@ -633,15 +633,15 @@ int main (int argc, char **argv)
 		epgdb_close ();
 		return 0;
 	}
-	
+
 	if (iactive) interactive_manager ();
 	else write_epgdat ();
-	
+
 	epgdb_clean ();
 	epgdb_close ();
 	log_add ("EPGDB closed");
 	memory_stats ();
 	log_close ();
-	
+
 	return 0;
 }

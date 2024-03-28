@@ -16,7 +16,7 @@ typedef struct epgdb_title_s
 	/* same elements of epgdb_title_header_t */
 	uint16_t	event_id;
 	uint16_t	mjd;
-	time_t	start_time;
+	time_t		start_time;
 	uint16_t	length;
 	uint8_t		genre_id;
 	uint8_t		flags;
@@ -70,7 +70,7 @@ typedef struct epgdb_channel_s
 	struct epgdb_title_s 	*title_first;
 	struct epgdb_title_s 	*title_last;
 	//struct epgdb_title_s 	*title_index;
-	
+
 	epgdb_alias_t			*aliases;
 	unsigned char			aliases_count;
 } epgdb_channel_t;

@@ -10,12 +10,12 @@ import gzip
 if six.PY2:
 	import httplib
 	from urllib2 import urlopen, HTTPError, URLError
-	from StringIO import StringIO	
+	from StringIO import StringIO
 else:
 	import http.client as httplib
 	from urllib.request import urlopen, Request # raises ImportError in Python 2
-	from urllib.error import HTTPError, URLError # raises ImportError in Python 2	
-	from io import BytesIO	
+	from urllib.error import HTTPError, URLError # raises ImportError in Python 2
+	from io import BytesIO
 
 from enigma import getDesktop, eTimer
 from Components.Label import Label
@@ -132,7 +132,7 @@ class CrossEPG_Rytec_Update(Screen):
 				conn = httplib.HTTPConnection(host)
 				conn.request("GET", path)
 				httpres = conn.getresponse()
-				print("[crossepg_rytec_update:load] host =%s, path=%s, httpres=%s" % (host, path, httpres))				
+				print("[crossepg_rytec_update:load] host =%s, path=%s, httpres=%s" % (host, path, httpres))
 				if httpres.status == 200:
 					f = open("/tmp/crossepg_rytec_tmp", "w")
 					databytes = httpres.read()

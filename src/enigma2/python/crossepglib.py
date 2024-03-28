@@ -33,30 +33,30 @@ def getEPGPatchType():
 		print("[crossepglib] patch crossepg v2.1 found")
 		return 3
 	except Exception as e:
-		print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)	
+		print("[crossepglib] patch crossepg v2.1 not found e = %s" % e)
 		pass
 	try:
 		epgpatch = instancemethod(_enigma.eEPGCache_load, eEPGCache) if six.PY3 else new.instancemethod(_enigma.eEPGCache_load, None, eEPGCache)
-		print("[crossepglib] patch epgcache.load() found")		
+		print("[crossepglib] patch epgcache.load() found")
 		return 0
 	except Exception as e:
-		print("[crossepglib] patch epgcache.load() not found e = %s" % e)	
+		print("[crossepglib] patch epgcache.load() not found e = %s" % e)
 		pass
 
 	try:
 		edgpatch = instancemethod(_enigma.eEPGCache_reloadEpg, eEPGCache) if six.PY3 else new.instancemethod(_enigma.eEPGCache_reloadEpg, None, eEPGCache)
-		print("[crossepglib] patch EDG NEMESIS found")		
+		print("[crossepglib] patch EDG NEMESIS found")
 		return 1
 	except Exception as e:
-		print("[crossepglib] patch EDG NEMESIS not found e = %s" % e)		
+		print("[crossepglib] patch EDG NEMESIS not found e = %s" % e)
 		pass
 
 	try:
 		oudeispatch = instancemethod(_enigma.eEPGCache_importEvent, eEPGCache) if six.PY3 else new.instancemethod(_enigma.eEPGCache_importEvent, None, eEPGCache)
-		print("[crossepglib] patch Oudeis found")		
+		print("[crossepglib] patch Oudeis found")
 		return 2
 	except Exception as e:
-		print("[crossepglib] patch Oudeis not found e = %s" % e)	
+		print("[crossepglib] patch Oudeis not found e = %s" % e)
 		pass
 
 	return -1
@@ -423,14 +423,14 @@ class CrossEPG_Wrapper:
 
 	def __cmdData(self, data):
 		data = six.ensure_str(data)
-		print("[crossepg][cmdData] data = %s" % data)		
+		print("[crossepg][cmdData] data = %s" % data)
 		if self.cache is None:
 			self.cache = data
 		else:
 			self.cache += data
 
 		if '\n' in data:
-			print("[crossepg][cmdData] \n in data = %s" % data)			
+			print("[crossepg][cmdData] \n in data = %s" % data)
 			splitcache = self.cache.split('\n')
 			if self.cache[-1] == '\n':
 				iteration = splitcache
@@ -444,7 +444,7 @@ class CrossEPG_Wrapper:
 					self.__parseLine(mydata)
 
 	def __parseLine(self, data):
-		print("[crossepg][parseline] parse data = %s" % data)	
+		print("[crossepg][parseline] parse data = %s" % data)
 		if data.find("CHANNEL ") == 0:
 			self.__callCallbacks(self.EVENT_CHANNEL, data[7:])
 		elif data.find("STARTTIME ") == 0:

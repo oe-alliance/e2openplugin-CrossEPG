@@ -41,12 +41,12 @@ void importer_parse_csv (char *dir, char *filename, char *label)
 		strcpy (file, filename);
 	else
 		sprintf (file, "%s/%s", dir, filename);
-	
+
 	log_add ("Importing data from '%s'...", label);
 	if (_file_callback != NULL) _file_callback (label);
 	if (csv_read (file, _progress_callback, _stop)) log_add ("Data imported");
 	else log_add ("Cannot import csv file");
-	
+
 	if (_step_callback != NULL) _step_callback ();
 }
 
@@ -59,17 +59,17 @@ void importer_parse_bin (char *dir, char *filename, char *label)
 		strcpy (file, filename);
 	else
 		sprintf (file, "%s/%s", dir, filename);
-		
+
 	if (dir != NULL)
 		chdir (dir);
-		
+
 	//sprintf (file, "%s/%s", dir, filename);
-	
+
 	log_add ("Importing data from '%s'...", label);
 	if (_file_callback != NULL) _file_callback (label);
 	if (bin_read (file, label, _progress_callback, _file_callback)) log_add ("Data imported");
 	else log_add ("Cannot import from bin file");
-	
+
 	if (_step_callback != NULL) _step_callback ();
 }
 
@@ -78,11 +78,11 @@ void importer_parse_url (char *dir, char *filename, char *dbroot)
 	FILE *fd;
 	char urlfile[256];
 	char line[1024];
-	
+
 	char host[256];
 	char port[6];
 	char page[256];
-	
+
 	sprintf (urlfile, "%s/%s", dir, filename);
 	fd = fopen (urlfile, "r");
 	if (fd == NULL)
@@ -90,18 +90,18 @@ void importer_parse_url (char *dir, char *filename, char *dbroot)
 		log_add ("Cannot read file '%s'", urlfile);
 		return;
 	}
-	
-	while (fgets (line, sizeof(line), fd)) 
+
+	while (fgets (line, sizeof(line), fd))
 	{
 		char *tmp = line;
 		int pos = 0;
-		
+
 		strcpy (_url, line);
-		
+
 		memset (host, 0, sizeof (host));
 		memset (port, 0, sizeof (port));
 		memset (page, 0, sizeof (page));
-		
+
 		if (strlen (tmp) < 7) continue;
 		if (memcmp (tmp, "http://", 7) != 0) continue;
 		tmp += 7;
@@ -126,9 +126,9 @@ void importer_parse_url (char *dir, char *filename, char *dbroot)
 		while ((tmp[0+pos] != '\0') && (tmp[0+pos] != '\n')) pos++;
 		if (pos > (sizeof (page) - 1)) continue;
 		memcpy (page, tmp, pos);
-		
+
 		if (line[strlen (line)-1] == '\n') line[strlen (line)-1] = '\0';
-		
+
 		if (importer_extension_check (page, "csv") || importer_extension_check (page, "csv.gz"))
 		{
 			bool ok;
@@ -167,11 +167,11 @@ void importer_parse_url (char *dir, char *filename, char *dbroot)
 				}
 			}
 			else if (_step_callback != NULL) _step_callback ();
-			
+
 			unlink (sfn);
 		}
 	}
-	
+
 	fclose (fd);
 }
 
@@ -181,7 +181,7 @@ int importer_set_steps (char *dir, void(*step_callback)())
 	DIR *dp;
 	struct dirent *ep;
 	int steps = 0;
-	
+
 	_step_callback = step_callback;
 
 	dp = opendir (dir);
@@ -201,7 +201,7 @@ int importer_set_steps (char *dir, void(*step_callback)())
 				fd = fopen (urlfile, "r");
 				if (fd != NULL)
 				{
-					while (fgets (line, sizeof(line), fd)) 
+					while (fgets (line, sizeof(line), fd))
 					{
 						if (memcmp (line, "http://", 7) != 0) continue;
 						steps += 2;
@@ -212,7 +212,7 @@ int importer_set_steps (char *dir, void(*step_callback)())
 		}
 		closedir (dp);
 	}
-	
+
 	return steps;
 }
 
@@ -224,12 +224,12 @@ void importer_parse_directory (char *dir, char *dbroot,
 {
 	DIR *dp;
 	struct dirent *ep;
-	
+
 	_progress_callback = progress_callback;
 	_url_callback = url_callback;
 	_file_callback = file_callback;
 	_stop = stop;
-	
+
 	dp = opendir (dir);
 	if (dp != NULL)
 	{
@@ -272,7 +272,7 @@ void importer_parse_directory (char *dir, char *dbroot,
 				strcpy (_file, ep->d_name);
 				importer_parse_bin (dir, ep->d_name, ep->d_name);
 			}
-			
+
 			else if (importer_extension_check (ep->d_name, "url"))
 				importer_parse_url (dir, ep->d_name, dbroot);
 		}

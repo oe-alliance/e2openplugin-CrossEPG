@@ -24,7 +24,7 @@ bool enigma2_helper_get_channel (int *nid, int *tsid, int *sid)
 		log_add ("Cannot get temp file");
 		return false;
 	}
-	
+
 	ret = http_get ("127.0.0.1", "web/subservices", 80, temp_file, NULL);
 	close (temp_file);
 
@@ -34,10 +34,10 @@ bool enigma2_helper_get_channel (int *nid, int *tsid, int *sid)
 		char line[256];
 		FILE *fd;
 		fd = fopen (sfn, "r");
-		
+
 		if (fd != NULL)
 		{
-			while (fgets (line, sizeof(line), fd)) 
+			while (fgets (line, sizeof(line), fd))
 			{
 				char *start = strstr (line, SERVICEID_START_TAG);
 				if (start != NULL)
@@ -48,7 +48,7 @@ bool enigma2_helper_get_channel (int *nid, int *tsid, int *sid)
 						int trash1, trash2, trash3, trash4, trash5, trash6, trash7;
 						end[0] = '\0';
 						start += strlen (SERVICEID_START_TAG);
-						
+
 						// 1:0:1:E33:16A8:FBFF:820000:0:0:0:
 						if (sscanf (start, "%x:%x:%x:%x:%x:%x:%x:%x:%x:%x", &trash1, &trash2, &trash3, sid, tsid, nid, &trash4, &trash5, &trash6, &trash7) == 10)
 						{
@@ -64,7 +64,7 @@ bool enigma2_helper_get_channel (int *nid, int *tsid, int *sid)
 		log_add ("Error reading current channel");
 
 	unlink (sfn);
-	
+
 	return ret;
 }
 
@@ -74,7 +74,7 @@ bool enigma2_helper_change_channel (int nid, int tsid, int sid, bool with_check)
 	char page[256];
 	int temp_file = -1, i;
 	bool ret = false;
-	
+
 	sprintf (sfn, "/tmp/crossepg.tmp.XXXXXX");
     if ((temp_file = mkstemp (sfn)) == -1)
 	{
@@ -85,9 +85,9 @@ bool enigma2_helper_change_channel (int nid, int tsid, int sid, bool with_check)
 	ret = http_get ("127.0.0.1", page, 80, temp_file, NULL);
 	close (temp_file);
 	unlink (sfn);
-	
+
 	if (!ret) return false;
-	
+
 	if (with_check)
 	{
 		ret = false;
@@ -106,7 +106,7 @@ bool enigma2_helper_change_channel (int nid, int tsid, int sid, bool with_check)
 			}
 		}
 	}
-	
+
 	return ret;
 }
 

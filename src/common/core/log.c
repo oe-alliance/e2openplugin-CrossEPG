@@ -20,12 +20,12 @@ void log_disable ()
 }
 
 bool log_open (char *db_root)
-{	
+{
 	char log_filename[256];
 	sprintf (log_filename, "%s/crossepg.log", db_root);
 
 	fd = fopen (log_filename, "a");
-	
+
 	return (fd != NULL);
 }
 
@@ -51,7 +51,7 @@ void log_add (char *message, ...)
 	now_time = time (NULL);
 	loctime = localtime (&now_time);
 	strftime (msg, 255, "%d/%m/%Y %H:%M:%S ", loctime);
-	
+
 	if (enabled)
 		fwrite (msg, strlen (msg), 1, stdout);
 	if (fd != NULL) fwrite (msg, strlen (msg), 1, fd);
@@ -60,7 +60,7 @@ void log_add (char *message, ...)
 	vsnprintf (msg, 16*1024, message, args);
 	va_end (args);
 	msg[(16*1024)-1] = '\0';
-	
+
 	if (enabled)
 	{
 		fwrite (msg, strlen (msg), 1, stdout);

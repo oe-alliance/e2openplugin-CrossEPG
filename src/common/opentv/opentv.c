@@ -65,26 +65,26 @@ bool opentv_read_channels_bat (unsigned char *data, unsigned int length)
 	unsigned short int	transport_stream_loop_length	= ((data[bouquet_descriptors_length + 10] & 0x0f) << 8) | data[bouquet_descriptors_length + 11];
 	unsigned int		offset1							= bouquet_descriptors_length + 12;
 	bool				ret								= false;
-	
+
 	while (transport_stream_loop_length > 0)
 	{
 		unsigned short int	tid							= (data[offset1] << 8) | data[offset1 + 1];
 		unsigned short int	nid							= (data[offset1 + 2] << 8) | data[offset1 + 3];
 		unsigned short int	transport_descriptor_length	= ((data[offset1 + 4] & 0x0f) << 8) | data[offset1 + 5];
 		unsigned int		offset2						= offset1 + 6;
-		
+
 		offset1							+= (transport_descriptor_length + 6);
 		transport_stream_loop_length	-= (transport_descriptor_length + 6);
-		
+
 		while (transport_descriptor_length > 0)
 		{
 			unsigned char	descriptor_tag		= data[offset2];
 			unsigned char	descriptor_length	= data[offset2 + 1];
 			unsigned int	offset3				= offset2 + 2;
-			
+
 			offset2						+= (descriptor_length + 2);
 			transport_descriptor_length	-= (descriptor_length + 2);
-			
+
 			if (descriptor_tag == 0xb1)
 			{
 				offset3				+= 2;
@@ -93,24 +93,24 @@ bool opentv_read_channels_bat (unsigned char *data, unsigned int length)
 				{
 					unsigned short int channel_id;
 					//unsigned short int sky_id;
-					
+
 					channel_id = (data[offset3 + 3] << 8) | data[offset3 + 4];
 					//sky_id = ( data[offset3+5] << 8 ) | data[offset3+6];
-					
+
 					if (channels[channel_id] == NULL)
 					{
 						channels[channel_id] = epgdb_channels_add (nid, tid, (data[offset3] << 8) | data[offset3 + 1]);
 						ch_count++;
 						ret = true;
 					}
-					
+
 					offset3				+= 9;
 					descriptor_length	-= 9;
 				}
 			}
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -124,29 +124,29 @@ void opentv_read_titles (unsigned char *data, unsigned int length, bool huffman_
 	epgdb_title_t *title;
 	unsigned short int channel_id	= (data[3] << 8) | data[4];
 	unsigned short int mjd_time		= (data[8] << 8) | data[9];
-	
+
 	if ((channel_id > 0) && (mjd_time > 0))
 	{
 		unsigned int offset = 10;
-		
+
 		while ((offset + 11) < length)
 		{
 			unsigned short int	event_id;
 			unsigned char		description_length;
 			unsigned short int	packet_length = ((data[offset + 2] & 0x0f) << 8) | data[offset + 3];
-			
+
 			if ((data[offset + 4] != 0xb5) || ((packet_length + offset) > length)) break;
-			
+
 			event_id = (data[offset] << 8) | data[offset + 1];
 			offset += 4;
 			description_length = data[offset + 1] - 7;
-			
+
 			if ((offset + 9 + description_length) > length) break;
-			
+
 			if (channels[channel_id] != NULL)
 			{
 				char tmp[256];
-				
+
 				/* prepare struct */
 				title = _malloc (sizeof (epgdb_title_t));
 				title->event_id = event_id;
@@ -160,10 +160,10 @@ void opentv_read_titles (unsigned char *data, unsigned int length, bool huffman_
 				title->iso_639_2 = 'n';
 				title->iso_639_3 = 'g';
 				title = epgdb_titles_add (channels[channel_id], title);
-				
+
 				if (!huffman_decode (data + offset + 9, description_length, tmp, 256, huffman_debug))
 					tmp[0] = '\0';
-				
+
 				if (huffman_debug)
 				{
 					char mtime[20];
@@ -172,7 +172,7 @@ void opentv_read_titles (unsigned char *data, unsigned int length, bool huffman_
 					strftime (mtime, 20, "%d/%m/%Y %H:%M", loctime);
 					printf ("Start time: %s\n", mtime);
 				}
-				
+
 				epgdb_titles_set_description (title, tmp);
 				tit_count++;
 			}
@@ -185,14 +185,14 @@ void opentv_read_titles (unsigned char *data, unsigned int length, bool huffman_
 void opentv_read_summaries (unsigned char *data, unsigned int length, bool huffman_debug)
 {
 	if (length < 20) return;
-	
+
 	unsigned short int channel_id	= (data[3] << 8) | data[4];
 	unsigned short int mjd_time	    = (data[8] << 8) | data[9];
-	
+
 	if ((channel_id > 0) && (mjd_time > 0))
 	{
 		unsigned int offset = 10;
-		
+
 		while (offset + 4 < length)
 		{
 			unsigned short int	event_id;
@@ -236,7 +236,7 @@ void opentv_read_summaries (unsigned char *data, unsigned int length, bool huffm
 					char tmp[MAX_SUMMARIE_SIZE * 2];
 					if (!huffman_decode (buffer, buffer_size, tmp, MAX_SUMMARIE_SIZE * 2, huffman_debug))
 						tmp[0] = '\0';
-					
+
 					if (huffman_debug)
 					{
 						char mtime[20];
@@ -245,7 +245,7 @@ void opentv_read_summaries (unsigned char *data, unsigned int length, bool huffm
 						strftime (mtime, 20, "%d/%m/%Y %H:%M", loctime);
 						printf ("Start time: %s\n", mtime);
 					}
-					
+
 					epgdb_titles_set_long_description (title, tmp);
 				}
 			}

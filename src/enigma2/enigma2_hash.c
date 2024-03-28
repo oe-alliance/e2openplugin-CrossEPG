@@ -29,7 +29,7 @@ bool enigma2_hash_add (uint32_t hash, unsigned char *data, unsigned char size)
 	new->use_count = 1;
 	new->prev = NULL;
 	new->next = NULL;
-	
+
 	if (hashes[hash & 0xffff] == NULL) hashes[hash & 0xffff] = new;
 	else
 	{
@@ -45,11 +45,11 @@ bool enigma2_hash_add (uint32_t hash, unsigned char *data, unsigned char size)
 			if (tmp->next == NULL) break;
 			tmp = tmp->next;
 		}
-		
+
 		new->prev = tmp;
 		tmp->next = new;
 	}
-	
+
 	return true;
 }
 
@@ -83,7 +83,7 @@ int enigma2_hash_count ()
 			hash = hash->next;
 		}
 	}
-	
+
 	return count;
 }
 
@@ -96,7 +96,7 @@ enigma2_hash_t *enigma2_hash_get_last (unsigned short int prefix)
 		if (hash->next == NULL) break;
 		hash = hash->next;
 	}
-	
+
 	return hash;
 }
 

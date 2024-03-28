@@ -38,7 +38,7 @@ def epgdb_get_installroot():
 		return False
 
 def epgdb_get_dbroot():
-	
+
 	homedir = epgdb_get_installroot()
 
 	if homedir == False:
@@ -48,20 +48,20 @@ def epgdb_get_dbroot():
 		f = open("%s/crossepg.config" % (homedir), "r")
 	except Exception as e:
 		return False
-		
+
 	entryRe = re.compile(r"db_root=(.*)")
-		
-	for line in f.readlines(): 
+
+	for line in f.readlines():
 		entry = re.findall(entryRe, line)
 		if entry:
 			dbroot = entry[0].strip()
-	
+
 	f.close()
 	return dbroot
-	
+
 def IS_UTF8(flags):
 	return flags & 0x01
-	
+
 def SET_UTF8(flags):
 	return flags | 0x01
 
