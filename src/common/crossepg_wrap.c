@@ -5118,7 +5118,7 @@ SWIGINTERN PyObject *_wrap_epgdb_title_t_start_time_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  uint32_t result;
+  time_t result;
 
   if (!PyArg_ParseTuple(args,(char *)"O:epgdb_title_t_start_time_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_epgdb_title_s, 0 |  0 );
@@ -5128,7 +5128,7 @@ SWIGINTERN PyObject *_wrap_epgdb_title_t_start_time_get(PyObject *SWIGUNUSEDPARM
   arg1 = (struct epgdb_title_s *)(argp1);
   {
     SWIG_PYTHON_THREAD_BEGIN_ALLOW;
-    result = (uint32_t) ((arg1)->start_time);
+    result = (time_t) ((arg1)->start_time);
     SWIG_PYTHON_THREAD_END_ALLOW;
   }
   resultobj = SWIG_From_unsigned_SS_int((unsigned int)(result));
