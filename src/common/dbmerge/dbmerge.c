@@ -158,8 +158,7 @@ bool dbmerge_merge (FILE *fd_h, FILE *fd_d, void(*progress_callback)(int, int))
 		return false;
 	}
 
-	fseek (fd_h, 22, SEEK_SET);
-
+	fseek (fd_h, strlen (MAGIC_HEADERS) + sizeof (unsigned char) + (sizeof (time_t) * 2), SEEK_SET);
 	fread (&channels_count, sizeof (int), 1, fd_h);
 	for (i=0; i<channels_count; i++)
 	{
