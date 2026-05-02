@@ -178,7 +178,7 @@ class lamedb_class:
 
 		# lamedb mix UTF-8 + iso-8859-* inside it
 		# need charset decoding line by line
-		fd = open(self.LAMEDB, "r")
+		fd = open(self.LAMEDB, "rb")
 
 		# skip transponder section
 		# read lamedb until are found "end" and "services" lines
@@ -384,8 +384,16 @@ class crossepg_db_class:
 		#print("DEBUG , summarie DATA TYPE: \'%s\'" % type(summarie).__name__ )
 
 		if utf8 == False:
-			crossepg.epgdb_titles_set_description(event_ref, title)
-			crossepg.epgdb_titles_set_long_description(event_ref, summarie)
-		else:
-			crossepg.epgdb_titles_set_description_utf8(event_ref, title)
-			crossepg.epgdb_titles_set_long_description_utf8(event_ref, summarie)
+			crossepg.epgdb_titles_set_description(event_ref, title.decode("utf-8"))
+			crossepg.epgdb_titles_set_long_description(event_ref, summarie.decode("utf-8"))
+		else:		
+			crossepg.epgdb_titles_set_description_utf8(event_ref, self.decode_epg(title))
+			crossepg.epgdb_titles_set_long_description_utf8(event_ref, self.decode_epg(summarie))
+
+		
+	# fix decoding hack
+	def decode_epg(self, data: bytes) -> str:
+		try:
+			return data.decode("utf-8")
+		except UnicodeDecodeError:
+			return data.decode("cp1252", errors="replace")
